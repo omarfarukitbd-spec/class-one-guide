@@ -29,3 +29,5 @@ CORE DIRECTIVES & RULES OF ENGAGEMENT:
 - **Standardized Error Handling**: Use a standard `Result` wrapper (e.g., `sealed class Result<T>`) to communicate Success, Error, and Loading states consistently across Domain and UI layers.
 
 - **Mandatory Previews**: Every Compose UI component (Atom/Molecule/Organism) MUST have a `@Preview` annotation with mock data to verify visual correctness without launching the app.
+
+- **Mandatory Build & Push Workflow**: After finishing every task or update, you MUST run a Gradle build. If the build succeeds without errors, you MUST automatically stage, commit, and push the changes to the Git repository with a descriptive commit message. NEVER push code that fails to build.
