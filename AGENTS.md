@@ -31,3 +31,10 @@ CORE DIRECTIVES & RULES OF ENGAGEMENT:
 - **Mandatory Previews**: Every Compose UI component (Atom/Molecule/Organism) MUST have a `@Preview` annotation with mock data to verify visual correctness without launching the app.
 
 - **Mandatory Build & Push Workflow**: After finishing every task or update, you MUST run a Gradle build. If the build succeeds without errors, you MUST automatically stage, commit, and push the changes to the Git repository with a descriptive commit message. NEVER push code that fails to build.
+
+PROJECT-SPECIFIC DESIGN DIRECTIVES:
+
+- **Strict Safe Area Handling**: ALL interactive UI elements (Buttons, Text, Icons) MUST respect the system bars. 
+    - Always use `statusBarsPadding()` or `safeDrawingPadding()` for top-level containers to prevent overlap with the Status Bar.
+    - Always use `navigationBarsPadding()` or `safeDrawingPadding()` for bottom-level containers to avoid being hidden by the Navigation Bar.
+    - When using `Scaffold`, its `innerPadding` MUST be applied to the main content container and consumed appropriately.
