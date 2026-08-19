@@ -39,12 +39,13 @@ fun SubjectDetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(AppTheme.brushes.deepSurface)
-                .padding(innerPadding)
         ) {
             when (val state = uiState) {
                 is SubjectDetailUiState.Loading -> {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
                         contentAlignment = Alignment.Center
                     ) {
                         CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
@@ -53,7 +54,12 @@ fun SubjectDetailScreen(
                 is SubjectDetailUiState.Success -> {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(20.dp),
+                        contentPadding = PaddingValues(
+                            top = innerPadding.calculateTopPadding() + 20.dp,
+                            bottom = innerPadding.calculateBottomPadding() + 20.dp,
+                            start = 20.dp,
+                            end = 20.dp
+                        ),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         item {
