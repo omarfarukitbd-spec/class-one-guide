@@ -1,0 +1,16 @@
+- [x] Core Design System Setup
+    - [x] Create `Color.kt` with Liquid Glass colors
+    - [x] Create `Brush.kt` for gradients
+    - [x] Create `Type.kt` for typography
+    - [x] Create `Theme.kt` with custom LocalProviders
+- [x] Implement Atoms
+    - [x] Create `GlassCard.kt`
+- [x] Feature Home UI Setup
+    - [x] Create `feature/home/ui` package
+    - [x] Implement `GreetingSection.kt`
+    - [x] Implement `SubjectCard.kt`
+- [x] Assemble `HomeScreen.kt`
+    - [x] Create Root Stateless Composable
+    - [x] Set up ViewModel with UI State
+- [x] Connect UI to MainActivity
+    - [x] Update `MainActivity.kt` to use `AppTheme` and `HomeScreen`
