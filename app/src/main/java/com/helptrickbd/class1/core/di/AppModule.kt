@@ -121,4 +121,10 @@ object AppModule {
     fun provideSettingsRepository(@ApplicationContext context: Context): SettingsRepository {
         return SettingsRepositoryImpl(context)
     }
+
+    @Provides
+    @Singleton
+    fun provideTracingRepository(): com.helptrickbd.class1.feature.drawing.domain.repository.TracingRepository {
+        return com.helptrickbd.class1.feature.drawing.data.repository.TracingRepositoryImpl()
+    }
 }

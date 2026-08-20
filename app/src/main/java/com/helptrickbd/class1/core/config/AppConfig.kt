@@ -47,6 +47,7 @@ object AppConfig {
     const val FEATURE_NAVIGATION_DRAWER = true
     const val FEATURE_CLOUD_SYNC = true
     const val FEATURE_DRAWING_BOARD = true
+    const val FEATURE_LETTER_TRACING = true
     const val FEATURE_SEARCH = true
     const val FEATURE_PDF_BOOKMARKS = true
     const val FEATURE_PDF_THUMBNAIL_PREVIEW = true

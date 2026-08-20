@@ -9,9 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AutoFixHigh
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,20 +19,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 val SlateColors = listOf(
+    Color(0xFFFFEB3B), // Bright Yellow
     Color.White,
-    Color(0xFFFFEB3B), // Yellow
     Color(0xFF00E676), // Bright Green
     Color(0xFF00E5FF), // Bright Cyan
-    Color(0xFFFF4081), // Pink
-    Color(0xFFFF9100)  // Orange
+    Color(0xFFFF4081), // Vibrant Pink
+    Color(0xFFFF9100), // Orange
+    Color(0xFFEA80FC)  // Soft Purple
 )
 
 @Composable
 fun DrawingControlsBar(
     selectedColor: Color,
     isEraser: Boolean,
+    showGuide: Boolean,
+    isTracingMode: Boolean,
     onColorSelected: (Color) -> Unit,
     onToggleEraser: () -> Unit,
+    onToggleGuide: () -> Unit,
     onClear: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -42,16 +44,16 @@ fun DrawingControlsBar(
         modifier = modifier
             .fillMaxWidth()
             .navigationBarsPadding()
-            .padding(16.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surface,
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
         tonalElevation = 6.dp,
         border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 14.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -79,9 +81,27 @@ fun DrawingControlsBar(
                 }
             }
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (isTracingMode) {
+                    IconButton(
+                        onClick = onToggleGuide,
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = if (showGuide) MaterialTheme.colorScheme.primaryContainer else Color.Transparent
+                        )
+                    ) {
+                        Icon(
+                            imageVector = if (showGuide) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                            contentDescription = if (showGuide) "গাইড লুকান" else "গাইড দেখান",
+                            tint = if (showGuide) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
                 FilledTonalIconButton(
                     onClick = onToggleEraser,
                     colors = IconButtonDefaults.filledTonalIconButtonColors(
@@ -97,9 +117,7 @@ fun DrawingControlsBar(
 
                 IconButton(
                     onClick = onClear,
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = MaterialTheme.colorScheme.error
-                    )
+                    colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.error)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Delete,
