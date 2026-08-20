@@ -139,11 +139,18 @@ class AppSpeechEngine @Inject constructor(
 
     fun openTtsSettings(context: Context) {
         try {
-            val intent = Intent(Settings.ACTION_TTS_SETTINGS).apply {
+            val intent = Intent("com.android.settings.TTS_SETTINGS").apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
             context.startActivity(intent)
-        } catch (_: Exception) {}
+        } catch (_: Exception) {
+            try {
+                val fallbackIntent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(fallbackIntent)
+            } catch (_: Exception) {}
+        }
     }
 
     fun stop() {
