@@ -96,7 +96,7 @@ fun TracingCanvas(
                     color = android.graphics.Color.WHITE
                     alpha = 110
                     style = Paint.Style.STROKE
-                    strokeWidth = 5f
+                    this.strokeWidth = 5f
                     pathEffect = DashPathEffect(floatArrayOf(16f, 14f), 0f)
                     isAntiAlias = true
                     typeface = Typeface.DEFAULT_BOLD
