@@ -1,5 +1,6 @@
 package com.helptrickbd.class1.feature.subject_detail.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -18,39 +19,50 @@ fun BookDetailTopBar(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Surface(
-        color = MaterialTheme.colorScheme.primary,
-        modifier = modifier.fillMaxWidth()
-    ) {
-        Row(
+    Column(modifier = modifier.fillMaxWidth()) {
+        // STRICT SYSTEM BAR ISOLATION: 
+        // Solid black background for Status Bar area
+        Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .statusBarsPadding()
+                .background(Color.Black)
+        )
+        
+        Surface(
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            IconButton(onClick = onBackClick) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.White
-                )
-            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = onBackClick) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.White
+                    )
+                }
 
-            Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(4.dp))
 
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = title,
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1
-                )
-                Text(
-                    text = "অধ্যায় ও রিসোর্স নির্বাচন করুন",
-                    color = Color.White.copy(alpha = 0.85f),
-                    fontSize = 12.sp
-                )
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = title,
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1
+                    )
+                    Text(
+                        text = "অধ্যায় ও রিসোর্স নির্বাচন করুন",
+                        color = Color.White.copy(alpha = 0.85f),
+                        fontSize = 12.sp
+                    )
+                }
             }
         }
     }

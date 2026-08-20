@@ -1,6 +1,5 @@
 package com.helptrickbd.class1.feature.pdf_viewer.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -34,7 +33,6 @@ fun PdfViewerScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .statusBarsPadding()
                         .padding(horizontal = 8.dp, vertical = 12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -78,7 +76,6 @@ fun PdfViewerScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .navigationBarsPadding()
                 .padding(24.dp),
             contentAlignment = Alignment.Center
         ) {

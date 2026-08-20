@@ -1,5 +1,6 @@
 package com.helptrickbd.class1.feature.home.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoStories
@@ -17,38 +18,50 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun HomeTopBar(modifier: Modifier = Modifier) {
-    Surface(
-        color = MaterialTheme.colorScheme.primary,
-        modifier = modifier.fillMaxWidth()
-    ) {
-        Row(
+    Column(modifier = modifier.fillMaxWidth()) {
+        // STRICT SYSTEM BAR ISOLATION: 
+        // This spacer ensures a solid black background behind the Status Bar area
+        // and pushes the app's colored TopBar strictly below it.
+        Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .statusBarsPadding()
+                .background(Color.Black)
+        )
+        
+        Surface(
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Icon(
-                imageVector = Icons.Default.AutoStories,
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier.size(28.dp)
-            )
-            
-            Spacer(modifier = Modifier.width(12.dp))
-            
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = "প্রথম শ্রেণির গাইড ও পাঠ্যবই",
-                    color = Color.White,
-                    fontSize = 19.sp,
-                    fontWeight = FontWeight.Bold
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 14.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.AutoStories,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(28.dp)
                 )
-                Text(
-                    text = "জাতীয় শিক্ষাক্রম ও পাঠ্যপুস্তক বোর্ড (NCTB)",
-                    color = Color.White.copy(alpha = 0.85f),
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Normal
-                )
+                
+                Spacer(modifier = Modifier.width(12.dp))
+                
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "প্রথম শ্রেণির গাইড ও পাঠ্যবই",
+                        color = Color.White,
+                        fontSize = 19.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "জাতীয় শিক্ষাক্রম ও পাঠ্যপুস্তক বোর্ড (NCTB)",
+                        color = Color.White.copy(alpha = 0.85f),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
             }
         }
     }
