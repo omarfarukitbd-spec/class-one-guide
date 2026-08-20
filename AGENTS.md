@@ -44,3 +44,5 @@ PROJECT-SPECIFIC DESIGN DIRECTIVES:
     - Always use `statusBarsPadding()` or `safeDrawingPadding()` for top-level containers to prevent overlap with the Status Bar.
     - Always use `navigationBarsPadding()` or `safeDrawingPadding()` for bottom-level containers to avoid being hidden by the Navigation Bar.
     - When using `Scaffold`, its `innerPadding` MUST be applied to the main content container and consumed appropriately.
+
+- **Zero Emojis & Strict Material 3 Vector Icons**: NEVER use emojis anywhere in the app (UI text, buttons, titles, subtitles, cards, or placeholders). Always use appropriate, high-quality, and responsive Material 3 Vector Icons (`ImageVector`, `Icons.Default.*`, `Icons.Outlined.*`, `Icons.Rounded.*`, or custom XML vector drawables) for all UI iconography and visual cues.

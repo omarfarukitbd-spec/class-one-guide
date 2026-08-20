@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Whatshot
@@ -53,7 +54,6 @@ fun HomeScreen(
             is HomeUiState.Success -> {
                 HomeContent(
                     innerPadding = innerPadding,
-                    userName = state.userName,
                     subjects = state.subjects,
                     resumeBook = state.resumeBook,
                     onSubjectClick = onSubjectClick
@@ -71,43 +71,38 @@ fun HomeScreen(
 @Composable
 fun DashboardTopBar() {
     Surface(
-        color = MaterialTheme.colorScheme.background,
+        color = MaterialTheme.colorScheme.primary,
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+                .padding(horizontal = 8.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(45.dp)
-                    .clip(CircleShape)
-                    .background(AppTheme.brushes.glassGradient)
-                    .border(1.dp, AppTheme.colors.glassBorder, CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
+            IconButton(onClick = { }) {
                 Icon(
-                    Icons.Default.Person,
-                    contentDescription = "Profile",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(24.dp)
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = "Menu",
+                    tint = Color.White
                 )
             }
             
-            IconButton(
-                onClick = { },
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .background(AppTheme.colors.glassWhite)
-            ) {
-                Icon(
-                    Icons.Default.Notifications,
-                    contentDescription = "Notifications",
-                    tint = MaterialTheme.colorScheme.onBackground
+            Spacer(modifier = Modifier.width(8.dp))
+            
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "প্রথম শ্রেণির গাইড",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "২০২৭ শিক্ষাবর্ষের জন্য পরিমার্জিত",
+                    color = Color.White.copy(alpha = 0.9f),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Normal
                 )
             }
         }
@@ -115,26 +110,8 @@ fun DashboardTopBar() {
 }
 
 @Composable
-fun WelcomeSection(userName: String) {
-    Column {
-        Text(
-            text = "আসসালামু আলাইকুম,",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-        )
-        Text(
-            text = userName,
-            style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.onBackground,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
-
-@Composable
 private fun HomeContent(
     innerPadding: PaddingValues,
-    userName: String,
     subjects: List<Subject>,
     resumeBook: Book?,
     onSubjectClick: (String) -> Unit
@@ -146,19 +123,20 @@ private fun HomeContent(
             .navigationBarsPadding()
             .padding(horizontal = 20.dp)
     ) {
-        Spacer(modifier = Modifier.height(10.dp))
-        WelcomeSection(userName = userName)
         Spacer(modifier = Modifier.height(24.dp))
+        
         resumeBook?.let { 
             ResumeReadingCard(book = it)
             Spacer(modifier = Modifier.height(24.dp))
         }
+        
         Text(
             text = "আপনার পাঠ্যবইসমূহ",
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.SemiBold
         )
+        
         Spacer(modifier = Modifier.height(16.dp))
 
         LazyVerticalGrid(
@@ -186,7 +164,7 @@ fun ResumeReadingCard(book: Book) {
             .height(160.dp)
             .clip(RoundedCornerShape(24.dp))
             .background(AppTheme.brushes.liquidMain)
-            .border(1.dp, AppTheme.colors.glassBorder, RoundedCornerShape(24.dp))
+            .border(1.dp, Color.White.copy(alpha = 0.2f), RoundedCornerShape(24.dp))
             .padding(20.dp)
     ) {
         Row(
@@ -276,7 +254,7 @@ fun SubjectGridCard(title: String, progress: Float, onClick: () -> Unit) {
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        border = BorderStroke(1.dp, AppTheme.colors.glassBorder)
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
     ) {
         Column(
             modifier = Modifier
