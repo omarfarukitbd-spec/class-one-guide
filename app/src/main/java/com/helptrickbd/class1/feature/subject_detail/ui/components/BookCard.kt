@@ -26,11 +26,9 @@ fun BookCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val tagColor = when (book.bookType.lowercase()) {
-        "textbook" -> ElectricPurple
-        "guide" -> CyanGlow
-        else -> SoftPink
-    }
+    // Determine tag based on title for now as we don't have bookType in model yet
+    val tagColor = if (book.title.contains("Guide", ignoreCase = true)) CyanGlow else ElectricPurple
+    val tagText = if (book.title.contains("Guide", ignoreCase = true)) "GUIDE" else "TEXTBOOK"
 
     GlassCard(
         modifier = modifier.fillMaxWidth(),
@@ -65,7 +63,7 @@ fun BookCard(
                         .padding(horizontal = 8.dp, vertical = 2.dp)
                 ) {
                     Text(
-                        text = book.bookType.uppercase(),
+                        text = tagText,
                         color = TextPrimary,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold
@@ -75,7 +73,7 @@ fun BookCard(
                 Spacer(modifier = Modifier.height(6.dp))
 
                 Text(
-                    text = book.bookName,
+                    text = book.title,
                     style = MaterialTheme.typography.titleMedium,
                     color = TextPrimary,
                     fontWeight = FontWeight.SemiBold

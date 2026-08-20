@@ -20,9 +20,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.helptrickbd.class1.core.designsystem.theme.AppTheme
 import com.helptrickbd.class1.feature.home.ui.HomeScreen
-import com.helptrickbd.class1.feature.home.ui.HomeUiState
-import com.helptrickbd.class1.feature.home.ui.HomeViewModel
-import com.helptrickbd.class1.feature.home.ui.SubjectUiModel
 
 @Composable
 fun AppNavGraph(
@@ -35,60 +32,18 @@ fun AppNavGraph(
         modifier = modifier
     ) {
         composable<Screen.Home> {
-            val viewModel: HomeViewModel = hiltViewModel()
-            val uiState by viewModel.uiState.collectAsState()
-
-            when (val state = uiState) {
-                is HomeUiState.Loading -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(AppTheme.brushes.deepSurface),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-                    }
-                }
-                is HomeUiState.Success -> {
-                    val subjectUiModels = state.subjects.mapIndexed { index, subject ->
-                        SubjectUiModel(
-                            id = subject.subjectId,
-                            title = subject.subjectName,
-                            progress = when (index % 3) {
-                                0 -> 0.75f
-                                1 -> 0.45f
-                                else -> 0.20f
-                            }
+            val viewModel: com.helptrickbd.class1.feature.home.presentation.HomeViewModel = hiltViewModel()
+            HomeScreen(
+                viewModel = viewModel,
+                onSubjectClick = { subjectId ->
+                    navController.navigate(
+                        Screen.SubjectDetail(
+                            subjectId = subjectId,
+                            subjectName = "" // Will be fetched in detail screen
                         )
-                    }
-                    HomeScreen(
-                        userName = state.classData.className.ifEmpty { "Student" },
-                        subjects = subjectUiModels,
-                        onSubjectClick = { subject ->
-                            navController.navigate(
-                                Screen.SubjectDetail(
-                                    subjectId = subject.id,
-                                    subjectName = subject.title
-                                )
-                            )
-                        }
                     )
                 }
-                is HomeUiState.Error -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(AppTheme.brushes.deepSurface),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "Error: ${state.message}",
-                            color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-                }
-            }
+            )
         }
 
         composable<Screen.SubjectDetail> {

@@ -1,13 +1,20 @@
 package com.helptrickbd.class1.feature.home.domain.repository
 
-import com.helptrickbd.class1.feature.home.domain.model.ClassData
+import com.helptrickbd.class1.feature.home.domain.model.Book
 import com.helptrickbd.class1.feature.home.domain.model.Subject
+import kotlinx.coroutines.flow.Flow
 
 /**
- * Repository interface for Home-related data operations.
- * Follows Clean Architecture by residing in the Domain layer.
+ * Repository interface for Home feature data operations.
  */
 interface HomeRepository {
-    suspend fun getClassData(classId: String): Result<ClassData>
-    suspend fun getSubjects(classId: String): Result<List<Subject>>
+    /**
+     * Retrieves all subjects for the home screen.
+     */
+    fun getSubjects(): Flow<List<Subject>>
+    
+    /**
+     * Retrieves the current reading progress for a user.
+     */
+    fun getResumeBook(): Flow<Book?>
 }

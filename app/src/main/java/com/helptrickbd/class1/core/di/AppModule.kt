@@ -9,6 +9,8 @@ import com.helptrickbd.class1.core.database.BookDao
 import com.helptrickbd.class1.core.database.SubjectDao
 import com.helptrickbd.class1.feature.home.data.repository.HomeRepositoryImpl
 import com.helptrickbd.class1.feature.home.domain.repository.HomeRepository
+import com.helptrickbd.class1.feature.subject_detail.data.repository.SubjectRepositoryImpl
+import com.helptrickbd.class1.feature.subject_detail.domain.repository.SubjectRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -55,17 +57,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideHomeRepository(
-        firestore: FirebaseFirestore?
-    ): HomeRepository {
-        return HomeRepositoryImpl(firestore)
+    fun provideHomeRepository(): HomeRepository {
+        return HomeRepositoryImpl()
     }
 
     @Provides
     @Singleton
-    fun provideSubjectRepository(
-        firestore: FirebaseFirestore?
-    ): com.helptrickbd.class1.feature.subject_detail.domain.repository.SubjectRepository {
-        return com.helptrickbd.class1.feature.subject_detail.data.repository.SubjectRepositoryImpl(firestore)
+    fun provideSubjectRepository(): SubjectRepository {
+        return SubjectRepositoryImpl()
     }
 }

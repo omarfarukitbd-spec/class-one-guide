@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Whatshot
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,53 +25,43 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.helptrickbd.class1.core.designsystem.theme.AppTheme
-
-data class SubjectUiModel(
-    val id: String,
-    val title: String,
-    val progress: Float
-)
+import com.helptrickbd.class1.feature.home.domain.model.Book
+import com.helptrickbd.class1.feature.home.domain.model.Subject
+import com.helptrickbd.class1.feature.home.presentation.HomeUiState
+import com.helptrickbd.class1.feature.home.presentation.HomeViewModel
 
 @Composable
 fun HomeScreen(
-    userName: String,
-    subjects: List<SubjectUiModel>,
-    onSubjectClick: (SubjectUiModel) -> Unit = {}
+    viewModel: HomeViewModel,
+    onSubjectClick: (String) -> Unit = {}
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = AppTheme.colors.deepSpace,
         topBar = { DashboardTopBar() }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .navigationBarsPadding() // Respect Navigation Bar
-                .padding(horizontal = 20.dp)
-        ) {
-            Spacer(modifier = Modifier.height(10.dp))
-            WelcomeSection(userName = userName)
-            Spacer(modifier = Modifier.height(24.dp))
-            ResumeReadingCard()
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = "আপনার পাঠ্যবইসমূহ",
-                style = MaterialTheme.typography.titleLarge,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(subjects) { subject ->
-                    SubjectGridCard(subject = subject, onClick = { onSubjectClick(subject) })
+        when (val state = uiState) {
+            is HomeUiState.Loading -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(color = Color.White)
+                }
+            }
+            is HomeUiState.Success -> {
+                HomeContent(
+                    innerPadding = innerPadding,
+                    userName = state.userName,
+                    subjects = state.subjects,
+                    resumeBook = state.resumeBook,
+                    onSubjectClick = onSubjectClick
+                )
+            }
+            is HomeUiState.Error -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(text = state.message, color = Color.Red)
                 }
             }
         }
@@ -86,7 +77,7 @@ fun DashboardTopBar() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .statusBarsPadding() // Respect Status Bar
+                .statusBarsPadding()
                 .padding(horizontal = 20.dp, vertical = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -141,7 +132,54 @@ fun WelcomeSection(userName: String) {
 }
 
 @Composable
-fun ResumeReadingCard() {
+private fun HomeContent(
+    innerPadding: PaddingValues,
+    userName: String,
+    subjects: List<Subject>,
+    resumeBook: Book?,
+    onSubjectClick: (String) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
+            .navigationBarsPadding()
+            .padding(horizontal = 20.dp)
+    ) {
+        Spacer(modifier = Modifier.height(10.dp))
+        WelcomeSection(userName = userName)
+        Spacer(modifier = Modifier.height(24.dp))
+        resumeBook?.let { 
+            ResumeReadingCard(book = it)
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+        Text(
+            text = "আপনার পাঠ্যবইসমূহ",
+            style = MaterialTheme.typography.titleLarge,
+            color = Color.White,
+            fontWeight = FontWeight.SemiBold
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items(subjects) { subject ->
+                SubjectGridCard(
+                    title = subject.subjectName,
+                    progress = 0.5f,
+                    onClick = { onSubjectClick(subject.subjectId) }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ResumeReadingCard(book: Book) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -164,9 +202,9 @@ fun ResumeReadingCard() {
             ) {
                 Icon(Icons.Default.Book, contentDescription = null, tint = Color.White)
             }
-            
+
             Spacer(modifier = Modifier.width(20.dp))
-            
+
             Column {
                 Text(
                     text = "পড়া চালিয়ে যান",
@@ -174,21 +212,21 @@ fun ResumeReadingCard() {
                     style = MaterialTheme.typography.labelMedium
                 )
                 Text(
-                    text = "বাংলা ১ম পত্র",
+                    text = book.title,
                     color = Color.White,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "৯ম শ্রেণি - পৃষ্ঠা ৪২",
+                    text = "অধ্যায় - প্রগ্রেস ${ (book.progressPercent * 100).toInt() }%",
                     color = Color.White.copy(alpha = 0.7f),
                     style = MaterialTheme.typography.bodySmall
                 )
-                
+
                 Spacer(modifier = Modifier.height(12.dp))
-                
+
                 LinearProgressIndicator(
-                    progress = { 0.65f },
+                    progress = { book.progressPercent },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(6.dp)
@@ -228,7 +266,7 @@ fun ResumeReadingCard() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SubjectGridCard(subject: SubjectUiModel, onClick: () -> Unit) {
+fun SubjectGridCard(title: String, progress: Float, onClick: () -> Unit) {
     Card(
         onClick = onClick,
         modifier = Modifier
@@ -250,10 +288,10 @@ fun SubjectGridCard(subject: SubjectUiModel, onClick: () -> Unit) {
                 tint = Color.White.copy(alpha = 0.9f),
                 modifier = Modifier.size(28.dp)
             )
-            
+
             Column {
                 Text(
-                    text = subject.title,
+                    text = title,
                     color = Color.White,
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.SemiBold,
@@ -261,7 +299,7 @@ fun SubjectGridCard(subject: SubjectUiModel, onClick: () -> Unit) {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 LinearProgressIndicator(
-                    progress = { subject.progress },
+                    progress = { progress },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(4.dp)

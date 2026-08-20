@@ -1,39 +1,34 @@
 package com.helptrickbd.class1.feature.home.data.repository
 
-import com.google.firebase.firestore.FirebaseFirestore
-import com.helptrickbd.class1.feature.home.domain.model.ClassData
+import com.helptrickbd.class1.feature.home.domain.model.Book
 import com.helptrickbd.class1.feature.home.domain.model.Subject
 import com.helptrickbd.class1.feature.home.domain.repository.HomeRepository
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
- * Implementation of [HomeRepository] using Firebase Firestore.
- * Currently stubbed with mock data for UI testing.
+ * Mock implementation of [HomeRepository] for development.
  */
-class HomeRepositoryImpl(
-    private val firestore: FirebaseFirestore? = null
-) : HomeRepository {
+@Singleton
+class HomeRepositoryImpl @Inject constructor() : HomeRepository {
 
-    override suspend fun getClassData(classId: String): Result<ClassData> {
-        // Mocking network delay
-        delay(500)
-        return Result.success(
-            ClassData(
-                classId = classId,
-                className = "Class 10",
-                features = mapOf("pdf_viewer" to true, "quiz" to false)
-            )
+    override fun getSubjects(): Flow<List<Subject>> = flowOf(
+        listOf(
+            Subject("1", "বাংলা ১ম পত্র", listOf(Book("b1", "বই ১", ""))),
+            Subject("2", "English For Today", listOf(Book("b2", "Book 2", ""))),
+            Subject("3", "গণিত", listOf(Book("b3", "গণিত বই", ""))),
+            Subject("4", "বিজ্ঞান", listOf(Book("b4", "বিজ্ঞান বই", "")))
         )
-    }
+    )
 
-    override suspend fun getSubjects(classId: String): Result<List<Subject>> {
-        delay(800)
-        return Result.success(
-            listOf(
-                Subject("1", "Mathematics", "https://example.com/math.png"),
-                Subject("2", "Physics", "https://example.com/physics.png"),
-                Subject("3", "Chemistry", "https://example.com/chem.png")
-            )
+    override fun getResumeBook(): Flow<Book?> = flowOf(
+        Book(
+            bookId = "resume_1",
+            title = "বাংলা ১ম পত্র",
+            pdfUrl = "",
+            progressPercent = 0.65f
         )
-    }
+    )
 }

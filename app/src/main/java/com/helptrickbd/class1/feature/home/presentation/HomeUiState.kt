@@ -1,13 +1,17 @@
-package com.helptrickbd.class1.feature.home.ui
+package com.helptrickbd.class1.feature.home.presentation
 
-import com.helptrickbd.class1.feature.home.domain.model.ClassData
+import com.helptrickbd.class1.feature.home.domain.model.Book
 import com.helptrickbd.class1.feature.home.domain.model.Subject
 
+/**
+ * UI State for the Home screen.
+ */
 sealed interface HomeUiState {
     data object Loading : HomeUiState
     
     data class Success(
-        val classData: ClassData,
+        val userName: String,
+        val resumeBook: Book?,
         val subjects: List<Subject>
     ) : HomeUiState
     
