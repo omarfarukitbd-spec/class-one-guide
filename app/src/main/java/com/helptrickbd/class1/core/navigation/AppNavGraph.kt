@@ -1,25 +1,17 @@
 package com.helptrickbd.class1.core.navigation
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.helptrickbd.class1.core.designsystem.theme.AppTheme
+import com.helptrickbd.class1.feature.home.presentation.HomeViewModel
 import com.helptrickbd.class1.feature.home.ui.HomeScreen
+import com.helptrickbd.class1.feature.pdf_viewer.ui.PdfViewerScreen
+import com.helptrickbd.class1.feature.subject_detail.ui.SubjectDetailScreen
+import com.helptrickbd.class1.feature.subject_detail.ui.SubjectDetailViewModel
 
 @Composable
 fun AppNavGraph(
@@ -32,14 +24,14 @@ fun AppNavGraph(
         modifier = modifier
     ) {
         composable<Screen.Home> {
-            val viewModel: com.helptrickbd.class1.feature.home.presentation.HomeViewModel = hiltViewModel()
+            val viewModel: HomeViewModel = hiltViewModel()
             HomeScreen(
                 viewModel = viewModel,
-                onSubjectClick = { subjectId ->
+                onBookClick = { bookId, bookTitle ->
                     navController.navigate(
                         Screen.SubjectDetail(
-                            subjectId = subjectId,
-                            subjectName = "" // Will be fetched in detail screen
+                            subjectId = bookId,
+                            subjectName = bookTitle
                         )
                     )
                 }
@@ -47,15 +39,15 @@ fun AppNavGraph(
         }
 
         composable<Screen.SubjectDetail> {
-            val detailViewModel: com.helptrickbd.class1.feature.subject_detail.ui.SubjectDetailViewModel = hiltViewModel()
-            com.helptrickbd.class1.feature.subject_detail.ui.SubjectDetailScreen(
+            val detailViewModel: SubjectDetailViewModel = hiltViewModel()
+            SubjectDetailScreen(
                 viewModel = detailViewModel,
                 onBackClick = { navController.popBackStack() },
-                onBookClick = { book ->
+                onResourceClick = { resource ->
                     navController.navigate(
                         Screen.PdfViewer(
-                            bookId = book.bookId,
-                            pdfUrl = book.pdfUrl
+                            resourceTitle = resource.title,
+                            pdfUrl = resource.pdfUrl
                         )
                     )
                 }
@@ -64,19 +56,11 @@ fun AppNavGraph(
 
         composable<Screen.PdfViewer> { backStackEntry ->
             val args = backStackEntry.toRoute<Screen.PdfViewer>()
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(AppTheme.brushes.deepSurface)
-                    .padding(24.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "PDF Viewer: Book ${args.bookId}\nURL: ${args.pdfUrl}",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-            }
+            PdfViewerScreen(
+                title = args.resourceTitle,
+                pdfUrl = args.pdfUrl,
+                onBackClick = { navController.popBackStack() }
+            )
         }
     }
 }

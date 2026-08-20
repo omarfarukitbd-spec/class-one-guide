@@ -12,12 +12,12 @@ sealed interface Screen {
     @Serializable
     data class SubjectDetail(
         val subjectId: String,
-        val subjectName: String
+        val subjectName: String = ""
     ) : Screen
 
     @Serializable
     data class PdfViewer(
-        val bookId: String,
+        val resourceTitle: String,
         val pdfUrl: String
     ) : Screen
 }

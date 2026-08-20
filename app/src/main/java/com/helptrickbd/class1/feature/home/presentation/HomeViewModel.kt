@@ -22,14 +22,14 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUiState> = _selectedCurriculum
         .flatMapLatest { curriculum ->
             combine(
-                repository.getSubjects(curriculum),
+                repository.getBooks(curriculum),
                 repository.getResumeBook()
-            ) { subjects, resumeBook ->
+            ) { books, resumeBook ->
                 HomeUiState.Success(
-                    userName = "ওমর ফারুক",
+                    userName = AppConfig.DEFAULT_USER_NAME,
                     selectedCurriculum = curriculum,
                     resumeBook = resumeBook,
-                    subjects = subjects
+                    books = books
                 ) as HomeUiState
             }
         }

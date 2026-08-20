@@ -78,19 +78,6 @@ fun AppTheme(
     )
     val customBrushes = AppCustomBrushes()
 
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = Color.Transparent.toArgb()
-            window.navigationBarColor = Color.Transparent.toArgb()
-            
-            val controller = WindowCompat.getInsetsController(window, view)
-            controller.isAppearanceLightStatusBars = !darkTheme
-            controller.isAppearanceLightNavigationBars = !darkTheme
-        }
-    }
-
     CompositionLocalProvider(
         LocalAppColors provides customColors,
         LocalAppBrushes provides customBrushes

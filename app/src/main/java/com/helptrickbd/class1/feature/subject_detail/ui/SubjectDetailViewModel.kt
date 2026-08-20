@@ -4,7 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.helptrickbd.class1.core.config.AppConfig
 import com.helptrickbd.class1.core.navigation.Screen
+import com.helptrickbd.class1.feature.home.domain.model.Book
+import com.helptrickbd.class1.feature.home.domain.model.LanguageVersion
 import com.helptrickbd.class1.feature.subject_detail.domain.repository.SubjectRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,35 +23,60 @@ class SubjectDetailViewModel @Inject constructor(
     private val repository: SubjectRepository
 ) : ViewModel() {
 
-    private val subjectDetailRoute: Screen.SubjectDetail = savedStateHandle.toRoute()
-    val subjectId = subjectDetailRoute.subjectId
-    val subjectName = subjectDetailRoute.subjectName
+    private val route: Screen.SubjectDetail = savedStateHandle.toRoute()
+    val bookId = route.subjectId
 
     private val _uiState = MutableStateFlow<SubjectDetailUiState>(SubjectDetailUiState.Loading)
     val uiState: StateFlow<SubjectDetailUiState> = _uiState.asStateFlow()
 
+    private var currentBook: Book? = null
+    private var currentVersion: LanguageVersion = AppConfig.DEFAULT_LANGUAGE_VERSION
+    private var expandedChapterId: String? = null
+
     init {
-        loadSubjectDetails()
+        loadBookDetails()
     }
 
-    fun loadSubjectDetails() {
+    fun loadBookDetails() {
         viewModelScope.launch {
             _uiState.value = SubjectDetailUiState.Loading
-            repository.getBooksForSubject(subjectId)
+            repository.getBookDetail(bookId)
                 .catch { e ->
-                    _uiState.value = SubjectDetailUiState.Error(e.message ?: "Failed to load books")
+                    _uiState.value = SubjectDetailUiState.Error(e.message ?: "Failed to load book details")
                 }
-                .collect { books ->
-                    val featureFlags = mapOf(
-                        "drawing_board" to true,
-                        "quiz" to true
-                    )
-                    _uiState.value = SubjectDetailUiState.Success(
-                        subjectName = subjectName,
-                        books = books, // Domain objects are the same
-                        features = featureFlags
-                    )
+                .collect { book ->
+                    if (book != null) {
+                        currentBook = book
+                        // Default expand first chapter for better discoverability
+                        expandedChapterId = book.chapters.firstOrNull()?.chapterId
+                        emitSuccessState()
+                    } else {
+                        _uiState.value = SubjectDetailUiState.Error("Book not found")
+                    }
                 }
         }
+    }
+
+    fun onVersionSelected(version: LanguageVersion) {
+        currentVersion = version
+        emitSuccessState()
+    }
+
+    fun onChapterToggle(chapterId: String) {
+        expandedChapterId = if (expandedChapterId == chapterId) null else chapterId
+        emitSuccessState()
+    }
+
+    private fun emitSuccessState() {
+        val book = currentBook ?: return
+        val filteredChapters = book.chapters.filter { it.version == currentVersion }
+            .ifEmpty { book.chapters } // Fallback to all if version specific doesn't exist
+
+        _uiState.value = SubjectDetailUiState.Success(
+            book = book,
+            selectedVersion = currentVersion,
+            chapters = filteredChapters,
+            expandedChapterId = expandedChapterId
+        )
     }
 }

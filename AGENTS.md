@@ -40,9 +40,10 @@ CORE DIRECTIVES & RULES OF ENGAGEMENT:
 
 PROJECT-SPECIFIC DESIGN DIRECTIVES:
 
-- **Strict Safe Area Handling**: ALL interactive UI elements (Buttons, Text, Icons) MUST respect the system bars. 
-    - Always use `statusBarsPadding()` or `safeDrawingPadding()` for top-level containers to prevent overlap with the Status Bar.
-    - Always use `navigationBarsPadding()` or `safeDrawingPadding()` for bottom-level containers to avoid being hidden by the Navigation Bar.
-    - When using `Scaffold`, its `innerPadding` MUST be applied to the main content container and consumed appropriately.
+- **STRICT SYSTEM BAR ISOLATION (MANDATORY)**: The app UI and background colors MUST NEVER bleed into, under, or overlap with the mobile system Status Bar (top) or Navigation Bar (bottom). 
+    - The app layout MUST strictly start **AFTER** the Status Bar and end **BEFORE** the Navigation Bar.
+    - NEVER use `enableEdgeToEdge()` with transparent styles that allow app colors to draw behind system icons (Time, Battery, etc.).
+    - Always ensure system bars maintain their solid system background (e.g., Black).
+    - If `Scaffold` or `statusBarsPadding()` is used, it must be configured so that no app-defined color ever reaches the system-controlled areas. This rule applies to ALL mobile versions and screen types.
 
 - **Zero Emojis & Strict Material 3 Vector Icons**: NEVER use emojis anywhere in the app (UI text, buttons, titles, subtitles, cards, or placeholders). Always use appropriate, high-quality, and responsive Material 3 Vector Icons (`ImageVector`, `Icons.Default.*`, `Icons.Outlined.*`, `Icons.Rounded.*`, or custom XML vector drawables) for all UI iconography and visual cues.

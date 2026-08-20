@@ -1,12 +1,8 @@
 package com.helptrickbd.class1
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.ui.graphics.toArgb
 import androidx.navigation.compose.rememberNavController
 import com.helptrickbd.class1.core.designsystem.theme.AppTheme
 import com.helptrickbd.class1.core.navigation.AppNavGraph
@@ -17,10 +13,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
-            navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT)
-        )
+        // STRICT SYSTEM BAR ISOLATION: 
+        // Edge-to-edge is explicitly disabled to ensure the app UI 
+        // strictly starts AFTER the Status Bar and BEFORE the Navigation Bar.
         
         setContent {
             val navController = rememberNavController()

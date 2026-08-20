@@ -1,26 +1,26 @@
 package com.helptrickbd.class1.feature.home.domain.model
 
 /**
- * Represents the type of educational curriculum.
+ * Represents the educational curriculum stream.
  */
-enum class Curriculum {
-    SCHOOL,
-    MADRASAH
+enum class Curriculum(val titleBangla: String) {
+    SCHOOL("স্কুল"),
+    MADRASAH("মাদ্রাসা")
 }
 
 /**
- * Represents the language version of the content.
+ * Represents the language medium / version of the content.
  */
-enum class LanguageVersion {
-    BANGLA,
-    ENGLISH
+enum class LanguageVersion(val titleBangla: String) {
+    BANGLA("বাংলা ভার্সন"),
+    ENGLISH("ইংরেজি ভার্সন")
 }
 
 /**
- * Represents the type of study resource.
+ * Represents the study resource category.
  */
-enum class ResourceType {
-    TEXTBOOK,
-    GUIDEBOOK,
-    MODEL_TEST
+enum class ResourceType(val defaultTitle: String) {
+    TEXTBOOK("মূল বই পড়ুন"),
+    GUIDEBOOK("গাইডবুক পড়ুন"),
+    MODEL_TEST("মডেল টেস্ট")
 }
