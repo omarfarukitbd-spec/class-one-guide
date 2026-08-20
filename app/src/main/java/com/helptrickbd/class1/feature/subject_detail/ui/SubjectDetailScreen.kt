@@ -3,6 +3,8 @@ package com.helptrickbd.class1.feature.subject_detail.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -11,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.helptrickbd.class1.core.designsystem.components.StandardTopBar
 import com.helptrickbd.class1.feature.home.domain.model.Resource
-import com.helptrickbd.class1.feature.subject_detail.ui.components.BookDetailTopBar
 import com.helptrickbd.class1.feature.subject_detail.ui.components.ChapterItemCard
 import com.helptrickbd.class1.feature.subject_detail.ui.components.VersionSelector
 
@@ -30,9 +32,11 @@ fun SubjectDetailScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             val title = (uiState as? SubjectDetailUiState.Success)?.book?.title ?: "বইয়ের বিবরণ"
-            BookDetailTopBar(
+            StandardTopBar(
                 title = title,
-                onBackClick = onBackClick
+                subtitle = "অধ্যায় ও রিসোর্স নির্বাচন করুন",
+                navigationIcon = Icons.AutoMirrored.Default.ArrowBack,
+                onNavigationClick = onBackClick
             )
         }
     ) { innerPadding ->

@@ -5,6 +5,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,12 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.helptrickbd.class1.core.designsystem.components.StandardTopBar
 import com.helptrickbd.class1.feature.home.domain.model.Book
 import com.helptrickbd.class1.feature.home.presentation.HomeUiState
 import com.helptrickbd.class1.feature.home.presentation.HomeViewModel
 import com.helptrickbd.class1.feature.home.ui.components.BookGridCard
 import com.helptrickbd.class1.feature.home.ui.components.CurriculumSelector
-import com.helptrickbd.class1.feature.home.ui.components.HomeTopBar
 import com.helptrickbd.class1.feature.home.ui.components.ResumeReadingSection
 
 @Composable
@@ -31,7 +33,14 @@ fun HomeScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
-        topBar = { HomeTopBar() }
+        topBar = { 
+            StandardTopBar(
+                title = "প্রথম শ্রেণির গাইড ও পাঠ্যবই",
+                subtitle = "জাতীয় শিক্ষাক্রম ও পাঠ্যপুস্তক বোর্ড (NCTB)",
+                navigationIcon = Icons.Default.Menu,
+                onNavigationClick = { /* Handle Drawer */ }
+            )
+        }
     ) { innerPadding ->
         when (val state = uiState) {
             is HomeUiState.Loading -> {
