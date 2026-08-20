@@ -3,8 +3,8 @@ package com.helptrickbd.class1.feature.drawing.ui
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.helptrickbd.class1.core.audio.AppSpeechEngine
 import com.helptrickbd.class1.core.audio.SoundFxHelper
+import com.helptrickbd.class1.core.audio.StudioAudioEngine
 import com.helptrickbd.class1.feature.drawing.domain.model.CelebrationState
 import com.helptrickbd.class1.feature.drawing.domain.model.TracingCategory
 import com.helptrickbd.class1.feature.drawing.domain.model.TracingItem
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DrawingViewModel @Inject constructor(
     private val getTracingItemsUseCase: GetTracingItemsUseCase,
-    private val speechEngine: AppSpeechEngine,
+    private val studioAudioEngine: StudioAudioEngine,
     private val soundFxHelper: SoundFxHelper
 ) : ViewModel() {
 
@@ -31,7 +31,7 @@ class DrawingViewModel @Inject constructor(
     init {
         loadCategory(TracingCategory.BANGLA_VOWEL)
         viewModelScope.launch {
-            speechEngine.isSpeaking.collect { speaking ->
+            studioAudioEngine.isSpeaking.collect { speaking ->
                 _uiState.value = _uiState.value.copy(isSpeaking = speaking)
             }
         }
@@ -91,8 +91,9 @@ class DrawingViewModel @Inject constructor(
     }
 
     private fun speakItem(item: TracingItem) {
-        val isEnglish = item.category == TracingCategory.ENGLISH_ALPHABET || item.category == TracingCategory.ENGLISH_NUMBER
-        speechEngine.speakTracingItem(item.character, item.wordExample, item.meaning, isEnglish)
+        viewModelScope.launch {
+            studioAudioEngine.playTracingItemAudio(item)
+        }
     }
 
     fun triggerCelebration() {
@@ -106,7 +107,7 @@ class DrawingViewModel @Inject constructor(
         )
         viewModelScope.launch {
             soundFxHelper.playVictoryChime()
-            speechEngine.speakPraise(isEnglish)
+            studioAudioEngine.playPraiseAudio(isEnglish)
             delay(3200)
             _uiState.value = _uiState.value.copy(
                 celebrationState = CelebrationState(isCelebrating = false)
@@ -144,6 +145,6 @@ class DrawingViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        speechEngine.stop()
+        studioAudioEngine.stop()
     }
 }
