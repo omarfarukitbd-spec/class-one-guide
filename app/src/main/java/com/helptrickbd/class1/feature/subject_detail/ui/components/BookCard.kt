@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.MenuBook
+import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -13,12 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.helptrickbd.class1.core.designsystem.atoms.GlassCard
-import com.helptrickbd.class1.core.designsystem.theme.*
 import com.helptrickbd.class1.feature.home.domain.model.Book
 
 @Composable
@@ -27,8 +25,11 @@ fun BookCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Determine tag based on title for now as we don't have bookType in model yet
-    val tagColor = if (book.title.contains("Guide", ignoreCase = true)) CyanGlow else ElectricPurple
+    val tagColor = if (book.title.contains("Guide", ignoreCase = true)) {
+        MaterialTheme.colorScheme.secondary
+    } else {
+        MaterialTheme.colorScheme.primary
+    }
     val tagText = if (book.title.contains("Guide", ignoreCase = true)) "GUIDE" else "TEXTBOOK"
 
     GlassCard(
@@ -47,7 +48,7 @@ fun BookCard(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.MenuBook,
+                    imageVector = Icons.AutoMirrored.Filled.MenuBook,
                     contentDescription = null,
                     tint = tagColor,
                     modifier = Modifier.size(26.dp)
@@ -86,7 +87,7 @@ fun BookCard(
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                 contentDescription = "Open Book",
-                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(20.dp)
             )
         }

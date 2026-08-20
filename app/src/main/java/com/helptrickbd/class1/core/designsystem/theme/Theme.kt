@@ -12,7 +12,6 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
@@ -20,7 +19,8 @@ import androidx.core.view.WindowCompat
 data class AppCustomColors(
     val glassWhite: Color,
     val glassBorder: Color,
-    val deepSpace: Color
+    val deepSpace: Color,
+    val topBarBackground: Color
 )
 
 @Immutable
@@ -34,31 +34,46 @@ val LocalAppColors = staticCompositionLocalOf {
     AppCustomColors(
         glassWhite = Color(0x1A000000),
         glassBorder = Color(0x1A000000),
-        deepSpace = Color.White
+        deepSpace = Color.White,
+        topBarBackground = TopBarLight
     ) 
 }
 val LocalAppBrushes = staticCompositionLocalOf { AppCustomBrushes() }
 
 private val DarkColorScheme = darkColorScheme(
-    primary = RoyalBlue,
-    secondary = VividBlue,
-    tertiary = AccentTeal,
-    background = DeepNavy,
+    primary = PrimaryDark,
+    onPrimary = OnPrimaryDark,
+    primaryContainer = PrimaryContainerDark,
+    onPrimaryContainer = OnPrimaryContainerDark,
+    secondary = SecondaryDark,
+    onSecondary = OnSecondaryDark,
+    secondaryContainer = SecondaryContainerDark,
+    onSecondaryContainer = OnSecondaryContainerDark,
+    background = BackgroundDark,
+    onBackground = OnBackgroundDark,
     surface = SurfaceDark,
-    onPrimary = Color.White,
-    onBackground = Color.White,
-    onSurface = Color.White
+    onSurface = OnSurfaceDark,
+    surfaceVariant = SurfaceVariantDark,
+    onSurfaceVariant = OnSurfaceVariantDark,
+    outlineVariant = OutlineVariantDark
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = RoyalBlue,
-    secondary = VividBlue,
-    tertiary = AccentTeal,
-    background = Color.White,
-    surface = AppBackgroundLight,
-    onPrimary = Color.White,
-    onBackground = TextPrimaryLight,
-    onSurface = TextPrimaryLight
+    primary = PrimaryLight,
+    onPrimary = OnPrimaryLight,
+    primaryContainer = PrimaryContainerLight,
+    onPrimaryContainer = OnPrimaryContainerLight,
+    secondary = SecondaryLight,
+    onSecondary = OnSecondaryLight,
+    secondaryContainer = SecondaryContainerLight,
+    onSecondaryContainer = OnSecondaryContainerLight,
+    background = BackgroundLight,
+    onBackground = OnBackgroundLight,
+    surface = SurfaceLight,
+    onSurface = OnSurfaceLight,
+    surfaceVariant = SurfaceVariantLight,
+    onSurfaceVariant = OnSurfaceVariantLight,
+    outlineVariant = OutlineVariantLight
 )
 
 @Composable
@@ -66,15 +81,13 @@ fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    // Current requirement: Default to Light (White)
-    // We can either respect system theme or force light for now.
-    // Let's respect system theme but ensure Light is fully functional.
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
     val customColors = AppCustomColors(
         glassWhite = if (darkTheme) Color(0x1AFFFFFF) else Color(0x0D000000),
         glassBorder = if (darkTheme) Color(0x26FFFFFF) else Color(0x1A000000),
-        deepSpace = colorScheme.background
+        deepSpace = colorScheme.background,
+        topBarBackground = if (darkTheme) TopBarDark else TopBarLight
     )
     val customBrushes = AppCustomBrushes()
 
@@ -84,9 +97,9 @@ fun AppTheme(
             val window = (view.context as Activity).window
             val controller = WindowCompat.getInsetsController(window, view)
             
-            // For Light Mode (white bg): dark icons (isAppearanceLightStatusBars = true)
-            // For Dark Mode (navy bg): light icons (isAppearanceLightStatusBars = false)
-            controller.isAppearanceLightStatusBars = !darkTheme
+            // TopBar is dark RoyalBlue or dark surface -> Status bar icons MUST ALWAYS be white/light!
+            controller.isAppearanceLightStatusBars = false
+            // Navigation bar follows the app theme
             controller.isAppearanceLightNavigationBars = !darkTheme
         }
     }

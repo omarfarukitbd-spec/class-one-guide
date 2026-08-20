@@ -10,6 +10,15 @@ CORE DIRECTIVES & RULES OF ENGAGEMENT:
 
 - **Atomic Design System**: Build UIs incrementally (Atoms -> Molecules -> Organisms). Place all common UI components (buttons, custom themes, glassmorphism modifiers) in a centralized core/designsystem package.
 
+- **Mandatory 5-Layer Cross-Validation & Zero Unresolved References**:
+    - NEVER introduce, reference, or modify a variable, constant, feature flag, or domain property in the UI layer without first defining and verifying it across all 5 architectural layers:
+        1. **Config Layer**: Define feature flags/constants in `core/config/AppConfig.kt` first.
+        2. **Database/Entity Layer**: Verify fields exist in `BookEntity`, `ChapterEntity`, or Room DAOs.
+        3. **Domain Layer**: Verify properties are defined on Domain Models (`Book`, `Chapter`, etc.) and UseCases.
+        4. **Repository Layer**: Verify mapping from Entity to Domain Model (`toDomain()`) includes all properties.
+        5. **UI & Navigation Layer**: Ensure all Composables, ViewModels, and `AppNavGraph` routes pass valid, existing symbols.
+    - NEVER declare a task complete or hand off code without performing this full 5-layer cross-check to guarantee zero compilation errors.
+
 - **Global Configurability & Centralized Control (SSOT)**: Every feature, business logic, UI behavior, and system configuration MUST be structured for global, app-wide controllability:
     - Never hardcode isolated logic or create tightly coupled screen-specific implementations that cannot be centrally adjusted.
     - Centralize all app-wide configurations, constants, business rules, feature flags, and policies within `core/config/AppConfig.kt`.
@@ -24,7 +33,32 @@ CORE DIRECTIVES & RULES OF ENGAGEMENT:
 
 - **Silent Error Fixing**: If a compilation error occurs, analyze the root cause (e.g., Gradle version mismatch, missing Kotlin extension) deeply before suggesting a fix. Do not guess.
 
-- **Strict State Management**: Use `StateFlow` instead of `LiveData` in ViewModels. Always collect state in Composables using `collectAsStateWithLifecycle()` to prevent background resource leaks.
+- **Strict State Management & Exhaustive 4-State UI**:
+    - Use `StateFlow` in ViewModels and collect state in Composables using `collectAsStateWithLifecycle()`.
+    - Every screen UI State MUST explicitly model and handle 4 distinct states: `Loading`, `Success`, `Error` (with a user-facing retry action button), and `Empty` (informative view when no data exists).
+    - Handle transient/one-off UI events (Snackbars, Toasts, Navigation triggers) via `Channel` or `SharedFlow` observed with `LaunchedEffect` to avoid re-triggering across recompositions/configuration changes.
+
+- **Offline-First Architecture (Room as SSOT)**:
+    - Treat local storage (Room Database / DataStore) as the Single Source of Truth (SSOT) for all remote data.
+    - Repositories must expose `Flow<T>` from Room. Network or Firebase sync updates the database, and the UI reacts to database emissions.
+    - Guarantee 100% smooth offline usability (cached books, chapters, and metadata) even with zero internet connectivity.
+
+- **Compose Performance & 60/120 FPS Stability**:
+    - Annotate UI State and Domain models with `@Immutable` or `@Stable` to allow Compose compiler smart recomposition skipping.
+    - Mandatory Unique Keys: All `LazyColumn`, `LazyRow`, and `LazyVerticalGrid` items MUST define unique keys (e.g., `items(books, key = { it.bookId })`).
+    - Use `derivedStateOf` for expensive derived calculations or scroll position observations to prevent unnecessary recompositions.
+
+- **Lifecycle Awareness & Safe Resource / PDF Streaming**:
+    - Always use `collectAsStateWithLifecycle()` to prevent background resource and battery drain.
+    - File and PDF operations must use streaming and app-scoped cache (`context.cacheDir`), never loading full large binaries directly into RAM to prevent `OutOfMemoryError` (OOM).
+
+- **Accessibility (a11y) & Adaptive Font Scaling**:
+    - Support dynamic system font scaling gracefully using `sp` and responsive container heights (`wrapContentHeight`) so text is never truncated when the user changes system font size.
+    - Every interactive UI element (Button, Icon, Card) MUST provide a clear, localized `contentDescription` for screen readers (TalkBack).
+
+- **Scoped Storage & Security Compliance**:
+    - Strictly adhere to Android 10-15+ Scoped Storage guidelines.
+    - Proactively catch and gracefully handle network timeouts, corrupt downloads, and IO exceptions without crashing the application.
 
 - **No Hardcoded Resources**: Never hardcode strings, colors, or dimensions in UI files. Always extract them to `strings.xml`, `colors.xml`, or `Theme.kt` and access via `stringResource()`, `MaterialTheme.colorScheme`, etc.
 
@@ -36,14 +70,27 @@ CORE DIRECTIVES & RULES OF ENGAGEMENT:
 
 - **Mandatory Previews**: Every Compose UI component (Atom/Molecule/Organism) MUST have a `@Preview` annotation with mock data to verify visual correctness without launching the app.
 
+- **Mandatory Clear & Concise Reporting & Bengali Documentation**:
+    - **100% Bengali Documentation (Plans & Walkthroughs)**: All `implementation_plan.md` and `walkthrough.md` artifacts, as well as all post-task explanations and responses to the user, MUST ALWAYS be written in clean, professional, and well-structured **Bengali (বাংলা)**.
+    - **Post-Task Code Explanation**: After completing any task, refactoring, or code edit, you MUST ALWAYS provide a structured summary in Bengali:
+        - **What changed (কী কী পরিবর্তন হয়েছে)**: Clear bullet points listing all modified/created files and components.
+        - **Why it was changed (কেন পরিবর্তন করা হয়েছে)**: The exact architectural, performance, or UI reason behind the change.
+        - **Code Highlights (কোড পরিবর্তন / Before vs After)**: Show relevant code snippets or diffs.
+
 - **Mandatory Build & Push Workflow**: After finishing every task or update, you MUST run a Gradle build. If the build succeeds without errors, you MUST automatically stage, commit, and push the changes to the Git repository with a descriptive commit message. NEVER push code that fails to build.
 
 PROJECT-SPECIFIC DESIGN DIRECTIVES:
 
-- **STRICT SYSTEM BAR ISOLATION (MANDATORY)**: The app UI and background colors MUST NEVER bleed into, under, or overlap with the mobile system Status Bar (top) or Navigation Bar (bottom). 
-    - The app layout MUST strictly start **AFTER** the Status Bar and end **BEFORE** the Navigation Bar.
-    - NEVER use `enableEdgeToEdge()` with transparent styles that allow app colors to draw behind system icons (Time, Battery, etc.).
-    - Always ensure system bars maintain their solid system background (e.g., Black).
-    - If `Scaffold` or `statusBarsPadding()` is used, it must be configured so that no app-defined color ever reaches the system-controlled areas. This rule applies to ALL mobile versions and screen types.
+- **ANDROID NATIVE SYSTEM UI CONTROLLER & EDGE-TO-EDGE SYSTEM (100% MANDATORY)**:
+    - **Activity Edge-to-Edge Initialization**: Always call `enableEdgeToEdge()` in `MainActivity.onCreate()` as mandated by modern Android guidelines (Android 14/15+).
+    - **Dynamic System UI Appearance (SSOT in Theme.kt)**: System bar icons and contrast MUST be controlled centrally via `WindowCompat.getInsetsController(window, view)` inside Compose `SideEffect` in `Theme.kt`:
+        - `controller.isAppearanceLightStatusBars = !darkTheme` (Ensures dark status bar icons on light theme, light icons on dark theme for 100% crystal-clear readability).
+        - `controller.isAppearanceLightNavigationBars = !darkTheme` (Ensures navigation bar icons and gesture pill contrast correctly with the theme background).
+    - **Mandatory Window Insets Consumption**:
+        - Every screen MUST use `Scaffold` or explicit `WindowInsets` handling.
+        - Composable screens MUST ALWAYS consume `innerPadding` provided by `Scaffold` (or use `Modifier.statusBarsPadding()`, `Modifier.navigationBarsPadding()`, `Modifier.safeDrawingPadding()`). NEVER ignore `innerPadding`.
+        - Screen headers and Top Bars MUST consume status bar insets (via `Modifier.statusBarsPadding()` or `StandardTopBar`) so interactive icons, navigation buttons, and titles are never obscured or cut off by the system status bar, notch, or camera cutout.
+        - Bottom navigation, floating action buttons, and scrollable list bottoms MUST consume navigation bar insets (via `innerPadding` or `Modifier.navigationBarsPadding()`) so interactive elements are never clipped by the system gesture bar or 3-button navigation.
+    - **Zero Fragmented Hacks**: Individual screens/composables must NEVER perform isolated window manipulations. All System UI controller behaviors must be centrally driven through `MainActivity.kt`, `Theme.kt`, and `core/designsystem` components.
 
 - **Zero Emojis & Strict Material 3 Vector Icons**: NEVER use emojis anywhere in the app (UI text, buttons, titles, subtitles, cards, or placeholders). Always use appropriate, high-quality, and responsive Material 3 Vector Icons (`ImageVector`, `Icons.Default.*`, `Icons.Outlined.*`, `Icons.Rounded.*`, or custom XML vector drawables) for all UI iconography and visual cues.

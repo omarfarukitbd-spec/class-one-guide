@@ -4,28 +4,58 @@ import com.helptrickbd.class1.feature.home.domain.model.Curriculum
 import com.helptrickbd.class1.feature.home.domain.model.LanguageVersion
 
 /**
- * Single Source of Truth (SSOT) for App-wide Configuration.
+ * Single Source of Truth (SSOT) for App-wide Configuration, Multi-Class Scaling & Cloud Admin Panel.
  * 
- * To clone this app for Class 2, 3, etc., update these values.
+ * To clone this codebase for other classes (Class 2, 3, 4 ... 10), update these settings.
  */
 object AppConfig {
     
-    // Target Class Identifier (Used for Firebase Filtering)
+    // ==========================================
+    // 1. Target Class Identifier & Metadata
+    // ==========================================
     const val TARGET_CLASS_ID = "class_1"
+    const val CLASS_NAME_BANGLA = "প্রথম শ্রেণি"
+    const val ACADEMIC_YEAR = "২০২৬"
+    const val APP_NAME = "Class 1 Guide"
+    const val DEFAULT_USER_NAME = "শিক্ষার্থী"
     
-    // Default Preferences
+    // ==========================================
+    // 2. Default Curriculum & Language Settings
+    // ==========================================
     val DEFAULT_CURRICULUM = Curriculum.SCHOOL
     val DEFAULT_LANGUAGE_VERSION = LanguageVersion.BANGLA
     
-    // UI Configuration
-    const val APP_NAME = "Class 1 Guide"
-    const val DEFAULT_USER_NAME = "ছাত্র/ছাত্রী"
-    
-    // Remote Storage Root (GitHub PDF Hosting Base URL)
+    // ==========================================
+    // 3. Remote Storage & Cloud Admin Sync Engine
+    // ==========================================
+    // Base CDN / GitHub Storage for PDF Streaming
     const val PDF_STORAGE_BASE_URL = "https://raw.githubusercontent.com/omarfarukitbd-spec/class-one-guide/main/pdfs/"
-
-    // Feature Toggles
-    const val ENABLE_DARK_MODE = true
-    const val ENABLE_ADMIN_PANEL = true
-    const val SHOW_STUDY_STREAK = true
+    
+    // Cloud Firestore Collection Structure (Global Admin Panel SSOT)
+    const val CLOUD_ROOT_COLLECTION = "nctb_classes"
+    const val CLOUD_BOOKS_COLLECTION = "books"
+    const val CLOUD_CHAPTERS_COLLECTION = "chapters"
+    
+    // ==========================================
+    // 4. Class-Specific Pluggable Feature Flags
+    // ==========================================
+    // Core Features (Available in Class 1)
+    const val FEATURE_PDF_READER = true
+    const val FEATURE_OFFLINE_CACHE = true
+    const val FEATURE_READING_PROGRESS = true
+    const val FEATURE_DARK_MODE = true
+    const val FEATURE_NAVIGATION_DRAWER = true
+    const val FEATURE_CLOUD_SYNC = true
+    const val FEATURE_DRAWING_BOARD = true
+    const val FEATURE_SEARCH = true
+    const val FEATURE_PDF_BOOKMARKS = true
+    const val FEATURE_PDF_THUMBNAIL_PREVIEW = true
+    const val FEATURE_PDF_READING_THEMES = true
+    const val FEATURE_PDF_HORIZONTAL_SCROLL = true
+    
+    // Higher Class Pluggable Extensions (Class 6 - 10 Extensions)
+    const val FEATURE_MCQ_QUIZ = false
+    const val FEATURE_VIDEO_CLASSES = false
+    const val FEATURE_FORMULA_SHEET = false
+    const val FEATURE_BOARD_QUESTIONS = false
 }

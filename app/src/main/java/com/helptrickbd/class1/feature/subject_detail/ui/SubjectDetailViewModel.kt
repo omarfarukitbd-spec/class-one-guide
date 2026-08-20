@@ -42,7 +42,7 @@ class SubjectDetailViewModel @Inject constructor(
             _uiState.value = SubjectDetailUiState.Loading
             repository.getBookDetail(bookId)
                 .catch { e ->
-                    _uiState.value = SubjectDetailUiState.Error(e.message ?: "Failed to load book details")
+                    _uiState.value = SubjectDetailUiState.Error(e.message ?: "বইয়ের বিবরণ লোড করতে সমস্যা হয়েছে")
                 }
                 .collect { book ->
                     if (book != null) {
@@ -51,9 +51,17 @@ class SubjectDetailViewModel @Inject constructor(
                         expandedChapterId = book.chapters.firstOrNull()?.chapterId
                         emitSuccessState()
                     } else {
-                        _uiState.value = SubjectDetailUiState.Error("Book not found")
+                        _uiState.value = SubjectDetailUiState.Error("বইটি পাওয়া যায়নি")
                     }
                 }
+        }
+    }
+
+    fun onToggleFavorite() {
+        val book = currentBook ?: return
+        val newFav = !book.isFavorite
+        viewModelScope.launch {
+            repository.toggleFavorite(book.bookId, newFav)
         }
     }
 

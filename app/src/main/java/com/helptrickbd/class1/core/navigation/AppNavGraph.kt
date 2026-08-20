@@ -7,9 +7,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.helptrickbd.class1.feature.home.presentation.HomeViewModel
-import com.helptrickbd.class1.feature.home.ui.HomeScreen
+import com.helptrickbd.class1.feature.main.ui.MainScreen
 import com.helptrickbd.class1.feature.pdf_viewer.ui.PdfViewerScreen
+import com.helptrickbd.class1.feature.pdf_viewer.ui.PdfViewerViewModel
 import com.helptrickbd.class1.feature.subject_detail.ui.SubjectDetailScreen
 import com.helptrickbd.class1.feature.subject_detail.ui.SubjectDetailViewModel
 
@@ -24,9 +24,7 @@ fun AppNavGraph(
         modifier = modifier
     ) {
         composable<Screen.Home> {
-            val viewModel: HomeViewModel = hiltViewModel()
-            HomeScreen(
-                viewModel = viewModel,
+            MainScreen(
                 onBookClick = { bookId, bookTitle ->
                     navController.navigate(
                         Screen.SubjectDetail(
@@ -34,6 +32,25 @@ fun AppNavGraph(
                             subjectName = bookTitle
                         )
                     )
+                },
+                onResumeClick = { resumeBook ->
+                    if (resumeBook.pdfUrl.isNotBlank()) {
+                        navController.navigate(
+                            Screen.PdfViewer(
+                                resourceTitle = resumeBook.title,
+                                pdfUrl = resumeBook.pdfUrl,
+                                bookId = resumeBook.bookId,
+                                initialPage = resumeBook.lastReadPage
+                            )
+                        )
+                    } else {
+                        navController.navigate(
+                            Screen.SubjectDetail(
+                                subjectId = resumeBook.bookId,
+                                subjectName = resumeBook.title
+                            )
+                        )
+                    }
                 }
             )
         }
@@ -47,7 +64,8 @@ fun AppNavGraph(
                     navController.navigate(
                         Screen.PdfViewer(
                             resourceTitle = resource.title,
-                            pdfUrl = resource.pdfUrl
+                            pdfUrl = resource.pdfUrl,
+                            bookId = detailViewModel.bookId
                         )
                     )
                 }
@@ -56,9 +74,13 @@ fun AppNavGraph(
 
         composable<Screen.PdfViewer> { backStackEntry ->
             val args = backStackEntry.toRoute<Screen.PdfViewer>()
+            val pdfViewModel: PdfViewerViewModel = hiltViewModel()
             PdfViewerScreen(
                 title = args.resourceTitle,
                 pdfUrl = args.pdfUrl,
+                bookId = args.bookId,
+                initialPage = args.initialPage,
+                viewModel = pdfViewModel,
                 onBackClick = { navController.popBackStack() }
             )
         }

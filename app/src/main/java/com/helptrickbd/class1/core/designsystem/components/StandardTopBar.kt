@@ -1,5 +1,6 @@
 package com.helptrickbd.class1.core.designsystem.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -10,9 +11,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.helptrickbd.class1.core.designsystem.theme.AppTheme
+import com.helptrickbd.class1.core.designsystem.theme.TopBarDark
 
 /**
- * A globally configurable Top Bar that strictly handles system bar isolation.
+ * A globally configurable Top Bar that strictly handles native system UI insets.
  * Use this as the SSOT for all screen headers.
  */
 @Composable
@@ -22,10 +25,14 @@ fun StandardTopBar(
     navigationIcon: ImageVector? = null,
     onNavigationClick: () -> Unit = {},
     modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.colorScheme.primary
+    backgroundColor: Color = AppTheme.colors.topBarBackground,
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
+    val isDark = backgroundColor == TopBarDark
+
     Surface(
         color = backgroundColor,
+        border = if (isDark) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)) else null,
         modifier = modifier.fillMaxWidth()
     ) {
         Row(
@@ -69,6 +76,11 @@ fun StandardTopBar(
                     )
                 }
             }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                content = actions
+            )
         }
     }
 }

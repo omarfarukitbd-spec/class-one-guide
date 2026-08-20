@@ -1,136 +1,146 @@
 package com.helptrickbd.class1.feature.pdf_viewer.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.PictureAsPdf
-import androidx.compose.material3.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.helptrickbd.class1.feature.pdf_viewer.domain.model.PdfActiveSheet
+import com.helptrickbd.class1.feature.pdf_viewer.domain.model.PdfViewMode
+import com.helptrickbd.class1.feature.pdf_viewer.ui.components.*
 
 @Composable
 fun PdfViewerScreen(
     title: String,
     pdfUrl: String,
+    viewModel: PdfViewerViewModel,
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    bookId: String = "",
+    initialPage: Int = 1
 ) {
+    LaunchedEffect(pdfUrl, bookId) {
+        viewModel.loadPdf(url = pdfUrl, bookId = bookId, initialPage = initialPage)
+    }
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
-            Surface(
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.fillMaxWidth()
+            val successState = uiState as? PdfViewerUiState.Success
+            AnimatedVisibility(
+                visible = successState?.isControlsVisible ?: true,
+                enter = slideInVertically(initialOffsetY = { -it }) + fadeIn(),
+                exit = slideOutVertically(targetOffsetY = { -it }) + fadeOut()
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp, vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.White
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(4.dp))
-
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = title,
-                            color = Color.White,
-                            fontSize = 17.sp,
-                            fontWeight = FontWeight.Bold,
-                            maxLines = 1
-                        )
-                        Text(
-                            text = "ডিজিটাল পাঠ্যবই রিডার",
-                            color = Color.White.copy(alpha = 0.85f),
-                            fontSize = 12.sp
-                        )
-                    }
-
-                    IconButton(onClick = { /* Handle download/share */ }) {
-                        Icon(
-                            imageVector = Icons.Default.Download,
-                            contentDescription = "Download PDF",
-                            tint = Color.White
-                        )
-                    }
-                }
+                PdfTopAppBar(
+                    title = title,
+                    currentPage = successState?.currentPage ?: initialPage,
+                    totalPages = successState?.totalPages ?: 1,
+                    isBookmarked = successState?.isCurrentPageBookmarked ?: false,
+                    onBackClick = onBackClick,
+                    onToggleBookmark = viewModel::toggleBookmark,
+                    onOpenThumbnails = { viewModel.openSheet(PdfActiveSheet.THUMBNAIL_GRID) },
+                    onOpenBookmarks = { viewModel.openSheet(PdfActiveSheet.BOOKMARKS_LIST) },
+                    onOpenSettings = { viewModel.openSheet(PdfActiveSheet.READING_SETTINGS) }
+                )
             }
         }
     ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(24.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(28.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Surface(
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
-                        shape = RoundedCornerShape(16.dp)
+        when (val state = uiState) {
+            is PdfViewerUiState.Loading -> {
+                PdfLoadingView(progress = state.progress, innerPadding = innerPadding)
+            }
+            is PdfViewerUiState.Success -> {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    if (state.viewMode == PdfViewMode.HORIZONTAL_PAGER) {
+                        PdfHorizontalPagerView(
+                            totalPages = state.totalPages,
+                            currentPage = state.currentPage,
+                            engine = state.engine,
+                            readingTheme = state.readingTheme,
+                            onPageChanged = viewModel::onPageChanged,
+                            onToggleControls = viewModel::toggleControlsVisibility,
+                            innerPadding = innerPadding
+                        )
+                    } else {
+                        PdfVerticalListView(
+                            totalPages = state.totalPages,
+                            currentPage = state.currentPage,
+                            engine = state.engine,
+                            readingTheme = state.readingTheme,
+                            onPageChanged = viewModel::onPageChanged,
+                            onToggleControls = viewModel::toggleControlsVisibility,
+                            innerPadding = innerPadding
+                        )
+                    }
+
+                    AnimatedVisibility(
+                        visible = state.isControlsVisible,
+                        enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
+                        exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
+                        modifier = Modifier.align(Alignment.BottomCenter)
                     ) {
-                        Box(modifier = Modifier.padding(16.dp)) {
-                            Icon(
-                                imageVector = Icons.Default.PictureAsPdf,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(48.dp)
+                        PdfBottomScrubber(
+                            currentPage = state.currentPage,
+                            totalPages = state.totalPages,
+                            readingTheme = state.readingTheme,
+                            viewMode = state.viewMode,
+                            onPageSelected = viewModel::onPageChanged,
+                            onThemeSelected = viewModel::setReadingTheme,
+                            onViewModeToggle = {
+                                val nextMode = if (state.viewMode == PdfViewMode.VERTICAL_SCROLL) PdfViewMode.HORIZONTAL_PAGER else PdfViewMode.VERTICAL_SCROLL
+                                viewModel.setViewMode(nextMode)
+                            }
+                        )
+                    }
+
+                    when (state.activeSheet) {
+                        PdfActiveSheet.THUMBNAIL_GRID -> {
+                            PdfThumbnailGridSheet(
+                                totalPages = state.totalPages,
+                                currentPage = state.currentPage,
+                                bookmarks = state.bookmarks,
+                                engine = state.engine,
+                                onPageSelected = viewModel::onPageChanged,
+                                onDismiss = viewModel::closeSheet
                             )
                         }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = "ফাইল: $pdfUrl",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    Button(
-                        onClick = { /* Open full renderer */ },
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(text = "পড়া শুরু করুন")
+                        PdfActiveSheet.BOOKMARKS_LIST -> {
+                            PdfBookmarksSheet(
+                                bookmarks = state.bookmarks,
+                                onPageSelected = viewModel::onPageChanged,
+                                onDeleteBookmark = viewModel::deleteBookmark,
+                                onDismiss = viewModel::closeSheet
+                            )
+                        }
+                        PdfActiveSheet.READING_SETTINGS -> {
+                            PdfReadingSettingsSheet(
+                                readingTheme = state.readingTheme,
+                                viewMode = state.viewMode,
+                                onThemeSelected = viewModel::setReadingTheme,
+                                onViewModeSelected = viewModel::setViewMode,
+                                onDismiss = viewModel::closeSheet
+                            )
+                        }
+                        PdfActiveSheet.NONE -> {}
                     }
                 }
+            }
+            is PdfViewerUiState.Error -> {
+                PdfErrorView(message = state.message, onRetry = viewModel::retry, innerPadding = innerPadding)
             }
         }
     }

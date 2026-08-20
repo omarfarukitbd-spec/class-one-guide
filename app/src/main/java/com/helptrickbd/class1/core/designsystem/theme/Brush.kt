@@ -5,18 +5,18 @@ import androidx.compose.ui.graphics.Color
 
 object AppBrushes {
     val LiquidMain = Brush.linearGradient(
-        colors = listOf(ElectricPurple, CyanGlow)
+        colors = listOf(PrimaryLight, SecondaryLight)
     )
 
     val GlassGradient = Brush.verticalGradient(
-        colors = listOf(GlassWhite, Color.Transparent)
+        colors = listOf(Color(0x26FFFFFF), Color.Transparent)
     )
 
     val SoftSunset = Brush.horizontalGradient(
-        colors = listOf(SoftPink, ElectricPurple)
+        colors = listOf(SecondaryDark, PrimaryDark)
     )
 
     val DeepSurface = Brush.radialGradient(
-        colors = listOf(SurfaceDark, DeepSpace)
+        colors = listOf(SurfaceDark, BackgroundDark)
     )
 }

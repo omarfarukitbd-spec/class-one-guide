@@ -10,8 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.helptrickbd.class1.core.designsystem.theme.TextPrimary
-import com.helptrickbd.class1.core.designsystem.theme.TextSecondary
 
 @Composable
 fun GreetingSection(
@@ -22,13 +20,13 @@ fun GreetingSection(
         Text(
             text = "Welcome back,",
             style = MaterialTheme.typography.bodyLarge,
-            color = TextSecondary
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = userName,
             style = MaterialTheme.typography.headlineLarge,
-            color = TextPrimary,
+            color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 28.sp
         )

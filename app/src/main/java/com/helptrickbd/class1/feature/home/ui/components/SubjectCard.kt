@@ -14,9 +14,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.helptrickbd.class1.core.designsystem.atoms.GlassCard
-import com.helptrickbd.class1.core.designsystem.theme.AppTheme
-import com.helptrickbd.class1.core.designsystem.theme.TextPrimary
-import com.helptrickbd.class1.core.designsystem.theme.TextSecondary
 
 @Composable
 fun SubjectCard(
@@ -38,13 +35,13 @@ fun SubjectCard(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = AppTheme.colors.glassBorder,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(32.dp)
                 )
                 Text(
                     text = "${(progress * 100).toInt()}%",
                     style = MaterialTheme.typography.bodySmall,
-                    color = TextSecondary,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -54,7 +51,7 @@ fun SubjectCard(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleLarge,
-                color = TextPrimary,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Bold
             )
             
@@ -66,7 +63,7 @@ fun SubjectCard(
                     .fillMaxWidth()
                     .height(6.dp),
                 color = MaterialTheme.colorScheme.primary,
-                trackColor = AppTheme.colors.glassBorder,
+                trackColor = MaterialTheme.colorScheme.surfaceVariant,
                 strokeCap = StrokeCap.Round
             )
         }
