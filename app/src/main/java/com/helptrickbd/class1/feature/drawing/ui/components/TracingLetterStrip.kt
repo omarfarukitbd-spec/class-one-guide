@@ -11,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,12 +46,15 @@ fun TracingLetterStrip(
             val isSelected = item.id == selectedItem?.id
             Surface(
                 modifier = Modifier
-                    .size(44.dp)
+                    .size(46.dp)
                     .clickable { onItemSelected(item) },
                 shape = RoundedCornerShape(12.dp),
-                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
-                border = if (isSelected) BorderStroke(2.dp, MaterialTheme.colorScheme.primaryContainer) else null,
-                shadowElevation = if (isSelected) 4.dp else 0.dp
+                color = if (isSelected) Color(0xFFFFD54F) else Color(0xFF222B3D),
+                border = BorderStroke(
+                    width = if (isSelected) 2.dp else 1.dp,
+                    color = if (isSelected) Color(0xFFFFE082) else Color(0xFF37445C)
+                ),
+                shadowElevation = if (isSelected) 6.dp else 1.dp
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -58,9 +62,9 @@ fun TracingLetterStrip(
                 ) {
                     Text(
                         text = item.character,
-                        fontSize = 18.sp,
+                        fontSize = 19.sp,
                         fontWeight = FontWeight.Bold,
-                        color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+                        color = if (isSelected) Color(0xFF121722) else Color(0xFFF8FAFC) // 100% readable contrast
                     )
                 }
             }

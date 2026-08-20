@@ -20,7 +20,7 @@ import com.helptrickbd.class1.feature.drawing.domain.model.TracingCategory
 import com.helptrickbd.class1.feature.drawing.domain.model.TracingItem
 import com.helptrickbd.class1.feature.drawing.ui.model.DrawingPath
 
-val SlateCanvasBackground = Color(0xFF181D27)
+val SlateCanvasBackground = Color(0xFF141824)
 
 @Composable
 fun TracingCanvas(

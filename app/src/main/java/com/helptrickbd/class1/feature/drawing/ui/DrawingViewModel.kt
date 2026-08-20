@@ -2,19 +2,27 @@ package com.helptrickbd.class1.feature.drawing.ui
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.helptrickbd.class1.core.audio.AppSpeechEngine
+import com.helptrickbd.class1.core.audio.SoundFxHelper
+import com.helptrickbd.class1.feature.drawing.domain.model.CelebrationState
 import com.helptrickbd.class1.feature.drawing.domain.model.TracingCategory
 import com.helptrickbd.class1.feature.drawing.domain.model.TracingItem
 import com.helptrickbd.class1.feature.drawing.domain.usecase.GetTracingItemsUseCase
 import com.helptrickbd.class1.feature.drawing.ui.model.DrawingPath
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DrawingViewModel @Inject constructor(
-    private val getTracingItemsUseCase: GetTracingItemsUseCase
+    private val getTracingItemsUseCase: GetTracingItemsUseCase,
+    private val speechEngine: AppSpeechEngine,
+    private val soundFxHelper: SoundFxHelper
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DrawingUiState())
@@ -22,6 +30,11 @@ class DrawingViewModel @Inject constructor(
 
     init {
         loadCategory(TracingCategory.BANGLA_VOWEL)
+        viewModelScope.launch {
+            speechEngine.isSpeaking.collect { speaking ->
+                _uiState.value = _uiState.value.copy(isSpeaking = speaking)
+            }
+        }
     }
 
     fun selectCategory(category: TracingCategory) {
@@ -31,53 +44,86 @@ class DrawingViewModel @Inject constructor(
 
     private fun loadCategory(category: TracingCategory) {
         val items = getTracingItemsUseCase(category)
+        val firstItem = items.firstOrNull()
         _uiState.value = _uiState.value.copy(
             selectedCategory = category,
             items = items,
-            selectedItem = items.firstOrNull(),
-            paths = emptyList()
+            selectedItem = firstItem,
+            paths = emptyList(),
+            celebrationState = CelebrationState(isCelebrating = false)
         )
+        if (firstItem != null && _uiState.value.isAutoSpeechEnabled) {
+            speakItem(firstItem)
+        }
     }
 
     fun selectItem(item: TracingItem) {
         _uiState.value = _uiState.value.copy(
             selectedItem = item,
-            paths = emptyList()
+            paths = emptyList(),
+            celebrationState = CelebrationState(isCelebrating = false)
         )
+        if (_uiState.value.isAutoSpeechEnabled) {
+            speakItem(item)
+        }
     }
 
     fun nextItem() {
-        val currentState = _uiState.value
-        val items = currentState.items
+        val items = _uiState.value.items
         if (items.isEmpty()) return
-
-        val currentIndex = items.indexOf(currentState.selectedItem)
+        val currentIndex = items.indexOf(_uiState.value.selectedItem)
         if (currentIndex != -1 && currentIndex < items.size - 1) {
             selectItem(items[currentIndex + 1])
         }
     }
 
     fun previousItem() {
-        val currentState = _uiState.value
-        val items = currentState.items
+        val items = _uiState.value.items
         if (items.isEmpty()) return
-
-        val currentIndex = items.indexOf(currentState.selectedItem)
+        val currentIndex = items.indexOf(_uiState.value.selectedItem)
         if (currentIndex > 0) {
             selectItem(items[currentIndex - 1])
         }
     }
 
+    fun speakCurrentItem() {
+        _uiState.value.selectedItem?.let { speakItem(it) }
+    }
+
+    private fun speakItem(item: TracingItem) {
+        val isEnglish = item.category == TracingCategory.ENGLISH_ALPHABET || item.category == TracingCategory.ENGLISH_NUMBER
+        speechEngine.speakTracingItem(item.character, item.wordExample, item.meaning, isEnglish)
+    }
+
+    fun triggerCelebration() {
+        val isEnglish = _uiState.value.selectedCategory == TracingCategory.ENGLISH_ALPHABET || _uiState.value.selectedCategory == TracingCategory.ENGLISH_NUMBER
+        _uiState.value = _uiState.value.copy(
+            celebrationState = CelebrationState(
+                isCelebrating = true,
+                starsEarned = 3,
+                praiseMessage = if (isEnglish) "Well done! Excellent!" else "সাবাশ! চমৎকার হয়েছে!"
+            )
+        )
+        viewModelScope.launch {
+            soundFxHelper.playVictoryChime()
+            speechEngine.speakPraise(isEnglish)
+            delay(3200)
+            _uiState.value = _uiState.value.copy(
+                celebrationState = CelebrationState(isCelebrating = false)
+            )
+        }
+    }
+
+    fun dismissCelebration() {
+        _uiState.value = _uiState.value.copy(celebrationState = CelebrationState(isCelebrating = false))
+    }
+
     fun addPath(path: DrawingPath) {
-        val updatedPaths = _uiState.value.paths + path
-        _uiState.value = _uiState.value.copy(paths = updatedPaths)
+        _uiState.value = _uiState.value.copy(paths = _uiState.value.paths + path)
     }
 
     fun selectColor(color: Color) {
-        _uiState.value = _uiState.value.copy(
-            selectedColor = color,
-            isEraser = false
-        )
+        _uiState.value = _uiState.value.copy(selectedColor = color, isEraser = false)
     }
 
     fun setStrokeWidth(width: Float) {
@@ -94,5 +140,10 @@ class DrawingViewModel @Inject constructor(
 
     fun toggleGuide() {
         _uiState.value = _uiState.value.copy(showGuide = !_uiState.value.showGuide)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        speechEngine.stop()
     }
 }

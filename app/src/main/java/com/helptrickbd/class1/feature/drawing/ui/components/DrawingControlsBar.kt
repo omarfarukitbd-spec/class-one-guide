@@ -16,10 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 val SlateColors = listOf(
-    Color(0xFFFFEB3B), // Bright Yellow
+    Color(0xFFFFD54F), // Radiant Yellow
     Color.White,
     Color(0xFF00E676), // Bright Green
     Color(0xFF00E5FF), // Bright Cyan
@@ -38,6 +40,7 @@ fun DrawingControlsBar(
     onToggleEraser: () -> Unit,
     onToggleGuide: () -> Unit,
     onClear: () -> Unit,
+    onDoneCelebration: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -46,9 +49,9 @@ fun DrawingControlsBar(
             .navigationBarsPadding()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
-        tonalElevation = 6.dp,
-        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+        color = Color(0xFF1E2538),
+        shadowElevation = 8.dp,
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF333E54))
     ) {
         Row(
             modifier = Modifier
@@ -73,7 +76,7 @@ fun DrawingControlsBar(
                             .background(color)
                             .border(
                                 width = if (isSelected) 3.dp else 1.dp,
-                                color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray.copy(alpha = 0.4f),
+                                color = if (isSelected) Color(0xFFFFD54F) else Color.White.copy(alpha = 0.3f),
                                 shape = CircleShape
                             )
                             .clickable { onColorSelected(color) }
@@ -88,16 +91,40 @@ fun DrawingControlsBar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (isTracingMode) {
+                    // Done / Celebration Trigger Button
+                    FilledTonalButton(
+                        onClick = onDoneCelebration,
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.filledTonalButtonColors(
+                            containerColor = Color(0xFFFFD54F),
+                            contentColor = Color(0xFF121722)
+                        ),
+                        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp),
+                        modifier = Modifier.height(36.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "সম্পন্ন",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
                     IconButton(
                         onClick = onToggleGuide,
                         colors = IconButtonDefaults.iconButtonColors(
-                            containerColor = if (showGuide) MaterialTheme.colorScheme.primaryContainer else Color.Transparent
+                            containerColor = if (showGuide) Color(0xFF283349) else Color.Transparent
                         )
                     ) {
                         Icon(
                             imageVector = if (showGuide) Icons.Default.Visibility else Icons.Default.VisibilityOff,
                             contentDescription = if (showGuide) "গাইড লুকান" else "গাইড দেখান",
-                            tint = if (showGuide) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = if (showGuide) Color(0xFFFFD54F) else Color(0xFF94A3B8)
                         )
                     }
                 }
@@ -105,8 +132,8 @@ fun DrawingControlsBar(
                 FilledTonalIconButton(
                     onClick = onToggleEraser,
                     colors = IconButtonDefaults.filledTonalIconButtonColors(
-                        containerColor = if (isEraser) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
-                        contentColor = if (isEraser) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
+                        containerColor = if (isEraser) Color(0xFFFFD54F) else Color(0xFF283349),
+                        contentColor = if (isEraser) Color(0xFF121722) else Color(0xFFF1F5F9)
                     )
                 ) {
                     Icon(
@@ -117,7 +144,7 @@ fun DrawingControlsBar(
 
                 IconButton(
                     onClick = onClear,
-                    colors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                    colors = IconButtonDefaults.iconButtonColors(contentColor = Color(0xFFFF6E6E))
                 ) {
                     Icon(
                         imageVector = Icons.Default.Delete,
