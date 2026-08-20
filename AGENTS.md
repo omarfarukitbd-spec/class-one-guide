@@ -12,7 +12,8 @@ CORE DIRECTIVES & RULES OF ENGAGEMENT:
 
 - **Global Configurability & Centralized Control (SSOT)**: Every feature, business logic, UI behavior, and system configuration MUST be structured for global, app-wide controllability:
     - Never hardcode isolated logic or create tightly coupled screen-specific implementations that cannot be centrally adjusted.
-    - Centralize all app-wide configurations, constants, business rules, feature flags, and policies within dedicated core modules (e.g., `core/config`, `core/common`, `core/domain`, or singleton Managers via DI).
+    - Centralize all app-wide configurations, constants, business rules, feature flags, and policies within `core/config/AppConfig.kt`.
+    - Refer to `SCALABILITY_GUIDE.md` for detailed instructions on cloning this project for other classes (Class 2, 3, etc.).
     - Design components and UseCases to be driven by a Single Source of Truth (SSOT) so that behaviors, styling, and data rules can be modified or toggled globally across the entire app from one central place without rewriting multiple screens.
 
 - **No Code Placeholders**: NEVER output partial code. Never use lazy comments like // ... rest of the code or // ... previous logic. Always provide the full, ready-to-copy file.
