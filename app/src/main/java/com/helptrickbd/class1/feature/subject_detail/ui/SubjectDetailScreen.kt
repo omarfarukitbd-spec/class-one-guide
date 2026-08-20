@@ -16,8 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.helptrickbd.class1.core.designsystem.theme.AppTheme
-import com.helptrickbd.class1.core.designsystem.theme.TextPrimary
-import com.helptrickbd.class1.core.designsystem.theme.TextSecondary
 import com.helptrickbd.class1.feature.home.domain.model.Book
 import com.helptrickbd.class1.feature.subject_detail.ui.components.BookCard
 import com.helptrickbd.class1.feature.subject_detail.ui.components.SpecialFeaturesSection
@@ -33,12 +31,12 @@ fun SubjectDetailScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = AppTheme.colors.deepSpace
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(AppTheme.brushes.deepSurface)
+                .background(MaterialTheme.colorScheme.background)
         ) {
             when (val state = uiState) {
                 is SubjectDetailUiState.Loading -> {
@@ -71,19 +69,19 @@ fun SubjectDetailScreen(
                                     Icon(
                                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                         contentDescription = "Back",
-                                        tint = TextPrimary
+                                        tint = MaterialTheme.colorScheme.onBackground
                                     )
                                 }
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Column {
                                     Text(
                                         text = "Subject Overview",
-                                        color = TextSecondary,
+                                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                                         fontSize = 14.sp
                                     )
                                     Text(
                                         text = state.subjectName,
-                                        color = TextPrimary,
+                                        color = MaterialTheme.colorScheme.onBackground,
                                         fontSize = 24.sp,
                                         fontWeight = FontWeight.Bold
                                     )
@@ -101,7 +99,7 @@ fun SubjectDetailScreen(
                         item {
                             Text(
                                 text = "Available Books & Guides",
-                                color = TextSecondary,
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Bold,
                                 letterSpacing = 1.sp

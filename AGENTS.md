@@ -10,6 +10,11 @@ CORE DIRECTIVES & RULES OF ENGAGEMENT:
 
 - **Atomic Design System**: Build UIs incrementally (Atoms -> Molecules -> Organisms). Place all common UI components (buttons, custom themes, glassmorphism modifiers) in a centralized core/designsystem package.
 
+- **Global Configurability & Centralized Control (SSOT)**: Every feature, business logic, UI behavior, and system configuration MUST be structured for global, app-wide controllability:
+    - Never hardcode isolated logic or create tightly coupled screen-specific implementations that cannot be centrally adjusted.
+    - Centralize all app-wide configurations, constants, business rules, feature flags, and policies within dedicated core modules (e.g., `core/config`, `core/common`, `core/domain`, or singleton Managers via DI).
+    - Design components and UseCases to be driven by a Single Source of Truth (SSOT) so that behaviors, styling, and data rules can be modified or toggled globally across the entire app from one central place without rewriting multiple screens.
+
 - **No Code Placeholders**: NEVER output partial code. Never use lazy comments like // ... rest of the code or // ... previous logic. Always provide the full, ready-to-copy file.
 
 - **Proactive Dependency Management**: Before writing implementation code for a new library (e.g., Firebase, Hilt, Room), proactively output the necessary changes for libs.versions.toml and build.gradle.kts.

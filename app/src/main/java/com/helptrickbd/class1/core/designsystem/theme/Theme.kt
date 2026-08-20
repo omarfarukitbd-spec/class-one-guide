@@ -18,9 +18,9 @@ import androidx.core.view.WindowCompat
 
 @Immutable
 data class AppCustomColors(
-    val glassWhite: Color = GlassWhite,
-    val glassBorder: Color = GlassBorder,
-    val deepSpace: Color = DeepSpace
+    val glassWhite: Color,
+    val glassBorder: Color,
+    val deepSpace: Color
 )
 
 @Immutable
@@ -30,15 +30,35 @@ data class AppCustomBrushes(
     val deepSurface: Brush = AppBrushes.DeepSurface
 )
 
-val LocalAppColors = staticCompositionLocalOf { AppCustomColors() }
+val LocalAppColors = staticCompositionLocalOf { 
+    AppCustomColors(
+        glassWhite = Color(0x1A000000),
+        glassBorder = Color(0x1A000000),
+        deepSpace = Color.White
+    ) 
+}
 val LocalAppBrushes = staticCompositionLocalOf { AppCustomBrushes() }
 
 private val DarkColorScheme = darkColorScheme(
-    primary = ElectricPurple,
-    secondary = CyanGlow,
-    tertiary = SoftPink,
-    background = DeepSpace,
-    surface = SurfaceDark
+    primary = RoyalBlue,
+    secondary = VividBlue,
+    tertiary = AccentTeal,
+    background = DeepNavy,
+    surface = SurfaceDark,
+    onPrimary = Color.White,
+    onBackground = Color.White,
+    onSurface = Color.White
+)
+
+private val LightColorScheme = lightColorScheme(
+    primary = RoyalBlue,
+    secondary = VividBlue,
+    tertiary = AccentTeal,
+    background = Color.White,
+    surface = AppBackgroundLight,
+    onPrimary = Color.White,
+    onBackground = TextPrimaryLight,
+    onSurface = TextPrimaryLight
 )
 
 @Composable
@@ -46,21 +66,28 @@ fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) DarkColorScheme else DarkColorScheme // Forcing dark for the premium look
+    // Current requirement: Default to Light (White)
+    // We can either respect system theme or force light for now.
+    // Let's respect system theme but ensure Light is fully functional.
+    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
-    val customColors = AppCustomColors()
+    val customColors = AppCustomColors(
+        glassWhite = if (darkTheme) Color(0x1AFFFFFF) else Color(0x0D000000),
+        glassBorder = if (darkTheme) Color(0x26FFFFFF) else Color(0x1A000000),
+        deepSpace = colorScheme.background
+    )
     val customBrushes = AppCustomBrushes()
 
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = android.graphics.Color.TRANSPARENT
-            window.navigationBarColor = android.graphics.Color.TRANSPARENT
+            window.statusBarColor = Color.Transparent.toArgb()
+            window.navigationBarColor = Color.Transparent.toArgb()
             
             val controller = WindowCompat.getInsetsController(window, view)
-            controller.isAppearanceLightStatusBars = false // Force light icons for dark bg
-            controller.isAppearanceLightNavigationBars = false
+            controller.isAppearanceLightStatusBars = !darkTheme
+            controller.isAppearanceLightNavigationBars = !darkTheme
         }
     }
 

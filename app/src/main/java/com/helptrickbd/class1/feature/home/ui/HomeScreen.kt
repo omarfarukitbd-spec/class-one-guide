@@ -41,13 +41,13 @@ fun HomeScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = AppTheme.colors.deepSpace,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = { DashboardTopBar() }
     ) { innerPadding ->
         when (val state = uiState) {
             is HomeUiState.Loading -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = Color.White)
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
             }
             is HomeUiState.Success -> {
@@ -61,7 +61,7 @@ fun HomeScreen(
             }
             is HomeUiState.Error -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = state.message, color = Color.Red)
+                    Text(text = state.message, color = MaterialTheme.colorScheme.error)
                 }
             }
         }
@@ -71,7 +71,7 @@ fun HomeScreen(
 @Composable
 fun DashboardTopBar() {
     Surface(
-        color = AppTheme.colors.deepSpace,
+        color = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -93,7 +93,7 @@ fun DashboardTopBar() {
                 Icon(
                     Icons.Default.Person,
                     contentDescription = "Profile",
-                    tint = Color.White,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -107,7 +107,7 @@ fun DashboardTopBar() {
                 Icon(
                     Icons.Default.Notifications,
                     contentDescription = "Notifications",
-                    tint = Color.White
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         }
@@ -120,12 +120,12 @@ fun WelcomeSection(userName: String) {
         Text(
             text = "আসসালামু আলাইকুম,",
             style = MaterialTheme.typography.bodyLarge,
-            color = Color.White.copy(alpha = 0.7f)
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
         )
         Text(
             text = userName,
             style = MaterialTheme.typography.headlineLarge,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.Bold
         )
     }
@@ -156,7 +156,7 @@ private fun HomeContent(
         Text(
             text = "আপনার পাঠ্যবইসমূহ",
             style = MaterialTheme.typography.titleLarge,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.SemiBold
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -273,8 +273,10 @@ fun SubjectGridCard(title: String, progress: Float, onClick: () -> Unit) {
             .fillMaxWidth()
             .height(120.dp),
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = AppTheme.colors.glassWhite),
-        border = borderStroke(1.dp, AppTheme.colors.glassBorder)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(1.dp, AppTheme.colors.glassBorder)
     ) {
         Column(
             modifier = Modifier
@@ -285,14 +287,14 @@ fun SubjectGridCard(title: String, progress: Float, onClick: () -> Unit) {
             Icon(
                 Icons.Default.Book,
                 contentDescription = null,
-                tint = Color.White.copy(alpha = 0.9f),
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(28.dp)
             )
 
             Column {
                 Text(
                     text = title,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1
@@ -304,8 +306,8 @@ fun SubjectGridCard(title: String, progress: Float, onClick: () -> Unit) {
                         .fillMaxWidth()
                         .height(4.dp)
                         .clip(CircleShape),
-                    color = Color.White,
-                    trackColor = Color.White.copy(alpha = 0.2f)
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
                 )
             }
         }
