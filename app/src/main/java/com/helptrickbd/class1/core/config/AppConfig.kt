@@ -1,5 +1,8 @@
 package com.helptrickbd.class1.core.config
 
+import com.helptrickbd.class1.feature.home.domain.model.Curriculum
+import com.helptrickbd.class1.feature.home.domain.model.LanguageVersion
+
 /**
  * Single Source of Truth (SSOT) for App-wide Configuration.
  * 
@@ -9,6 +12,10 @@ object AppConfig {
     
     // Target Class Identifier (Used for Firebase Filtering)
     const val TARGET_CLASS_ID = "class_1"
+    
+    // Default Preferences
+    val DEFAULT_CURRICULUM = Curriculum.SCHOOL
+    val DEFAULT_LANGUAGE_VERSION = LanguageVersion.BANGLA
     
     // UI Configuration
     const val APP_NAME = "Class 1 Guide"

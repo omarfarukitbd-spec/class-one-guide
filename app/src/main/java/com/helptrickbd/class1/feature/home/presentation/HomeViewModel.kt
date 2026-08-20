@@ -2,10 +2,12 @@ package com.helptrickbd.class1.feature.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.helptrickbd.class1.core.config.AppConfig
+import com.helptrickbd.class1.feature.home.domain.model.Curriculum
 import com.helptrickbd.class1.feature.home.domain.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -13,31 +15,32 @@ class HomeViewModel @Inject constructor(
     private val repository: HomeRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
-    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+    private val _selectedCurriculum = MutableStateFlow(AppConfig.DEFAULT_CURRICULUM)
+    val selectedCurriculum = _selectedCurriculum.asStateFlow()
 
-    init {
-        loadDashboardData()
-    }
-
-    private fun loadDashboardData() {
-        viewModelScope.launch {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val uiState: StateFlow<HomeUiState> = _selectedCurriculum
+        .flatMapLatest { curriculum ->
             combine(
-                repository.getSubjects(),
+                repository.getSubjects(curriculum),
                 repository.getResumeBook()
             ) { subjects, resumeBook ->
                 HomeUiState.Success(
                     userName = "ওমর ফারুক",
+                    selectedCurriculum = curriculum,
                     resumeBook = resumeBook,
                     subjects = subjects
-                )
-            }
-            .catch { e ->
-                _uiState.value = HomeUiState.Error(e.message ?: "Unknown Error")
-            }
-            .collect { state ->
-                _uiState.value = state
+                ) as HomeUiState
             }
         }
+        .catch { e -> emit(HomeUiState.Error(e.message ?: "Unknown Error")) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = HomeUiState.Loading
+        )
+
+    fun onCurriculumSelected(curriculum: Curriculum) {
+        _selectedCurriculum.value = curriculum
     }
 }

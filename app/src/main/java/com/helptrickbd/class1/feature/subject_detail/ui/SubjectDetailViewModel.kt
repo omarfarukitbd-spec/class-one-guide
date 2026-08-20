@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.helptrickbd.class1.core.navigation.Screen
-import com.helptrickbd.class1.feature.home.domain.model.Book
 import com.helptrickbd.class1.feature.subject_detail.domain.repository.SubjectRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,12 +45,7 @@ class SubjectDetailViewModel @Inject constructor(
                     )
                     _uiState.value = SubjectDetailUiState.Success(
                         subjectName = subjectName,
-                        books = books.map { 
-                            // Map domain book to whatever UI expects or just use it
-                            Book(
-                                it.bookId, it.title, it.pdfUrl, it.coverUrl, it.isFavorite, it.progressPercent
-                            )
-                        },
+                        books = books, // Domain objects are the same
                         features = featureFlags
                     )
                 }

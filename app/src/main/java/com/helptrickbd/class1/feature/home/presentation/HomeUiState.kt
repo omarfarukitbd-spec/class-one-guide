@@ -1,6 +1,7 @@
 package com.helptrickbd.class1.feature.home.presentation
 
 import com.helptrickbd.class1.feature.home.domain.model.Book
+import com.helptrickbd.class1.feature.home.domain.model.Curriculum
 import com.helptrickbd.class1.feature.home.domain.model.Subject
 
 /**
@@ -11,6 +12,7 @@ sealed interface HomeUiState {
     
     data class Success(
         val userName: String,
+        val selectedCurriculum: Curriculum,
         val resumeBook: Book?,
         val subjects: List<Subject>
     ) : HomeUiState

@@ -1,6 +1,7 @@
 package com.helptrickbd.class1.feature.home.domain.repository
 
 import com.helptrickbd.class1.feature.home.domain.model.Book
+import com.helptrickbd.class1.feature.home.domain.model.Curriculum
 import com.helptrickbd.class1.feature.home.domain.model.Subject
 import kotlinx.coroutines.flow.Flow
 
@@ -9,9 +10,9 @@ import kotlinx.coroutines.flow.Flow
  */
 interface HomeRepository {
     /**
-     * Retrieves all subjects for the home screen.
+     * Retrieves all subjects for the given curriculum.
      */
-    fun getSubjects(): Flow<List<Subject>>
+    fun getSubjects(curriculum: Curriculum): Flow<List<Subject>>
     
     /**
      * Retrieves the current reading progress for a user.
