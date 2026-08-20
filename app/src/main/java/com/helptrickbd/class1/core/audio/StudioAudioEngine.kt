@@ -3,6 +3,7 @@ package com.helptrickbd.class1.core.audio
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.media.audiofx.LoudnessEnhancer
 import com.helptrickbd.class1.feature.drawing.domain.audio.TracingAudioRegistry
 import com.helptrickbd.class1.feature.drawing.domain.model.TracingCategory
 import com.helptrickbd.class1.feature.drawing.domain.model.TracingItem
@@ -21,6 +22,7 @@ class StudioAudioEngine @Inject constructor(
     private val speechEngine: AppSpeechEngine
 ) {
     private var mediaPlayer: MediaPlayer? = null
+    private var loudnessEnhancer: LoudnessEnhancer? = null
     private val _isSpeaking = MutableStateFlow(false)
     val isSpeaking: StateFlow<Boolean> = _isSpeaking.asStateFlow()
 
@@ -36,14 +38,21 @@ class StudioAudioEngine @Inject constructor(
                     .setUsage(AudioAttributes.USAGE_MEDIA)
                     .build()
             )
-            setOnCompletionListener {
-                _isSpeaking.value = false
-            }
+            setVolume(1.0f, 1.0f)
+            setOnCompletionListener { _isSpeaking.value = false }
             setOnErrorListener { _, _, _ ->
                 _isSpeaking.value = false
                 true
             }
         }
+        try {
+            mediaPlayer?.audioSessionId?.let { sessionId ->
+                loudnessEnhancer = LoudnessEnhancer(sessionId).apply {
+                    setTargetGain(1200) // +12 dB hardware boost for punchy sound
+                    enabled = true
+                }
+            }
+        } catch (_: Exception) {}
     }
 
     suspend fun playTracingItemAudio(item: TracingItem) = withContext(Dispatchers.Main) {
@@ -56,6 +65,7 @@ class StudioAudioEngine @Inject constructor(
                 context.assets.openFd(audioPath).use { afd ->
                     mediaPlayer?.reset()
                     mediaPlayer?.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
+                    mediaPlayer?.setVolume(1.0f, 1.0f)
                     mediaPlayer?.prepare()
                     mediaPlayer?.start()
                     _isSpeaking.value = true
@@ -80,6 +90,7 @@ class StudioAudioEngine @Inject constructor(
                 context.assets.openFd(praisePath).use { afd ->
                     mediaPlayer?.reset()
                     mediaPlayer?.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
+                    mediaPlayer?.setVolume(1.0f, 1.0f)
                     mediaPlayer?.prepare()
                     mediaPlayer?.start()
                     _isSpeaking.value = true
@@ -113,6 +124,8 @@ class StudioAudioEngine @Inject constructor(
 
     fun release() {
         stop()
+        loudnessEnhancer?.release()
+        loudnessEnhancer = null
         mediaPlayer?.release()
         mediaPlayer = null
         speechEngine.shutdown()
