@@ -6,6 +6,8 @@ import androidx.compose.runtime.Immutable
 data class KarChihnoItem(
     val id: String,
     val sign: String,           // e.g. "া"
+    val displaySign: String,    // e.g. "কা" (ক-যুক্ত রূপ যাতে ডটেড বৃত্ত না আসে)
+    val vowelForm: String,      // e.g. "আ ( া )"
     val name: String,           // e.g. "আ-কার"
     val fullVowel: String,      // e.g. "আ"
     val exampleWord: String,    // e.g. "পাখা"

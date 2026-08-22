@@ -49,21 +49,21 @@ fun KarChihnoBanner(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = item.sign,
-                        fontSize = 36.sp,
+                        text = item.displaySign,
+                        fontSize = 34.sp,
                         fontWeight = FontWeight.Black,
                         color = Color(0xFFFFD54F)
                     )
-                    Spacer(modifier = Modifier.width(12.dp))
+                    Spacer(modifier = Modifier.width(14.dp))
                     Column {
                         Text(
-                            text = "${item.name} (${item.fullVowel})",
-                            fontSize = 20.sp,
+                            text = "${item.name} (${item.vowelForm})",
+                            fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
                         Text(
-                            text = "স্বরবর্ণ '${item.fullVowel}' এর সংক্ষিপ্ত রূপ",
+                            text = "স্বরবর্ণ '${item.fullVowel}' এর কার-চিহ্ন রূপ",
                             fontSize = 12.sp,
                             color = Color(0xFF94A3B8)
                         )

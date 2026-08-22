@@ -47,18 +47,18 @@ fun KarChihnoCard(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 6.dp)
+            modifier = Modifier.padding(vertical = 10.dp, horizontal = 4.dp)
         ) {
             Text(
-                text = item.sign,
-                fontSize = 28.sp,
+                text = item.displaySign,
+                fontSize = 24.sp,
                 fontWeight = FontWeight.Black,
                 color = if (isSelected) Color(0xFFFFD54F) else Color.White
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = item.name,
-                fontSize = 12.sp,
+                fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 color = if (isSelected) Color(0xFFFFE082) else Color(0xFFCBD5E1)
             )
