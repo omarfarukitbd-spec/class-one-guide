@@ -1,16 +1,12 @@
 package com.helptrickbd.class1.feature.games.ui.hear_and_pick
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -24,6 +20,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.helptrickbd.class1.feature.drawing.ui.components.ConfettiCelebrationOverlay
+import com.helptrickbd.class1.feature.games.ui.components.GameOptionButton
+import com.helptrickbd.class1.feature.games.ui.components.GameOverSummary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -151,7 +149,7 @@ fun HearAndPickScreen(
                                 for (col in 0..1) {
                                     val index = row * 2 + col
                                     val letter = current.options.getOrNull(index) ?: ""
-                                    OptionButton(
+                                    GameOptionButton(
                                         letter = letter,
                                         isSelected = uiState.selectedOptionIndex == index,
                                         isCorrect = if (uiState.selectedOptionIndex == index) uiState.isCorrect else null,
@@ -170,81 +168,6 @@ fun HearAndPickScreen(
                 onDismiss = {},
                 onNext = {}
             )
-        }
-    }
-}
-
-@Composable
-private fun OptionButton(
-    letter: String,
-    isSelected: Boolean,
-    isCorrect: Boolean?,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val bgColor by animateColorAsState(
-        targetValue = when {
-            isSelected && isCorrect == true -> Color(0xFF22C55E)
-            isSelected && isCorrect == false -> Color(0xFFEF4444)
-            else -> Color(0xFF1E2538)
-        },
-        animationSpec = tween(200),
-        label = "opt_bg"
-    )
-
-    Surface(
-        shape = RoundedCornerShape(20.dp),
-        color = bgColor,
-        border = BorderStroke(2.dp, if (isSelected) Color.White else Color(0xFF333E54)),
-        shadowElevation = 6.dp,
-        modifier = modifier
-            .height(90.dp)
-            .clickable(onClick = onClick)
-    ) {
-        Box(contentAlignment = Alignment.Center) {
-            Text(
-                text = letter,
-                fontSize = 38.sp,
-                fontWeight = FontWeight.Black,
-                color = Color.White
-            )
-        }
-    }
-}
-
-@Composable
-private fun GameOverSummary(
-    score: Int,
-    total: Int,
-    onPlayAgain: () -> Unit
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize().padding(24.dp)
-    ) {
-        Text(
-            text = "🎉 অভিনন্দন! 🎉",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.ExtraBold,
-            color = Color(0xFFFFD54F)
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-        Text(
-            text = "তুমি $total টি প্রশ্নের মধ্যে $score টি সঠিক উত্তর দিয়েছ!",
-            fontSize = 16.sp,
-            color = Color.White
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        Button(
-            onClick = onPlayAgain,
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFD54F)),
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.height(52.dp)
-        ) {
-            Icon(imageVector = Icons.Default.Refresh, contentDescription = null, tint = Color.Black)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "আবার খেলুন", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 16.sp)
         }
     }
 }

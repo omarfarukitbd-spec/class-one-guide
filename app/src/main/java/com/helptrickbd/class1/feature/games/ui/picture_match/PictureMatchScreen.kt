@@ -1,7 +1,5 @@
 package com.helptrickbd.class1.feature.games.ui.picture_match
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -23,6 +20,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.helptrickbd.class1.feature.drawing.ui.components.ConfettiCelebrationOverlay
+import com.helptrickbd.class1.feature.games.ui.components.GameOptionButton
+import com.helptrickbd.class1.feature.games.ui.components.GameOverSummary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,10 +47,7 @@ fun PictureMatchScreen(
                 ),
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "ফিরে যান"
-                        )
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "ফিরে যান")
                     }
                 },
                 title = {
@@ -61,7 +57,7 @@ fun PictureMatchScreen(
                         modifier = Modifier.fillMaxWidth().padding(end = 16.dp)
                     ) {
                         Text(
-                            text = "ছবি দেখে বর্ণ মেলাও",
+                            text = "ছবি ও শব্দ দেখে বর্ণ মেলাও",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
@@ -98,61 +94,62 @@ fun PictureMatchScreen(
                 ) {
                     LinearProgressIndicator(
                         progress = { (uiState.currentIndex + 1) / uiState.questions.size.toFloat() },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(8.dp),
+                        modifier = Modifier.fillMaxWidth().height(8.dp),
                         color = Color(0xFFFFD54F),
                         trackColor = Color(0xFF1E2538)
                     )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                    Text(
-                        text = "এই শব্দের প্রথম বর্ণ কোনটি?",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Target Word Highlight Banner
+                    // Word Card
                     Surface(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = RoundedCornerShape(20.dp),
                         color = Color(0xFF1E2538),
                         border = BorderStroke(2.dp, Color(0xFF38BDF8)),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable(onClick = viewModel::playCurrentRhyme)
+                            .clickable(onClick = viewModel::playCurrentPrompt)
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.padding(20.dp)
+                            modifier = Modifier.padding(16.dp)
                         ) {
-                            Text(
-                                text = current.targetWord,
-                                fontSize = 36.sp,
-                                fontWeight = FontWeight.Black,
-                                color = Color(0xFFFFD54F)
-                            )
-                            Spacer(modifier = Modifier.width(16.dp))
                             IconButton(
-                                onClick = viewModel::playCurrentRhyme,
+                                onClick = viewModel::playCurrentPrompt,
                                 colors = IconButtonDefaults.iconButtonColors(
-                                    containerColor = Color(0xFF283349),
-                                    contentColor = Color(0xFF38BDF8)
+                                    containerColor = if (uiState.isSpeaking) Color(0xFFFFD54F) else Color(0xFF283349),
+                                    contentColor = if (uiState.isSpeaking) Color.Black else Color.White
                                 )
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.VolumeUp,
-                                    contentDescription = "ছড়া শুনুন"
+                                Icon(imageVector = Icons.Default.VolumeUp, contentDescription = "শব্দ শুনুন")
+                            }
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Column {
+                                Text(
+                                    text = current.word,
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.Black,
+                                    color = Color(0xFFFFD54F)
+                                )
+                                Text(
+                                    text = current.rhyme,
+                                    fontSize = 13.sp,
+                                    color = Color(0xFFCBD5E1)
                                 )
                             }
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(28.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    Text(
+                        text = "এই শব্দের শুরুর বর্ণটি কোনটি?",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     // 4 Options Grid (2x2)
                     Column(
@@ -167,7 +164,7 @@ fun PictureMatchScreen(
                                 for (col in 0..1) {
                                     val index = row * 2 + col
                                     val letter = current.options.getOrNull(index) ?: ""
-                                    OptionButton(
+                                    GameOptionButton(
                                         letter = letter,
                                         isSelected = uiState.selectedOptionIndex == index,
                                         isCorrect = if (uiState.selectedOptionIndex == index) uiState.isCorrect else null,
@@ -186,81 +183,6 @@ fun PictureMatchScreen(
                 onDismiss = {},
                 onNext = {}
             )
-        }
-    }
-}
-
-@Composable
-private fun OptionButton(
-    letter: String,
-    isSelected: Boolean,
-    isCorrect: Boolean?,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val bgColor by animateColorAsState(
-        targetValue = when {
-            isSelected && isCorrect == true -> Color(0xFF22C55E)
-            isSelected && isCorrect == false -> Color(0xFFEF4444)
-            else -> Color(0xFF1E2538)
-        },
-        animationSpec = tween(200),
-        label = "pm_opt_bg"
-    )
-
-    Surface(
-        shape = RoundedCornerShape(20.dp),
-        color = bgColor,
-        border = BorderStroke(2.dp, if (isSelected) Color.White else Color(0xFF333E54)),
-        shadowElevation = 6.dp,
-        modifier = modifier
-            .height(90.dp)
-            .clickable(onClick = onClick)
-    ) {
-        Box(contentAlignment = Alignment.Center) {
-            Text(
-                text = letter,
-                fontSize = 38.sp,
-                fontWeight = FontWeight.Black,
-                color = Color.White
-            )
-        }
-    }
-}
-
-@Composable
-private fun GameOverSummary(
-    score: Int,
-    total: Int,
-    onPlayAgain: () -> Unit
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize().padding(24.dp)
-    ) {
-        Text(
-            text = "🌟 দারুণ খেলেছ! 🌟",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.ExtraBold,
-            color = Color(0xFFFFD54F)
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-        Text(
-            text = "তুমি $total টি প্রশ্নের মধ্যে $score টি সঠিক উত্তর দিয়েছ!",
-            fontSize = 16.sp,
-            color = Color.White
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        Button(
-            onClick = onPlayAgain,
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFD54F)),
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.height(52.dp)
-        ) {
-            Icon(imageVector = Icons.Default.Refresh, contentDescription = null, tint = Color.Black)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "আবার খেলুন", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 16.sp)
         }
     }
 }
