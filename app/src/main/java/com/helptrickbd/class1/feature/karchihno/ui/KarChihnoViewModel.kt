@@ -39,16 +39,34 @@ class KarChihnoViewModel @Inject constructor(
             items = items,
             selectedItem = firstItem
         )
-        firstItem?.let { playSignAudio(it) }
+        firstItem?.let { playFullSequence(it) }
     }
 
     fun selectItem(item: KarChihnoItem) {
-        if (_uiState.value.selectedItem == item) {
-            playSignAudio(item)
-            return
-        }
         _uiState.value = _uiState.value.copy(selectedItem = item)
-        playSignAudio(item)
+        playFullSequence(item)
+    }
+
+    fun playFullSequence(item: KarChihnoItem) {
+        viewModelScope.launch {
+            soundFxHelper.playBubbleClick()
+            _uiState.value = _uiState.value.copy(isSpeaking = true)
+            studioAudioEngine.playDirectAsset(item.signAudioPath) {
+                if (item.spellAudioPath.isNotBlank() && item.spellAudioPath != item.signAudioPath) {
+                    viewModelScope.launch {
+                        _uiState.value = _uiState.value.copy(isSpellingPlaying = true)
+                        studioAudioEngine.playDirectAsset(item.spellAudioPath) {
+                            _uiState.value = _uiState.value.copy(
+                                isSpellingPlaying = false,
+                                isSpeaking = false
+                            )
+                        }
+                    }
+                } else {
+                    _uiState.value = _uiState.value.copy(isSpeaking = false)
+                }
+            }
+        }
     }
 
     fun playSignAudio(item: KarChihnoItem) {
@@ -62,22 +80,8 @@ class KarChihnoViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isSpellingPlaying = true)
             studioAudioEngine.playDirectAsset(item.spellAudioPath) {
-                if (item.wordAudioPath.isNotBlank() && item.wordAudioPath != item.spellAudioPath) {
-                    viewModelScope.launch {
-                        studioAudioEngine.playDirectAsset(item.wordAudioPath) {
-                            _uiState.value = _uiState.value.copy(isSpellingPlaying = false)
-                        }
-                    }
-                } else {
-                    _uiState.value = _uiState.value.copy(isSpellingPlaying = false)
-                }
+                _uiState.value = _uiState.value.copy(isSpellingPlaying = false)
             }
-        }
-    }
-
-    fun playWordAudio(item: KarChihnoItem) {
-        viewModelScope.launch {
-            studioAudioEngine.playDirectAsset(item.wordAudioPath)
         }
     }
 

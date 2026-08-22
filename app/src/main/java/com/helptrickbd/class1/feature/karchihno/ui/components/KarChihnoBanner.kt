@@ -47,27 +47,19 @@ fun KarChihnoBanner(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Column {
                     Text(
-                        text = item.displaySign,
-                        fontSize = 34.sp,
+                        text = "${item.name} (${item.vowelForm})",
+                        fontSize = 22.sp,
                         fontWeight = FontWeight.Black,
                         color = Color(0xFFFFD54F)
                     )
-                    Spacer(modifier = Modifier.width(14.dp))
-                    Column {
-                        Text(
-                            text = "${item.name} (${item.vowelForm})",
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
-                        Text(
-                            text = "স্বরবর্ণ '${item.fullVowel}' এর কার-চিহ্ন রূপ",
-                            fontSize = 12.sp,
-                            color = Color(0xFF94A3B8)
-                        )
-                    }
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = "স্বরবর্ণ '${item.fullVowel}' এর সংক্ষিপ্ত রূপ",
+                        fontSize = 13.sp,
+                        color = Color(0xFF94A3B8)
+                    )
                 }
 
                 IconButton(
