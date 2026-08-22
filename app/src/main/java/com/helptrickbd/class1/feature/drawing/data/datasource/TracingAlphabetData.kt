@@ -23,7 +23,7 @@ object TracingAlphabetData {
         TracingItem("c15", "ণ", "হরিণ", "হরিণ থাকে বনের ধারে", TracingCategory.BANGLA_CONSONANT, 15),
         TracingItem("c16", "ত", "তরমুজ", "তরমুজ খাব মজা করে", TracingCategory.BANGLA_CONSONANT, 16),
         TracingItem("c17", "থ", "থালা", "থালার খাবার খাবে খুকি", TracingCategory.BANGLA_CONSONANT, 17),
-        TracingItem("c18", "দ", "দোয়েল", "দোয়েল আমাদের জাতীয় পাখি", TracingCategory.BANGLA_CONSONANT, 18),
+        TracingItem("c18", "দ", "দাদু", "দাদুর চোখে চশমা রয়", TracingCategory.BANGLA_CONSONANT, 18),
         TracingItem("c19", "ধ", "ধান", "ধান ফলিয়ে আমরা বাঁচি", TracingCategory.BANGLA_CONSONANT, 19),
         TracingItem("c20", "ন", "নৌকা", "নৌকা চালায় নয়ন মাঝি", TracingCategory.BANGLA_CONSONANT, 20),
         TracingItem("c21", "প", "পাখি", "পাখি গান গায় গাছে গাছে", TracingCategory.BANGLA_CONSONANT, 21),
