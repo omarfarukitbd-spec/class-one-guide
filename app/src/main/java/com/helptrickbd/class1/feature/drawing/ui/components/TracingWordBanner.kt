@@ -75,7 +75,10 @@ fun TracingWordBanner(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.weight(1f)
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = item.character,

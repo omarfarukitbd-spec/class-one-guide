@@ -16,9 +16,18 @@ object TracingAudioRegistry {
         }
     }
 
+    fun getRhymeAudioPath(item: TracingItem): String {
+        return when (item.category) {
+            TracingCategory.BANGLA_VOWEL -> "audio/rhymes/bn_rhyme_${formatIndex(item.orderIndex)}.mp3"
+            TracingCategory.BANGLA_CONSONANT -> "audio/rhymes/bn_rhyme_${formatIndex(item.orderIndex + 11)}.mp3"
+            else -> ""
+        }
+    }
+
     fun getRandomPraiseAudioPath(isEnglish: Boolean): String {
         val prefix = if (isEnglish) "praise_en_" else "praise_bn_"
-        val index = (1..3).random()
+        val maxIndex = if (isEnglish) 3 else 4
+        val index = (1..maxIndex).random()
         return "audio/praise/${prefix}$index.mp3"
     }
 

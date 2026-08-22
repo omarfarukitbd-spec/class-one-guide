@@ -6,17 +6,17 @@ import com.helptrickbd.class1.feature.drawing.domain.model.TracingItem
 object TracingDataSource {
 
     val banglaVowels = listOf(
-        TracingItem("v1", "অ", "অজগর", "অজগর আসছে তেড়ে", TracingCategory.BANGLA_VOWEL, 1),
+        TracingItem("v1", "অ", "অজগর", "অজগরটি আসছে তেড়ে", TracingCategory.BANGLA_VOWEL, 1),
         TracingItem("v2", "আ", "আম", "আমটি আমি খাব পেড়ে", TracingCategory.BANGLA_VOWEL, 2),
-        TracingItem("v3", "ই", "ইঁদুর", "ইঁদুর ছানা ভয়ে মরে", TracingCategory.BANGLA_VOWEL, 3),
-        TracingItem("v4", "ঈ", "ঈগল", "ঈগল পাখি পাছে ধরে", TracingCategory.BANGLA_VOWEL, 4),
-        TracingItem("v5", "উ", "উট", "উট চলেছে মুখটি তুলে", TracingCategory.BANGLA_VOWEL, 5),
-        TracingItem("v6", "ঊ", "ঊষা", "ঊষা হাসে পুব আকাশে", TracingCategory.BANGLA_VOWEL, 6),
+        TracingItem("v3", "ই", "ইলিশ", "ইলিশ ভাজা খেতে মজা", TracingCategory.BANGLA_VOWEL, 3),
+        TracingItem("v4", "ঈ", "ঈগল", "ঈগল হল পাখির রাজা", TracingCategory.BANGLA_VOWEL, 4),
+        TracingItem("v5", "উ", "উট", "উট চলছে মরুর দেশে", TracingCategory.BANGLA_VOWEL, 5),
+        TracingItem("v6", "ঊ", "ঊষা", "ঊষা হাসে পূব আকাশে", TracingCategory.BANGLA_VOWEL, 6),
         TracingItem("v7", "ঋ", "ঋষি", "ঋষি মশাই বসেন পূজায়", TracingCategory.BANGLA_VOWEL, 7),
         TracingItem("v8", "এ", "একতারা", "একতারাটি বাজে বেশ", TracingCategory.BANGLA_VOWEL, 8),
-        TracingItem("v9", "ঐ", "ঐরাবত", "ঐরাবতটি দেখতে বেশ", TracingCategory.BANGLA_VOWEL, 9),
-        TracingItem("v10", "ও", "ওল", "ওল খেলে ধরবে গলা", TracingCategory.BANGLA_VOWEL, 10),
-        TracingItem("v11", "ঔ", "ঔষধ", "ঔষধ খেতে মিছে বলা", TracingCategory.BANGLA_VOWEL, 11)
+        TracingItem("v9", "ঐ", "ঐরাবত", "ঐরাবতটি আসছে তেড়ে", TracingCategory.BANGLA_VOWEL, 9),
+        TracingItem("v10", "ও", "ওজন", "ওজন করো সঠিক করে", TracingCategory.BANGLA_VOWEL, 10),
+        TracingItem("v11", "ঔ", "ঔষধ", "ঔষধ খাবে অসুখ হলে", TracingCategory.BANGLA_VOWEL, 11)
     )
 
     val banglaNumbers = listOf(

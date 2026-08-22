@@ -56,25 +56,56 @@ class StudioAudioEngine @Inject constructor(
     }
 
     suspend fun playTracingItemAudio(item: TracingItem) = withContext(Dispatchers.Main) {
-        val audioPath = TracingAudioRegistry.getAudioPath(item)
+        val letterPath = TracingAudioRegistry.getAudioPath(item)
+        val rhymePath = TracingAudioRegistry.getRhymeAudioPath(item)
         val isEnglish = item.category == TracingCategory.ENGLISH_ALPHABET || item.category == TracingCategory.ENGLISH_NUMBER
 
-        if (audioPath.isNotBlank() && isAssetAvailable(audioPath)) {
-            try {
-                stop()
-                context.assets.openFd(audioPath).use { afd ->
-                    mediaPlayer?.reset()
-                    mediaPlayer?.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
-                    mediaPlayer?.setVolume(1.0f, 1.0f)
-                    mediaPlayer?.prepare()
-                    mediaPlayer?.start()
-                    _isSpeaking.value = true
+        if (letterPath.isNotBlank() && isAssetAvailable(letterPath)) {
+            stop()
+            playAsset(letterPath) {
+                if (rhymePath.isNotBlank() && isAssetAvailable(rhymePath)) {
+                    playAsset(rhymePath, null)
+                } else {
+                    _isSpeaking.value = false
                 }
-            } catch (_: Exception) {
-                fallbackToTts(item, isEnglish)
             }
+        } else if (rhymePath.isNotBlank() && isAssetAvailable(rhymePath)) {
+            stop()
+            playAsset(rhymePath, null)
         } else {
             fallbackToTts(item, isEnglish)
+        }
+    }
+
+    suspend fun playRhymeOnly(item: TracingItem) = withContext(Dispatchers.Main) {
+        val rhymePath = TracingAudioRegistry.getRhymeAudioPath(item)
+        if (rhymePath.isNotBlank() && isAssetAvailable(rhymePath)) {
+            stop()
+            playAsset(rhymePath, null)
+        } else {
+            playTracingItemAudio(item)
+        }
+    }
+
+    private fun playAsset(path: String, onComplete: (() -> Unit)?) {
+        try {
+            context.assets.openFd(path).use { afd ->
+                mediaPlayer?.reset()
+                mediaPlayer?.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
+                mediaPlayer?.setVolume(1.0f, 1.0f)
+                mediaPlayer?.setOnCompletionListener {
+                    if (onComplete != null) {
+                        onComplete()
+                    } else {
+                        _isSpeaking.value = false
+                    }
+                }
+                mediaPlayer?.prepare()
+                mediaPlayer?.start()
+                _isSpeaking.value = true
+            }
+        } catch (_: Exception) {
+            _isSpeaking.value = false
         }
     }
 
@@ -85,19 +116,8 @@ class StudioAudioEngine @Inject constructor(
     suspend fun playPraiseAudio(isEnglish: Boolean) = withContext(Dispatchers.Main) {
         val praisePath = TracingAudioRegistry.getRandomPraiseAudioPath(isEnglish)
         if (isAssetAvailable(praisePath)) {
-            try {
-                stop()
-                context.assets.openFd(praisePath).use { afd ->
-                    mediaPlayer?.reset()
-                    mediaPlayer?.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
-                    mediaPlayer?.setVolume(1.0f, 1.0f)
-                    mediaPlayer?.prepare()
-                    mediaPlayer?.start()
-                    _isSpeaking.value = true
-                }
-            } catch (_: Exception) {
-                speechEngine.speakPraise(isEnglish)
-            }
+            stop()
+            playAsset(praisePath, null)
         } else {
             speechEngine.speakPraise(isEnglish)
         }
