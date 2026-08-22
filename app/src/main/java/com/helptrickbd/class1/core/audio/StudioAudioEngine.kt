@@ -87,6 +87,15 @@ class StudioAudioEngine @Inject constructor(
         }
     }
 
+    suspend fun playDirectAsset(path: String, onComplete: (() -> Unit)? = null) = withContext(Dispatchers.Main) {
+        if (path.isNotBlank() && isAssetAvailable(path)) {
+            stop()
+            playAsset(path, onComplete)
+        } else {
+            onComplete?.invoke()
+        }
+    }
+
     private fun playAsset(path: String, onComplete: (() -> Unit)?) {
         try {
             context.assets.openFd(path).use { afd ->
@@ -106,6 +115,7 @@ class StudioAudioEngine @Inject constructor(
             }
         } catch (_: Exception) {
             _isSpeaking.value = false
+            onComplete?.invoke()
         }
     }
 
@@ -123,7 +133,7 @@ class StudioAudioEngine @Inject constructor(
         }
     }
 
-    private fun isAssetAvailable(path: String): Boolean {
+    fun isAssetAvailable(path: String): Boolean {
         return try {
             context.assets.openFd(path).close()
             true

@@ -127,4 +127,10 @@ object AppModule {
     fun provideTracingRepository(): com.helptrickbd.class1.feature.drawing.domain.repository.TracingRepository {
         return com.helptrickbd.class1.feature.drawing.data.repository.TracingRepositoryImpl()
     }
+
+    @Provides
+    @Singleton
+    fun provideKarChihnoRepository(): com.helptrickbd.class1.feature.karchihno.domain.repository.KarChihnoRepository {
+        return com.helptrickbd.class1.feature.karchihno.data.repository.KarChihnoRepositoryImpl()
+    }
 }

@@ -13,9 +13,13 @@ import com.helptrickbd.class1.core.navigation.Screen
 import com.helptrickbd.class1.feature.drawing.ui.DrawingSlateScreen
 import com.helptrickbd.class1.feature.favorites.presentation.FavoritesViewModel
 import com.helptrickbd.class1.feature.favorites.ui.FavoritesScreen
+import com.helptrickbd.class1.feature.games.ui.GamesHubScreen
+import com.helptrickbd.class1.feature.games.ui.hear_and_pick.HearAndPickScreen
+import com.helptrickbd.class1.feature.games.ui.picture_match.PictureMatchScreen
 import com.helptrickbd.class1.feature.home.domain.model.Book
 import com.helptrickbd.class1.feature.home.presentation.HomeViewModel
 import com.helptrickbd.class1.feature.home.ui.HomeScreen
+import com.helptrickbd.class1.feature.karchihno.ui.KarChihnoScreen
 import com.helptrickbd.class1.feature.settings.presentation.SettingsViewModel
 import com.helptrickbd.class1.feature.settings.ui.SettingsScreen
 
@@ -26,10 +30,15 @@ fun MainScreen(
     modifier: Modifier = Modifier
 ) {
     var currentTab by remember { mutableStateOf<Screen>(Screen.Home) }
+    var hubSubScreen by remember { mutableStateOf<Screen?>(null) }
 
-    // If not on Home tab, hardware back press switches back to Home tab
-    BackHandler(enabled = currentTab != Screen.Home) {
-        currentTab = Screen.Home
+    // If on a subscreen or non-home tab, hardware back press pops back gracefully
+    BackHandler(enabled = currentTab != Screen.Home || hubSubScreen != null) {
+        if (hubSubScreen != null) {
+            hubSubScreen = null
+        } else {
+            currentTab = Screen.Home
+        }
     }
 
     Scaffold(
@@ -37,7 +46,10 @@ fun MainScreen(
         bottomBar = {
             AppBottomNavBar(
                 currentRoute = currentTab,
-                onNavigate = { currentTab = it }
+                onNavigate = {
+                    hubSubScreen = null
+                    currentTab = it
+                }
             )
         }
     ) { innerPadding ->
@@ -56,9 +68,28 @@ fun MainScreen(
                     )
                 }
                 is Screen.DrawingSlate -> {
-                    DrawingSlateScreen(
-                        onBackClick = { currentTab = Screen.Home }
-                    )
+                    when (hubSubScreen) {
+                        is Screen.DrawingSlate -> {
+                            DrawingSlateScreen(onBackClick = { hubSubScreen = null })
+                        }
+                        is Screen.KarChihno -> {
+                            KarChihnoScreen(onBackClick = { hubSubScreen = null })
+                        }
+                        is Screen.HearAndPick -> {
+                            HearAndPickScreen(onBackClick = { hubSubScreen = null })
+                        }
+                        is Screen.PictureMatch -> {
+                            PictureMatchScreen(onBackClick = { hubSubScreen = null })
+                        }
+                        else -> {
+                            GamesHubScreen(
+                                onNavigateToSlate = { hubSubScreen = Screen.DrawingSlate },
+                                onNavigateToKarChihno = { hubSubScreen = Screen.KarChihno },
+                                onNavigateToHearAndPick = { hubSubScreen = Screen.HearAndPick },
+                                onNavigateToPictureMatch = { hubSubScreen = Screen.PictureMatch }
+                            )
+                        }
+                    }
                 }
                 is Screen.Favorites -> {
                     val favViewModel: FavoritesViewModel = hiltViewModel()
@@ -69,9 +100,7 @@ fun MainScreen(
                 }
                 is Screen.Settings -> {
                     val settingsViewModel: SettingsViewModel = hiltViewModel()
-                    SettingsScreen(
-                        viewModel = settingsViewModel
-                    )
+                    SettingsScreen(viewModel = settingsViewModel)
                 }
                 else -> {}
             }

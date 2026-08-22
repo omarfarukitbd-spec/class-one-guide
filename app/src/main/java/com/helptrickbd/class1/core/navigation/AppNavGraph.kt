@@ -84,5 +84,29 @@ fun AppNavGraph(
                 onBackClick = { navController.popBackStack() }
             )
         }
+
+        composable<Screen.DrawingSlate> {
+            com.helptrickbd.class1.feature.drawing.ui.DrawingSlateScreen(
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable<Screen.KarChihno> {
+            com.helptrickbd.class1.feature.karchihno.ui.KarChihnoScreen(
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable<Screen.HearAndPick> {
+            com.helptrickbd.class1.feature.games.ui.hear_and_pick.HearAndPickScreen(
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable<Screen.PictureMatch> {
+            com.helptrickbd.class1.feature.games.ui.picture_match.PictureMatchScreen(
+                onBackClick = { navController.popBackStack() }
+            )
+        }
     }
 }

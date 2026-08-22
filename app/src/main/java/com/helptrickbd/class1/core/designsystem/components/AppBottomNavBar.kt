@@ -22,7 +22,7 @@ sealed class BottomNavItem(
     val icon: ImageVector
 ) {
     data object Home : BottomNavItem(Screen.Home, "হোম", Icons.Default.Home)
-    data object Slate : BottomNavItem(Screen.DrawingSlate, "স্লেট", Icons.Default.Draw)
+    data object Slate : BottomNavItem(Screen.DrawingSlate, "হাতেখড়ি", Icons.Default.Draw)
     data object Favorites : BottomNavItem(Screen.Favorites, "বুকমার্ক", Icons.Default.Bookmark)
     data object Settings : BottomNavItem(Screen.Settings, "সেটিংস", Icons.Default.Settings)
 }

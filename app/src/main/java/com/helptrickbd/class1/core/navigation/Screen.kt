@@ -19,6 +19,15 @@ sealed interface Screen {
     data object Settings : Screen
 
     @Serializable
+    data object KarChihno : Screen
+
+    @Serializable
+    data object HearAndPick : Screen
+
+    @Serializable
+    data object PictureMatch : Screen
+
+    @Serializable
     data class SubjectDetail(
         val subjectId: String,
         val subjectName: String = ""
