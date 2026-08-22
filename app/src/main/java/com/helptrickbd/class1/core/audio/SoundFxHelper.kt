@@ -26,6 +26,12 @@ class SoundFxHelper @Inject constructor() {
         } catch (_: Exception) {}
     }
 
+    suspend fun playBubbleClick() = withContext(Dispatchers.IO) {
+        try {
+            toneGen?.startTone(ToneGenerator.TONE_PROP_BEEP, 70)
+        } catch (_: Exception) {}
+    }
+
     fun release() {
         toneGen?.release()
         toneGen = null
