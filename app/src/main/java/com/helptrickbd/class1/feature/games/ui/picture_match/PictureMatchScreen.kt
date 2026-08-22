@@ -57,7 +57,7 @@ fun PictureMatchScreen(
                         modifier = Modifier.fillMaxWidth().padding(end = 16.dp)
                     ) {
                         Text(
-                            text = "ছবি ও শব্দ দেখে বর্ণ মেলাও",
+                            text = "শব্দ ও ছড়া দেখে বর্ণ মেলাও",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
@@ -108,14 +108,14 @@ fun PictureMatchScreen(
                         border = BorderStroke(2.dp, Color(0xFF38BDF8)),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable(onClick = viewModel::playCurrentPrompt)
+                            .clickable(onClick = { viewModel.playCurrentPrompt() })
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.padding(16.dp)
                         ) {
                             IconButton(
-                                onClick = viewModel::playCurrentPrompt,
+                                onClick = { viewModel.playCurrentPrompt() },
                                 colors = IconButtonDefaults.iconButtonColors(
                                     containerColor = if (uiState.isSpeaking) Color(0xFFFFD54F) else Color(0xFF283349),
                                     contentColor = if (uiState.isSpeaking) Color.Black else Color.White
@@ -126,13 +126,13 @@ fun PictureMatchScreen(
                             Spacer(modifier = Modifier.width(12.dp))
                             Column {
                                 Text(
-                                    text = current.word,
+                                    text = current.targetWord,
                                     fontSize = 24.sp,
                                     fontWeight = FontWeight.Black,
                                     color = Color(0xFFFFD54F)
                                 )
                                 Text(
-                                    text = current.rhyme,
+                                    text = "শব্দটি শুনে শুরুর বর্ণে ট্যাপ করো",
                                     fontSize = 13.sp,
                                     color = Color(0xFFCBD5E1)
                                 )

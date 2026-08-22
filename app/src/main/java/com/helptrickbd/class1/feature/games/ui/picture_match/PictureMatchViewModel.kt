@@ -43,6 +43,8 @@ class PictureMatchViewModel @Inject constructor(
         playCurrentRhyme()
     }
 
+    fun playCurrentPrompt() = playCurrentRhyme()
+
     fun playCurrentRhyme() {
         val q = _uiState.value.currentQuestion ?: return
         viewModelScope.launch {
