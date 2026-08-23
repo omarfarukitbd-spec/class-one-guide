@@ -4,10 +4,7 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.audiofx.LoudnessEnhancer
-import com.helptrickbd.class1.feature.drawing.domain.audio.TracingAudioRegistry
-import com.helptrickbd.class1.feature.drawing.domain.model.TracingCategory
-import com.helptrickbd.class1.feature.drawing.domain.model.TracingItem
-import dagger.hilt.android.qualifiers.ApplicationContext
+ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,6 +13,10 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Robust Centralized Audio Engine for high-fidelity speech and sound effects.
+ * Handles both local assets and TTS fallback.
+ */
 @Singleton
 class StudioAudioEngine @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -55,48 +56,20 @@ class StudioAudioEngine @Inject constructor(
         } catch (_: Exception) {}
     }
 
-    suspend fun playTracingItemAudio(item: TracingItem) = withContext(Dispatchers.Main) {
-        val letterPath = TracingAudioRegistry.getAudioPath(item)
-        val rhymePath = TracingAudioRegistry.getRhymeAudioPath(item)
-        val isEnglish = item.category == TracingCategory.ENGLISH_ALPHABET || item.category == TracingCategory.ENGLISH_NUMBER
-
-        if (letterPath.isNotBlank() && isAssetAvailable(letterPath)) {
-            stop()
-            playAsset(letterPath) {
-                if (rhymePath.isNotBlank() && isAssetAvailable(rhymePath)) {
-                    playAsset(rhymePath, null)
-                } else {
-                    _isSpeaking.value = false
-                }
-            }
-        } else if (rhymePath.isNotBlank() && isAssetAvailable(rhymePath)) {
-            stop()
-            playAsset(rhymePath, null)
-        } else {
-            fallbackToTts(item, isEnglish)
-        }
-    }
-
-    suspend fun playRhymeOnly(item: TracingItem) = withContext(Dispatchers.Main) {
-        val rhymePath = TracingAudioRegistry.getRhymeAudioPath(item)
-        if (rhymePath.isNotBlank() && isAssetAvailable(rhymePath)) {
-            stop()
-            playAsset(rhymePath, null)
-        } else {
-            playTracingItemAudio(item)
-        }
-    }
-
-    suspend fun playDirectAsset(path: String, onComplete: (() -> Unit)? = null) = withContext(Dispatchers.Main) {
+    /**
+     * Plays a direct asset path. Useful for pre-recorded studio voices.
+     */
+    suspend fun playAsset(path: String, onComplete: (() -> Unit)? = null) = withContext(Dispatchers.Main) {
         if (path.isNotBlank() && isAssetAvailable(path)) {
             stop()
-            playAsset(path, onComplete)
+            performPlayAsset(path, onComplete)
         } else {
             onComplete?.invoke()
+            _isSpeaking.value = false
         }
     }
 
-    private fun playAsset(path: String, onComplete: (() -> Unit)?) {
+    private fun performPlayAsset(path: String, onComplete: (() -> Unit)?) {
         try {
             context.assets.openFd(path).use { afd ->
                 mediaPlayer?.reset()
@@ -119,18 +92,13 @@ class StudioAudioEngine @Inject constructor(
         }
     }
 
-    private fun fallbackToTts(item: TracingItem, isEnglish: Boolean) {
-        speechEngine.speakTracingItem(item.character, item.wordExample, item.meaning, isEnglish)
-    }
-
-    suspend fun playPraiseAudio(isEnglish: Boolean) = withContext(Dispatchers.Main) {
-        val praisePath = TracingAudioRegistry.getRandomPraiseAudioPath(isEnglish)
-        if (isAssetAvailable(praisePath)) {
-            stop()
-            playAsset(praisePath, null)
-        } else {
-            speechEngine.speakPraise(isEnglish)
-        }
+    /**
+     * Fallback to Text-to-Speech if asset is missing.
+     */
+    fun speak(text: String, isEnglish: Boolean = false) {
+        stop()
+        speechEngine.speak(text, isEnglish)
+        _isSpeaking.value = true
     }
 
     fun isAssetAvailable(path: String): Boolean {

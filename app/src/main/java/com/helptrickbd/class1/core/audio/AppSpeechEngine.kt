@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import android.speech.tts.Voice
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,6 +15,9 @@ import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Text-to-Speech engine optimized for Bengali and English learning.
+ */
 @Singleton
 class AppSpeechEngine @Inject constructor(
     @ApplicationContext private val context: Context
@@ -35,13 +37,13 @@ class AppSpeechEngine @Inject constructor(
         "সাবাশ! চমৎকার হয়েছে!",
         "দারুণ! তুমি পেরেছ!",
         "বাহ! খুব সুন্দর হয়েছে!",
-        "অসাধারণ লেখা!"
+        "অসাধারণ!"
     )
 
     private val englishPraisePhrases = listOf(
         "Well done! Excellent!",
         "Great job! You did it!",
-        "Awesome! Beautiful writing!"
+        "Awesome! Beautiful!"
     )
 
     init {
@@ -71,9 +73,9 @@ class AppSpeechEngine @Inject constructor(
                 .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
                 .build()
         )
-        // Set higher pitch and optimal rate for sweet female tone
-        tts?.setPitch(1.35f)
-        tts?.setSpeechRate(0.75f)
+        // Optimal female tone
+        tts?.setPitch(1.3f)
+        tts?.setSpeechRate(0.85f)
 
         tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
             override fun onStart(utteranceId: String?) { _isSpeaking.value = true }
@@ -93,64 +95,31 @@ class AppSpeechEngine @Inject constructor(
             val availableVoices = tts?.voices ?: emptySet()
             val targetLang = targetLocale.language
 
-            // Search for female voice codes (e.g. Google's bif/bdf/sfg/female)
             val femaleVoice = availableVoices
                 .filter { it.locale.language == targetLang }
                 .firstOrNull { voice ->
                     val name = voice.name.lowercase()
-                    name.contains("bif") || // Bengali India Female
-                    name.contains("bdf") || // Bengali Bangladesh Female
-                    name.contains("female") ||
-                    name.contains("#female") ||
-                    name.contains("fem") ||
-                    name.contains("sfg") || // English US Female
-                    name.contains("tpd") || // English US Female
-                    name.contains("iol") || // English US Female
-                    voice.features.contains("gender=female")
-                } ?: availableVoices
-                    .filter { it.locale.language == targetLang }
-                    .firstOrNull { !it.name.lowercase().contains("male") && !it.name.lowercase().contains("bim") && !it.name.lowercase().contains("bdm") }
-                    ?: availableVoices.firstOrNull { it.locale.language == targetLang }
+                    name.contains("female") || name.contains("fem") || 
+                    name.contains("bif") || name.contains("bdf") ||
+                    name.contains("sfg") || voice.features.contains("gender=female")
+                } ?: availableVoices.firstOrNull { it.locale.language == targetLang }
 
             femaleVoice?.let { tts?.voice = it }
         } catch (_: Exception) {}
     }
 
-    fun speakTracingItem(character: String, wordExample: String, meaning: String, isEnglish: Boolean) {
-        if (!isInitialized) return
+    /**
+     * Speaks the given text.
+     */
+    fun speak(text: String, isEnglish: Boolean = false) {
+        if (!isInitialized || text.isBlank()) return
         applyBestFemaleVoice(isEnglish)
-
-        val speechText = if (meaning.isNotBlank()) {
-            "$character , $wordExample । $meaning"
-        } else {
-            "$character , $wordExample"
-        }
-
-        tts?.speak(speechText, TextToSpeech.QUEUE_FLUSH, speechParams, "TRACING_ITEM_UTTERANCE")
+        tts?.speak(text, TextToSpeech.QUEUE_FLUSH, speechParams, "LEARNING_UTTERANCE")
     }
 
     fun speakPraise(isEnglish: Boolean) {
-        if (!isInitialized) return
-        applyBestFemaleVoice(isEnglish)
-
         val praise = if (isEnglish) englishPraisePhrases.random() else banglaPraisePhrases.random()
-        tts?.speak(praise, TextToSpeech.QUEUE_FLUSH, speechParams, "PRAISE_UTTERANCE")
-    }
-
-    fun openTtsSettings(context: Context) {
-        try {
-            val intent = Intent("com.android.settings.TTS_SETTINGS").apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            }
-            context.startActivity(intent)
-        } catch (_: Exception) {
-            try {
-                val fallbackIntent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-                context.startActivity(fallbackIntent)
-            } catch (_: Exception) {}
-        }
+        speak(praise, isEnglish)
     }
 
     fun stop() {

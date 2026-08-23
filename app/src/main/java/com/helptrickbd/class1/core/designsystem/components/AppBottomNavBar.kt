@@ -3,8 +3,8 @@ package com.helptrickbd.class1.core.designsystem.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.Draw
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
@@ -22,8 +22,8 @@ sealed class BottomNavItem(
     val icon: ImageVector
 ) {
     data object Home : BottomNavItem(Screen.Home, "হোম", Icons.Default.Home)
-    data object Slate : BottomNavItem(Screen.DrawingSlate, "হাতেখড়ি", Icons.Default.Draw)
-    data object Favorites : BottomNavItem(Screen.Favorites, "বুকমার্ক", Icons.Default.Bookmark)
+    data object Learning : BottomNavItem(Screen.LearningHub, "হাতেখড়ি", Icons.Default.AutoAwesome)
+    data object Favorites : BottomNavItem(Screen.Favorites, "পছন্দ", Icons.Default.Bookmark)
     data object Settings : BottomNavItem(Screen.Settings, "সেটিংস", Icons.Default.Settings)
 }
 
@@ -35,7 +35,7 @@ fun AppBottomNavBar(
 ) {
     val items = listOf(
         BottomNavItem.Home,
-        BottomNavItem.Slate,
+        BottomNavItem.Learning,
         BottomNavItem.Favorites,
         BottomNavItem.Settings
     )

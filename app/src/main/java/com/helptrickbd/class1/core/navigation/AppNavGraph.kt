@@ -85,28 +85,17 @@ fun AppNavGraph(
             )
         }
 
-        composable<Screen.DrawingSlate> {
-            com.helptrickbd.class1.feature.drawing.ui.DrawingSlateScreen(
-                onBackClick = { navController.popBackStack() }
-            )
+        // --- New Learning Routes (Placeholders) ---
+        composable<Screen.LearningHub> {
+            // TODO: Implement LearningHubScreen
         }
 
-        composable<Screen.KarChihno> {
-            com.helptrickbd.class1.feature.karchihno.ui.KarChihnoScreen(
-                onBackClick = { navController.popBackStack() }
-            )
+        composable<Screen.AlphabetSlate> {
+            // TODO: Implement AlphabetSlateScreen
         }
 
-        composable<Screen.HearAndPick> {
-            com.helptrickbd.class1.feature.games.ui.hear_and_pick.HearAndPickScreen(
-                onBackClick = { navController.popBackStack() }
-            )
-        }
-
-        composable<Screen.PictureMatch> {
-            com.helptrickbd.class1.feature.games.ui.picture_match.PictureMatchScreen(
-                onBackClick = { navController.popBackStack() }
-            )
+        composable<Screen.QuizGames> {
+            // TODO: Implement QuizGamesScreen
         }
     }
 }

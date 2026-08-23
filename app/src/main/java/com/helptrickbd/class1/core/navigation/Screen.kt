@@ -10,22 +10,20 @@ sealed interface Screen {
     data object Home : Screen
 
     @Serializable
-    data object DrawingSlate : Screen
-
-    @Serializable
     data object Favorites : Screen
 
     @Serializable
     data object Settings : Screen
 
+    // --- Learning / Hatekhari Section ---
     @Serializable
-    data object KarChihno : Screen
+    data object LearningHub : Screen
 
     @Serializable
-    data object HearAndPick : Screen
+    data object AlphabetSlate : Screen
 
     @Serializable
-    data object PictureMatch : Screen
+    data object QuizGames : Screen
 
     @Serializable
     data class SubjectDetail(
