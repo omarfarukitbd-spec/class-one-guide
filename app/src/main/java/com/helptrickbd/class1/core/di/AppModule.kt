@@ -16,6 +16,9 @@ import com.helptrickbd.class1.core.sync.domain.usecase.SyncCloudDataUseCase
 import com.helptrickbd.class1.core.sync.util.NetworkMonitor
 import com.helptrickbd.class1.feature.home.data.repository.HomeRepositoryImpl
 import com.helptrickbd.class1.feature.home.domain.repository.HomeRepository
+import com.helptrickbd.class1.feature.learning.data.datasource.LearningDataSource
+import com.helptrickbd.class1.feature.learning.data.repository.LearningRepositoryImpl
+import com.helptrickbd.class1.feature.learning.domain.repository.LearningRepository
 import com.helptrickbd.class1.feature.pdf_viewer.data.PdfDownloader
 import com.helptrickbd.class1.feature.pdf_viewer.data.repository.PdfRepositoryImpl
 import com.helptrickbd.class1.feature.pdf_viewer.domain.repository.PdfRepository
@@ -120,5 +123,13 @@ object AppModule {
     @Singleton
     fun provideSettingsRepository(@ApplicationContext context: Context): SettingsRepository {
         return SettingsRepositoryImpl(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLearningRepository(
+        dataSource: LearningDataSource
+    ): LearningRepository {
+        return LearningRepositoryImpl(dataSource)
     }
 }
