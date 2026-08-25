@@ -35,6 +35,14 @@ class MainActivity : ComponentActivity() {
         )
         super.onCreate(savedInstanceState)
         
+        // 100% Anti-Screenshot & Screen Capture Guard
+        if (com.helptrickbd.class1.core.config.AppConfig.FLAG_SECURE_ENABLED) {
+            window.setFlags(
+                android.view.WindowManager.LayoutParams.FLAG_SECURE,
+                android.view.WindowManager.LayoutParams.FLAG_SECURE
+            )
+        }
+        
         setContent {
             val themeMode by settingsRepository.getThemeMode()
                 .collectAsStateWithLifecycle(initialValue = ThemeMode.SYSTEM)

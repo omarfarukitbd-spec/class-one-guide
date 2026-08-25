@@ -9,5 +9,6 @@ import androidx.compose.runtime.Immutable
 data class SearchResult(
     val book: Book,
     val matchedUnitNo: String? = null,
-    val matchedChapterTitle: String? = null
+    val matchedChapterTitle: String? = null,
+    val matchedChapterId: String? = null
 )

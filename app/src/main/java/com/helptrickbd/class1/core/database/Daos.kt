@@ -21,6 +21,9 @@ interface BookDao {
     @Query("SELECT * FROM books WHERE isFavorite = 1 ORDER BY title ASC")
     fun getFavoriteBooks(): Flow<List<BookEntity>>
 
+    @Query("SELECT * FROM books ORDER BY title ASC")
+    fun getAllBooksFlow(): Flow<List<BookEntity>>
+
     @Query("SELECT * FROM books")
     suspend fun getAllBooksDirect(): List<BookEntity>
 

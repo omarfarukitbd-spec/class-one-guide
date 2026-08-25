@@ -15,15 +15,6 @@ sealed interface Screen {
     @Serializable
     data object Settings : Screen
 
-    // --- Learning / Hatekhari Section ---
-    @Serializable
-    data object LearningHub : Screen
-
-    @Serializable
-    data object AlphabetSlate : Screen
-
-    @Serializable
-    data object QuizGames : Screen
 
     @Serializable
     data class SubjectDetail(

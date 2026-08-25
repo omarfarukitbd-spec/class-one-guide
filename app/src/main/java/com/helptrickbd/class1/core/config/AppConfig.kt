@@ -46,19 +46,18 @@ object AppConfig {
     const val FEATURE_DARK_MODE = true
     const val FEATURE_NAVIGATION_DRAWER = true
     const val FEATURE_CLOUD_SYNC = true
-    const val FEATURE_DRAWING_BOARD = true
-    const val FEATURE_LETTER_TRACING = true
-    const val FEATURE_TRACING_AUDIO = true
-    const val FEATURE_TRACING_CELEBRATION = true
     const val FEATURE_SEARCH = true
     const val FEATURE_PDF_BOOKMARKS = true
     const val FEATURE_PDF_THUMBNAIL_PREVIEW = true
     const val FEATURE_PDF_READING_THEMES = true
     const val FEATURE_PDF_HORIZONTAL_SCROLL = true
     
-    // Higher Class Pluggable Extensions (Class 6 - 10 Extensions)
-    const val FEATURE_MCQ_QUIZ = false
-    const val FEATURE_VIDEO_CLASSES = false
-    const val FEATURE_FORMULA_SHEET = false
-    const val FEATURE_BOARD_QUESTIONS = false
+    // ==========================================
+    // 5. Enterprise Security, DRM & Anti-Theft Protection
+    // ==========================================
+    const val FLAG_SECURE_ENABLED = true             // 100% Anti-Screenshot & Screen Recording Prevention
+    const val ROOT_DETECTION_ENABLED = true          // Proactive Root & Magisk integrity check
+    const val FRIDA_TAMPER_PROTECTION_ENABLED = true  // Anti-Hooking & Memory tampering shield
+    const val ENCRYPTED_PDF_CACHE_ENABLED = true     // AES-256 GCM in-memory & scoped cache protection
+    const val SECURE_MEMORY_SHREDDING_ENABLED = true // Auto-zeroing RAM buffers on session close
 }

@@ -1,6 +1,7 @@
 package com.helptrickbd.class1.feature.pdf_viewer.data
 
 import android.content.Context
+import com.helptrickbd.class1.core.config.AppConfig
 import com.helptrickbd.class1.feature.pdf_viewer.domain.model.DownloadState
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +34,7 @@ class PdfDownloader @Inject constructor(
             return@flow
         }
 
+        val fullUrl = resolveFullUrl(url)
         val fileName = generateSafeFileName(url)
         val targetFile = File(pdfCacheDir, fileName)
 
@@ -42,13 +44,13 @@ class PdfDownloader @Inject constructor(
             return@flow
         }
 
-        // 2. Stream from Remote Storage
+        // 2. Stream from Remote Storage / CDN
         val tempFile = File(pdfCacheDir, "$fileName.tmp")
         var connection: HttpURLConnection? = null
 
         try {
             emit(DownloadState.Progress(0.05f))
-            val urlConnection = URL(url).openConnection() as HttpURLConnection
+            val urlConnection = URL(fullUrl).openConnection() as HttpURLConnection
             urlConnection.connectTimeout = 15000
             urlConnection.readTimeout = 25000
             urlConnection.connect()
@@ -93,6 +95,14 @@ class PdfDownloader @Inject constructor(
             connection?.disconnect()
         }
     }.flowOn(Dispatchers.IO)
+
+    private fun resolveFullUrl(url: String): String {
+        return if (url.startsWith("http://", ignoreCase = true) || url.startsWith("https://", ignoreCase = true)) {
+            url
+        } else {
+            "${AppConfig.PDF_STORAGE_BASE_URL.trimEnd('/')}/${url.trimStart('/')}"
+        }
+    }
 
     private fun generateSafeFileName(url: String): String {
         val rawName = url.substringAfterLast("/").substringBefore("?")

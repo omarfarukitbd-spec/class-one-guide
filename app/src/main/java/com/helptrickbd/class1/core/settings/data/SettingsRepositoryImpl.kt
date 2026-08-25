@@ -1,6 +1,7 @@
 package com.helptrickbd.class1.core.settings.data
 
 import android.content.Context
+import com.helptrickbd.class1.core.settings.domain.model.CachedFileInfo
 import com.helptrickbd.class1.core.settings.domain.model.StorageInfo
 import com.helptrickbd.class1.core.settings.domain.model.ThemeMode
 import com.helptrickbd.class1.core.settings.domain.repository.SettingsRepository
@@ -30,7 +31,10 @@ class SettingsRepositoryImpl @Inject constructor(
     private val pdfCacheDir: File
         get() = File(context.cacheDir, "pdfs")
 
-    override fun getStorageInfo(): Flow<StorageInfo> = storageState.asStateFlow()
+    override fun getStorageInfo(): Flow<StorageInfo> {
+        storageState.value = calculateStorage()
+        return storageState.asStateFlow()
+    }
 
     override suspend fun clearPdfCache(): Boolean = withContext(Dispatchers.IO) {
         try {
@@ -60,22 +64,51 @@ class SettingsRepositoryImpl @Inject constructor(
     private fun calculateStorage(): StorageInfo {
         if (!pdfCacheDir.exists()) return StorageInfo()
 
-        val files = pdfCacheDir.listFiles() ?: emptyArray()
+        val files = (pdfCacheDir.listFiles() ?: emptyArray()).filter { it.isFile && !it.name.endsWith(".tmp") }
         val totalBytes = files.sumOf { it.length() }
         val count = files.size
 
-        val formattedSize = if (totalBytes < 1024 * 1024) {
-            val kb = totalBytes / 1024.0
-            String.format(Locale.getDefault(), "%.1f KB", kb)
-        } else {
-            val mb = totalBytes / (1024.0 * 1024.0)
-            String.format(Locale.getDefault(), "%.1f MB", mb)
+        val cachedList = files.map { file ->
+            val bytes = file.length()
+            val sizeStr = formatBytes(bytes)
+            val displayName = resolveDisplayName(file.name)
+            CachedFileInfo(
+                fileName = file.name,
+                displayName = displayName,
+                formattedSize = sizeStr,
+                bytes = bytes
+            )
         }
 
         return StorageInfo(
             cachedBytes = totalBytes,
-            formattedSize = formattedSize,
-            cachedFilesCount = count
+            formattedSize = formatBytes(totalBytes),
+            cachedFilesCount = count,
+            cachedFiles = cachedList
         )
+    }
+
+    private fun formatBytes(bytes: Long): String {
+        return if (bytes < 1024 * 1024) {
+            val kb = bytes / 1024.0
+            String.format(Locale.getDefault(), "%.1f KB", kb)
+        } else {
+            val mb = bytes / (1024.0 * 1024.0)
+            String.format(Locale.getDefault(), "%.1f MB", mb)
+        }
+    }
+
+    private fun resolveDisplayName(name: String): String {
+        val clean = name.lowercase()
+        return when {
+            "bangla" in clean -> "আমার বাংলা বই"
+            "eng" in clean || "english" in clean -> "English for Today"
+            "math" in clean || "gonit" in clean -> "প্রাথমিক গণিত"
+            "art" in clean || "charupath" in clean -> "চারুপাঠ ও শিল্পকলা"
+            "quran" in clean || "tajweed" in clean -> "কুরআন মাজীদ ও তাজভীদ"
+            "aqaid" in clean || "fiqh" in clean -> "আকাইদ ও ফিকহ"
+            "arab" in clean || "durus" in clean -> "আদ্ দুরূসুল আরাবিয়্যাহ্"
+            else -> name.removeSuffix(".pdf")
+        }
     }
 }

@@ -6,9 +6,10 @@ object MadrasahBooksData {
     val books = listOf(
         Book(
             bookId = "madr_quran",
-            title = "কুরআন মাজীদ ও তাজবীদ",
-            subtitle = "ইবতেদায়ী ১ম শ্রেণি",
+            title = "কুরআন মাজীদ ও তাজভীদ",
+            subtitle = "ইবতেদায়ী ১ম শ্রেণি • NCTB",
             curriculum = Curriculum.MADRASAH,
+            pdfUrl = "quran_class1_full.pdf",
             availableVersions = listOf(LanguageVersion.BANGLA),
             progressPercent = 0.70f,
             chapters = listOf(
@@ -39,8 +40,9 @@ object MadrasahBooksData {
         Book(
             bookId = "madr_aqaid",
             title = "আকাইদ ও ফিকহ",
-            subtitle = "ইসলামিক বিশ্বাস ও প্রাথমিক বিধান",
+            subtitle = "ইসলামি বিশ্বাস ও প্রাথমিক বিধান • NCTB",
             curriculum = Curriculum.MADRASAH,
+            pdfUrl = "aqaid_class1_full.pdf",
             availableVersions = listOf(LanguageVersion.BANGLA),
             progressPercent = 0.50f,
             chapters = listOf(
@@ -70,9 +72,10 @@ object MadrasahBooksData {
         ),
         Book(
             bookId = "madr_arabic",
-            title = "আল-লুগাতুল আরাবিয়্যাহ (আরবি)",
-            subtitle = "সহজ আরবি ভাষা শিক্ষা",
+            title = "আদ্ দুরূসুল আরাবিয়্যাহ্",
+            subtitle = "সহজ আরবি ভাষা শিক্ষা • NCTB",
             curriculum = Curriculum.MADRASAH,
+            pdfUrl = "arabic_class1_full.pdf",
             availableVersions = listOf(LanguageVersion.BANGLA),
             progressPercent = 0.30f,
             chapters = listOf(
@@ -91,9 +94,10 @@ object MadrasahBooksData {
         ),
         Book(
             bookId = "madr_bangla",
-            title = "আমার বাংলা বই (মাদ্রাসা)",
-            subtitle = "ইবতেদায়ী ১ম শ্রেণি",
+            title = "আমার বাংলা বই (ইবতেদায়ী)",
+            subtitle = "ইবতেদায়ী ১ম শ্রেণি • NCTB",
             curriculum = Curriculum.MADRASAH,
+            pdfUrl = "madr_bangla_full.pdf",
             availableVersions = listOf(LanguageVersion.BANGLA),
             progressPercent = 0.45f,
             chapters = listOf(
@@ -111,10 +115,33 @@ object MadrasahBooksData {
             )
         ),
         Book(
-            bookId = "madr_math",
-            title = "প্রাথমিক গণিত (মাদ্রাসা)",
-            subtitle = "ইবতেদায়ী ১ম শ্রেণি",
+            bookId = "madr_english",
+            title = "English for Today (ইবতেদায়ী)",
+            subtitle = "Primary Curriculum Class 1 • NCTB",
             curriculum = Curriculum.MADRASAH,
+            pdfUrl = "madr_english_full.pdf",
+            availableVersions = listOf(LanguageVersion.BANGLA),
+            progressPercent = 0.35f,
+            chapters = listOf(
+                Chapter(
+                    chapterId = "me_c1",
+                    unitNo = "Unit 1",
+                    title = "Greetings & Alphabet",
+                    version = LanguageVersion.BANGLA,
+                    resources = listOf(
+                        Resource("mr19", "মূল বই পড়ুন", "madr_eng_u1_text.pdf", ResourceType.TEXTBOOK),
+                        Resource("mr20", "গাইডবুক পড়ুন", "madr_eng_u1_guide.pdf", ResourceType.GUIDEBOOK),
+                        Resource("mr21", "মডেল টেস্ট", "madr_eng_u1_test.pdf", ResourceType.MODEL_TEST)
+                    )
+                )
+            )
+        ),
+        Book(
+            bookId = "madr_math",
+            title = "প্রাথমিক গণিত (ইবতেদায়ী)",
+            subtitle = "ইবতেদায়ী ১ম শ্রেণি • NCTB",
+            curriculum = Curriculum.MADRASAH,
+            pdfUrl = "madr_math_full.pdf",
             availableVersions = listOf(LanguageVersion.BANGLA),
             progressPercent = 0.20f,
             chapters = listOf(
@@ -124,9 +151,9 @@ object MadrasahBooksData {
                     title = "সংখ্যা গণনা ও হিসাব",
                     version = LanguageVersion.BANGLA,
                     resources = listOf(
-                        Resource("mr19", "মূল বই পড়ুন", "madr_math_u1_text.pdf", ResourceType.TEXTBOOK),
-                        Resource("mr20", "গাইডবুক পড়ুন", "madr_math_u1_guide.pdf", ResourceType.GUIDEBOOK),
-                        Resource("mr21", "মডেল টেস্ট", "madr_math_u1_test.pdf", ResourceType.MODEL_TEST)
+                        Resource("mr22", "মূল বই পড়ুন", "madr_math_u1_text.pdf", ResourceType.TEXTBOOK),
+                        Resource("mr23", "গাইডবুক পড়ুন", "madr_math_u1_guide.pdf", ResourceType.GUIDEBOOK),
+                        Resource("mr24", "মডেল টেস্ট", "madr_math_u1_test.pdf", ResourceType.MODEL_TEST)
                     )
                 )
             )

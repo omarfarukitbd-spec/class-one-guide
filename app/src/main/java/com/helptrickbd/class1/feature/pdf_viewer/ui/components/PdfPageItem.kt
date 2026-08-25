@@ -3,6 +3,8 @@ package com.helptrickbd.class1.feature.pdf_viewer.ui.components
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -10,9 +12,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -45,11 +50,14 @@ fun PdfPageItem(
     readingTheme: PdfReadingTheme,
     modifier: Modifier = Modifier
 ) {
+    var scale by remember(pageIndex) { mutableFloatStateOf(1f) }
+    var offset by remember(pageIndex) { mutableStateOf(Offset.Zero) }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 6.dp),
-        shape = RoundedCornerShape(12.dp),
+            .padding(horizontal = 10.dp, vertical = 6.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
@@ -75,21 +83,55 @@ fun PdfPageItem(
                         PdfReadingTheme.SEPIA_WARM -> ColorFilter.colorMatrix(SepiaColorMatrix)
                     }
 
-                    Image(
-                        bitmap = currentBitmap.asImageBitmap(),
-                        contentDescription = "পৃষ্ঠা ${pageIndex + 1}",
-                        contentScale = ContentScale.FillWidth,
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
-                        colorFilter = colorFilter
-                    )
+                            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                            .pointerInput(pageIndex) {
+                                detectTransformGestures { _, pan, zoom, _ ->
+                                    scale = (scale * zoom).coerceIn(1f, 4f)
+                                    if (scale > 1f) {
+                                        val maxX = (size.width * (scale - 1)) / 2f
+                                        val maxY = (size.height * (scale - 1)) / 2f
+                                        offset = Offset(
+                                            x = (offset.x + pan.x).coerceIn(-maxX, maxX),
+                                            y = (offset.y + pan.y).coerceIn(-maxY, maxY)
+                                        )
+                                    } else {
+                                        offset = Offset.Zero
+                                    }
+                                }
+                            }
+                            .pointerInput(pageIndex) {
+                                detectTapGestures(
+                                    onDoubleTap = {
+                                        scale = if (scale > 1f) 1f else 2.2f
+                                        offset = Offset.Zero
+                                    }
+                                )
+                            }
+                    ) {
+                        Image(
+                            bitmap = currentBitmap.asImageBitmap(),
+                            contentDescription = "পৃষ্ঠা ${pageIndex + 1}",
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .graphicsLayer {
+                                    scaleX = scale
+                                    scaleY = scale
+                                    translationX = offset.x
+                                    translationY = offset.y
+                                },
+                            colorFilter = colorFilter
+                        )
+                    }
                 } else {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(360.dp)
-                            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)),
+                            .height(380.dp)
+                            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)),
                         contentAlignment = Alignment.Center
                     ) {
                         CircularProgressIndicator(
@@ -101,17 +143,17 @@ fun PdfPageItem(
                 }
 
                 Surface(
-                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
                         text = "পৃষ্ঠা ${pageIndex + 1}",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = FontWeight.Medium,
+                        fontWeight = FontWeight.Bold,
                         fontSize = 11.sp,
                         modifier = Modifier
-                            .padding(vertical = 4.dp)
+                            .padding(vertical = 5.dp)
                             .wrapContentWidth(Alignment.CenterHorizontally)
                     )
                 }

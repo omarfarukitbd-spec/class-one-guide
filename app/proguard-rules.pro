@@ -1,5 +1,40 @@
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in C:\Users\omarf\AppData\Local\Android\Sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
+# ==========================================
+# ProGuard & R8 Optimization Rules
+# Class 1 Guide • Production Release
+# ==========================================
+
+# 1. Kotlin Coroutines & Reflection
+-keepattributes *Annotation*, Signature, InnerClasses, EnclosingMethod
+-dontwarn kotlinx.coroutines.**
+
+# 2. AndroidX Room Database & Entities
+-keep class * extends androidx.room.RoomDatabase
+-keep @androidx.room.Entity class * { *; }
+-keep @androidx.room.Dao interface * { *; }
+-keep class * extends androidx.room.TypeConverter { *; }
+-dontwarn androidx.room.paging.**
+
+# 3. Kotlinx Serialization
+-keepattributes *Annotation*, InnerClasses
+-dontwarn kotlinx.serialization.**
+-keepclassmembers class * {
+    *** Companion;
+}
+-keepclasseswithmembers class * {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+-keep @kotlinx.serialization.Serializable class * { *; }
+
+# 4. Dagger & Hilt Dependency Injection
+-dontwarn dagger.hilt.**
+-keep class * extends dagger.hilt.android.internal.managers.ViewComponentManager$FragmentContextWrapper { *; }
+-keep class dagger.hilt.** { *; }
+
+# 5. Jetpack Compose Rules
+-keep class androidx.compose.material.icons.** { *; }
+-dontwarn androidx.compose.**
+
+# 6. Domain Models & App Data Classes
+-keep class com.helptrickbd.class1.feature.home.domain.model.** { *; }
+-keep class com.helptrickbd.class1.core.database.** { *; }
+-keep class com.helptrickbd.class1.core.settings.domain.model.** { *; }

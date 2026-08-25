@@ -84,18 +84,5 @@ fun AppNavGraph(
                 onBackClick = { navController.popBackStack() }
             )
         }
-
-        // --- New Learning Routes (Placeholders) ---
-        composable<Screen.LearningHub> {
-            // TODO: Implement LearningHubScreen
-        }
-
-        composable<Screen.AlphabetSlate> {
-            // TODO: Implement AlphabetSlateScreen
-        }
-
-        composable<Screen.QuizGames> {
-            // TODO: Implement QuizGamesScreen
-        }
     }
 }

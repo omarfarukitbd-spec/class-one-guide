@@ -2,17 +2,15 @@ package com.helptrickbd.class1.feature.pdf_viewer.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.BookmarkBorder
-import androidx.compose.material.icons.filled.CollectionsBookmark
-import androidx.compose.material.icons.filled.GridView
-import androidx.compose.material.icons.filled.Tune
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Bookmark
+import androidx.compose.material.icons.rounded.BookmarkBorder
+import androidx.compose.material.icons.rounded.CollectionsBookmark
+import androidx.compose.material.icons.rounded.GridView
+import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -43,7 +41,7 @@ fun PdfTopAppBar(
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                     contentDescription = "ফিরে যান"
                 )
             }
@@ -54,6 +52,7 @@ fun PdfTopAppBar(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -62,33 +61,33 @@ fun PdfTopAppBar(
                     style = MaterialTheme.typography.bodySmall,
                     fontSize = 11.sp,
                     color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.SemiBold
                 )
             }
         },
         actions = {
             IconButton(onClick = onToggleBookmark) {
                 Icon(
-                    imageVector = if (isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                    imageVector = if (isBookmarked) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder,
                     contentDescription = if (isBookmarked) "বুকমার্ক মুছুন" else "বুকমার্ক করুন",
                     tint = if (isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             IconButton(onClick = onOpenThumbnails) {
                 Icon(
-                    imageVector = Icons.Default.GridView,
+                    imageVector = Icons.Rounded.GridView,
                     contentDescription = "পৃষ্ঠা প্রিভিউ"
                 )
             }
             IconButton(onClick = onOpenBookmarks) {
                 Icon(
-                    imageVector = Icons.Default.CollectionsBookmark,
+                    imageVector = Icons.Rounded.CollectionsBookmark,
                     contentDescription = "বুকমার্ক তালিকা"
                 )
             }
             IconButton(onClick = onOpenSettings) {
                 Icon(
-                    imageVector = Icons.Default.Tune,
+                    imageVector = Icons.Rounded.Tune,
                     contentDescription = "রিডার সেটিংস"
                 )
             }

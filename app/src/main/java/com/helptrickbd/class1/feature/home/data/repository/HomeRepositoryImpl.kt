@@ -79,8 +79,14 @@ class HomeRepositoryImpl @Inject constructor(
 
     override fun searchBooksAndChapters(query: String, curriculum: Curriculum): Flow<List<SearchResult>> {
         val cleanQuery = query.trim()
+        val booksFlow = if (cleanQuery.isEmpty()) {
+            bookDao.getBooksByCurriculum(curriculum)
+        } else {
+            bookDao.getAllBooksFlow()
+        }
+
         return combine(
-            bookDao.getBooksByCurriculum(curriculum),
+            booksFlow,
             chapterDao.getAllChaptersFlow()
         ) { books, allChapters ->
             if (cleanQuery.isEmpty()) {
@@ -99,17 +105,17 @@ class HomeRepositoryImpl @Inject constructor(
 
                 val matchedChapter = bookChapters.firstOrNull { ch ->
                     ch.title.contains(cleanQuery, ignoreCase = true) ||
-                            ch.unitNo.contains(cleanQuery, ignoreCase = true)
+                            ch.unitNo.contains(cleanQuery, ignoreCase = true) ||
+                            ch.resources.any { it.title.contains(cleanQuery, ignoreCase = true) }
                 }
 
-                if (isBookMatch) {
-                    results.add(SearchResult(book = domainBook))
-                } else if (matchedChapter != null) {
+                if (isBookMatch || matchedChapter != null) {
                     results.add(
                         SearchResult(
                             book = domainBook,
-                            matchedUnitNo = matchedChapter.unitNo,
-                            matchedChapterTitle = matchedChapter.title
+                            matchedUnitNo = matchedChapter?.unitNo,
+                            matchedChapterTitle = matchedChapter?.title,
+                            matchedChapterId = matchedChapter?.chapterId
                         )
                     )
                 }

@@ -2,7 +2,6 @@ package com.helptrickbd.class1.core.database
 
 import com.helptrickbd.class1.feature.home.data.datasource.MadrasahBooksData
 import com.helptrickbd.class1.feature.home.data.datasource.SchoolBooksData
-import com.helptrickbd.class1.feature.home.domain.model.Book
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -14,12 +13,11 @@ class DatabaseSeeder @Inject constructor(
     private val chapterDao: ChapterDao
 ) {
     suspend fun seedIfNeeded() = withContext(Dispatchers.IO) {
-        val existingCount = bookDao.getBookCount()
-        if (existingCount > 0) return@withContext
-
         val allDomainBooks = SchoolBooksData.books + MadrasahBooksData.books
+        val existingBooks = bookDao.getAllBooksDirect().associateBy { it.bookId }
 
         val bookEntities = allDomainBooks.map { book ->
+            val existing = existingBooks[book.bookId]
             BookEntity(
                 bookId = book.bookId,
                 title = book.title,
@@ -29,10 +27,10 @@ class DatabaseSeeder @Inject constructor(
                 curriculum = book.curriculum,
                 availableVersions = book.availableVersions,
                 totalChapters = book.chapters.size,
-                isFavorite = book.isFavorite,
-                progressPercent = book.progressPercent,
-                lastReadPage = 1,
-                lastReadTimestamp = 0L
+                isFavorite = existing?.isFavorite ?: book.isFavorite,
+                progressPercent = existing?.progressPercent ?: book.progressPercent,
+                lastReadPage = existing?.lastReadPage ?: 1,
+                lastReadTimestamp = existing?.lastReadTimestamp ?: 0L
             )
         }
 

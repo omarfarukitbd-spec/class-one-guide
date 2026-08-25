@@ -15,9 +15,6 @@ import com.helptrickbd.class1.feature.favorites.ui.FavoritesScreen
 import com.helptrickbd.class1.feature.home.domain.model.Book
 import com.helptrickbd.class1.feature.home.presentation.HomeViewModel
 import com.helptrickbd.class1.feature.home.ui.HomeScreen
-import com.helptrickbd.class1.feature.learning.ui.games.QuizGamesScreen
-import com.helptrickbd.class1.feature.learning.ui.hub.LearningHubScreen
-import com.helptrickbd.class1.feature.learning.ui.slate.AlphabetSlateScreen
 import com.helptrickbd.class1.feature.settings.presentation.SettingsViewModel
 import com.helptrickbd.class1.feature.settings.ui.SettingsScreen
 
@@ -28,15 +25,10 @@ fun MainScreen(
     modifier: Modifier = Modifier
 ) {
     var currentTab by remember { mutableStateOf<Screen>(Screen.Home) }
-    var learningSubScreen by remember { mutableStateOf<Screen?>(null) }
 
     // Navigation logic for back press
-    BackHandler(enabled = currentTab != Screen.Home || learningSubScreen != null) {
-        if (learningSubScreen != null) {
-            learningSubScreen = null
-        } else {
-            currentTab = Screen.Home
-        }
+    BackHandler(enabled = currentTab != Screen.Home) {
+        currentTab = Screen.Home
     }
 
     Scaffold(
@@ -44,10 +36,7 @@ fun MainScreen(
         bottomBar = {
             AppBottomNavBar(
                 currentRoute = currentTab,
-                onNavigate = {
-                    learningSubScreen = null
-                    currentTab = it
-                }
+                onNavigate = { currentTab = it }
             )
         }
     ) { innerPadding ->
@@ -65,27 +54,12 @@ fun MainScreen(
                         onResumeClick = onResumeClick
                     )
                 }
-                is Screen.LearningHub -> {
-                    when (learningSubScreen) {
-                        is Screen.AlphabetSlate -> {
-                            AlphabetSlateScreen(onBackClick = { learningSubScreen = null })
-                        }
-                        is Screen.QuizGames -> {
-                            QuizGamesScreen(onBackClick = { learningSubScreen = null })
-                        }
-                        else -> {
-                            LearningHubScreen(
-                                onNavigateToSlate = { learningSubScreen = Screen.AlphabetSlate },
-                                onNavigateToGames = { learningSubScreen = Screen.QuizGames }
-                            )
-                        }
-                    }
-                }
                 is Screen.Favorites -> {
                     val favViewModel: FavoritesViewModel = hiltViewModel()
                     FavoritesScreen(
                         viewModel = favViewModel,
-                        onBookClick = onBookClick
+                        onBookClick = onBookClick,
+                        onResumeClick = onResumeClick
                     )
                 }
                 is Screen.Settings -> {

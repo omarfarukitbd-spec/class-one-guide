@@ -22,7 +22,6 @@ sealed class BottomNavItem(
     val icon: ImageVector
 ) {
     data object Home : BottomNavItem(Screen.Home, "হোম", Icons.Default.Home)
-    data object Learning : BottomNavItem(Screen.LearningHub, "হাতেখড়ি", Icons.Default.AutoAwesome)
     data object Favorites : BottomNavItem(Screen.Favorites, "পছন্দ", Icons.Default.Bookmark)
     data object Settings : BottomNavItem(Screen.Settings, "সেটিংস", Icons.Default.Settings)
 }
@@ -35,7 +34,6 @@ fun AppBottomNavBar(
 ) {
     val items = listOf(
         BottomNavItem.Home,
-        BottomNavItem.Learning,
         BottomNavItem.Favorites,
         BottomNavItem.Settings
     )

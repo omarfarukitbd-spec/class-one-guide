@@ -70,14 +70,15 @@ CORE DIRECTIVES & RULES OF ENGAGEMENT:
 
 - **Mandatory Previews**: Every Compose UI component (Atom/Molecule/Organism) MUST have a `@Preview` annotation with mock data to verify visual correctness without launching the app.
 
-- **Mandatory Clear & Concise Reporting & Bengali Documentation**:
+- **Mandatory Clear & Concise Reporting, Bengali Documentation & Next Step Suggestions**:
     - **100% Bengali Documentation (Plans & Walkthroughs)**: All `implementation_plan.md` and `walkthrough.md` artifacts, as well as all post-task explanations and responses to the user, MUST ALWAYS be written in clean, professional, and well-structured **Bengali (বাংলা)**.
     - **Post-Task Code Explanation**: After completing any task, refactoring, or code edit, you MUST ALWAYS provide a structured summary in Bengali:
         - **What changed (কী কী পরিবর্তন হয়েছে)**: Clear bullet points listing all modified/created files and components.
         - **Why it was changed (কেন পরিবর্তন করা হয়েছে)**: The exact architectural, performance, or UI reason behind the change.
         - **Code Highlights (কোড পরিবর্তন / Before vs After)**: Show relevant code snippets or diffs.
+    - **Mandatory Systematic Next Step Suggestions (পরবর্তী পদক্ষেপের ধারাবাহিক প্রস্তাবনা)**: At the very end of EVERY response after completing a task, you MUST ALWAYS suggest 2-3 logical, prioritized, and sequential next steps/features to work on, so the user has immediate clarity on what to build or polish next.
 
-- **Mandatory Build & Push Workflow**: After finishing every task or update, you MUST run a Gradle build. If the build succeeds without errors, you MUST automatically stage, commit, and push the changes to the Git repository with a descriptive commit message. NEVER push code that fails to build.
+- **No Automatic Terminal Gradle Build (Manual Build in Android Studio)**: NEVER run terminal Gradle build commands (e.g., `./gradlew build`, `assembleDebug`, `check`, etc.) in the background or terminal. The user builds, tests, and runs the application directly inside Android Studio. Perform rigorous 5-layer static code verification and architecture cross-validation before handing off code.
 
 PROJECT-SPECIFIC DESIGN DIRECTIVES:
 
@@ -94,3 +95,10 @@ PROJECT-SPECIFIC DESIGN DIRECTIVES:
     - **Zero Fragmented Hacks**: Individual screens/composables must NEVER perform isolated window manipulations. All System UI controller behaviors must be centrally driven through `MainActivity.kt`, `Theme.kt`, and `core/designsystem` components.
 
 - **Zero Emojis & Strict Material 3 Vector Icons**: NEVER use emojis anywhere in the app (UI text, buttons, titles, subtitles, cards, or placeholders). Always use appropriate, high-quality, and responsive Material 3 Vector Icons (`ImageVector`, `Icons.Default.*`, `Icons.Outlined.*`, `Icons.Rounded.*`, or custom XML vector drawables) for all UI iconography and visual cues.
+
+- **MILITARY-GRADE SECURITY, ANTI-SCREENSHOT & PDF DRM DIRECTIVES (100% MANDATORY)**:
+    - **Anti-Screenshot & Hardware Screen Capture Guard**: Enforce `WindowManager.LayoutParams.FLAG_SECURE` in `MainActivity` based on `AppConfig.FLAG_SECURE_ENABLED`. Under no circumstances should any user or third-party tool capture screenshots, record screen videos, or capture recent app task previews.
+    - **Encrypted In-Memory PDF DRM (Zero Public Disk Leaks)**: PDFs MUST NEVER be stored in plain public storage (`Downloads`, `ExternalStorage`). All PDF streaming must use internal scoped cache (`context.cacheDir`) with AES-256 GCM encrypted streaming and in-memory bitmap projection via `PdfRenderer`. When the reading session closes, automatically wipe/zero the memory buffers.
+    - **Root & Tamper Detection (Anti-Hooking Shield)**: Integrate `SecurityManager` to proactively detect Root binaries (`su`), Magisk, Frida hooking, Xposed frameworks, and emulator debuggers. Block execution or alert gracefully when integrity is compromised.
+    - **Zero Cleartext & SSL Pinning**: Enforce `cleartextTrafficPermitted="false"` across all network manifests and strictly enforce HTTPS with certificate validation.
+

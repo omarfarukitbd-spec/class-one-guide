@@ -9,6 +9,7 @@ object SchoolBooksData {
             title = "আমার বাংলা বই",
             subtitle = "জাতীয় শিক্ষাক্রম ও পাঠ্যপুস্তক বোর্ড",
             curriculum = Curriculum.SCHOOL,
+            pdfUrl = "bangla_class1_full.pdf",
             availableVersions = listOf(LanguageVersion.BANGLA, LanguageVersion.ENGLISH),
             progressPercent = 0.65f,
             chapters = listOf(
@@ -63,6 +64,7 @@ object SchoolBooksData {
             title = "English for Today",
             subtitle = "Primary Curriculum Class 1",
             curriculum = Curriculum.SCHOOL,
+            pdfUrl = "english_class1_full.pdf",
             availableVersions = listOf(LanguageVersion.BANGLA, LanguageVersion.ENGLISH),
             progressPercent = 0.40f,
             chapters = listOf(
@@ -95,6 +97,7 @@ object SchoolBooksData {
             title = "প্রাথমিক গণিত",
             subtitle = "সংখ্যার ধারণা, গণনা ও সহজ হিসাব",
             curriculum = Curriculum.SCHOOL,
+            pdfUrl = "math_class1_full.pdf",
             availableVersions = listOf(LanguageVersion.BANGLA, LanguageVersion.ENGLISH),
             progressPercent = 0.25f,
             chapters = listOf(
@@ -127,6 +130,7 @@ object SchoolBooksData {
             title = "চারুপাঠ ও শিল্পকলা",
             subtitle = "সহজ ছবি আঁকা ও রঙের আনন্দ",
             curriculum = Curriculum.SCHOOL,
+            pdfUrl = "art_class1_full.pdf",
             availableVersions = listOf(LanguageVersion.BANGLA),
             progressPercent = 0.10f,
             chapters = listOf(
