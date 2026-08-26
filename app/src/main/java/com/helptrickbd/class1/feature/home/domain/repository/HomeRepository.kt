@@ -38,4 +38,9 @@ interface HomeRepository {
      * Globally searches across book titles, unit numbers, and lesson titles.
      */
     fun searchBooksAndChapters(query: String, curriculum: Curriculum): Flow<List<SearchResult>>
+
+    /**
+     * Retrieves remote in-app notice broadcast from Firestore Admin Panel.
+     */
+    fun getCloudNotice(): Flow<String?>
 }

@@ -52,3 +52,18 @@ data class BookmarkEntity(
     val note: String? = null,
     val createdTimestamp: Long = System.currentTimeMillis()
 )
+
+@Entity(
+    tableName = "notifications",
+    indices = [Index(value = ["timestamp"])]
+)
+data class NotificationEntity(
+    @PrimaryKey val id: String,
+    val title: String,
+    val message: String,
+    val imageUrl: String? = null,
+    val bookId: String? = null,
+    val actionUrl: String? = null,
+    val isRead: Boolean = false,
+    val timestamp: Long = System.currentTimeMillis()
+)

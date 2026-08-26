@@ -12,7 +12,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -26,51 +25,37 @@ fun ResourceActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val (icon: ImageVector, iconColor: Color, containerColor: Color, subtitle: String) = when (resource.type) {
-        ResourceType.TEXTBOOK -> ResourceStyle(
-            Icons.Rounded.AutoStories,
-            Color(0xFF00897B),
-            Color(0xFFE0F2F1),
-            "বোর্ড পাঠ্যবই"
-        )
-        ResourceType.GUIDEBOOK -> ResourceStyle(
-            Icons.AutoMirrored.Rounded.MenuBook,
-            Color(0xFF3949AB),
-            Color(0xFFE8EAF6),
-            "প্রশ্নোত্তর ও সমাধান"
-        )
-        ResourceType.MODEL_TEST -> ResourceStyle(
-            Icons.Rounded.Quiz,
-            Color(0xFFFB8C00),
-            Color(0xFFFFF3E0),
-            "অনুশীলনী ও পরীক্ষা"
-        )
+    val (icon: ImageVector, subtitle: String) = when (resource.type) {
+        ResourceType.TEXTBOOK -> Pair(Icons.Rounded.AutoStories, "বোর্ড পাঠ্যবই")
+        ResourceType.GUIDEBOOK -> Pair(Icons.AutoMirrored.Rounded.MenuBook, "প্রশ্নোত্তর ও সমাধান")
+        ResourceType.MODEL_TEST -> Pair(Icons.Rounded.Quiz, "অনুশীলনী ও পরীক্ষা")
     }
 
     Surface(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
-        color = containerColor.copy(alpha = 0.5f),
-        border = BorderStroke(1.dp, iconColor.copy(alpha = 0.2f))
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 10.dp),
+                .padding(horizontal = 14.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Surface(
-                    color = containerColor,
-                    shape = RoundedCornerShape(10.dp)
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = RoundedCornerShape(10.dp),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f))
                 ) {
                     Box(modifier = Modifier.padding(8.dp)) {
                         Icon(
                             imageVector = icon,
                             contentDescription = null,
-                            tint = iconColor,
+                            tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.size(20.dp)
                         )
                     }
@@ -79,14 +64,14 @@ fun ResourceActionButton(
                 Column {
                     Text(
                         text = resource.title,
-                        fontSize = 13.sp,
+                        fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = subtitle,
                         fontSize = 11.sp,
-                        color = iconColor,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.Medium
                     )
                 }
@@ -95,16 +80,9 @@ fun ResourceActionButton(
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
                 contentDescription = null,
-                tint = iconColor,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(16.dp)
             )
         }
     }
 }
-
-private data class ResourceStyle(
-    val icon: ImageVector,
-    val iconColor: Color,
-    val containerColor: Color,
-    val subtitle: String
-)

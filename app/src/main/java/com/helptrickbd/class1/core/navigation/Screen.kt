@@ -7,6 +7,9 @@ import kotlinx.serialization.Serializable
  */
 sealed interface Screen {
     @Serializable
+    data object Splash : Screen
+
+    @Serializable
     data object Home : Screen
 
     @Serializable
@@ -14,6 +17,9 @@ sealed interface Screen {
 
     @Serializable
     data object Settings : Screen
+
+    @Serializable
+    data object NotificationInbox : Screen
 
 
     @Serializable

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun SearchSuggestionChips(
     onSuggestionClick: (String) -> Unit,
+    selectedQuery: String = "",
     modifier: Modifier = Modifier
 ) {
     val suggestions = listOf(
@@ -38,11 +39,15 @@ fun SearchSuggestionChips(
         verticalAlignment = Alignment.CenterVertically
     ) {
         suggestions.forEach { suggestion ->
+            val isSelected = selectedQuery.trim().equals(suggestion.trim(), ignoreCase = true)
             Surface(
                 onClick = { onSuggestionClick(suggestion) },
                 shape = RoundedCornerShape(10.dp),
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+                color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                border = BorderStroke(
+                    width = if (isSelected) 1.2.dp else 1.dp,
+                    color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+                )
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
@@ -51,15 +56,15 @@ fun SearchSuggestionChips(
                     Icon(
                         imageVector = Icons.Rounded.Search,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
                         modifier = Modifier.size(13.dp)
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
                         text = suggestion,
                         fontSize = 11.sp,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Medium
+                        color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                     )
                 }
             }

@@ -84,9 +84,10 @@ object AppModule {
     @Singleton
     fun provideCloudSyncRepository(
         @ApplicationContext context: Context,
-        firestore: FirebaseFirestore?
+        firestore: FirebaseFirestore?,
+        @IoDispatcher ioDispatcher: kotlinx.coroutines.CoroutineDispatcher
     ): CloudSyncRepository {
-        return CloudSyncRepositoryImpl(context, firestore)
+        return CloudSyncRepositoryImpl(context, firestore, ioDispatcher)
     }
 
     @Provides
@@ -96,9 +97,19 @@ object AppModule {
         chapterDao: ChapterDao,
         seeder: DatabaseSeeder,
         syncCloudDataUseCase: SyncCloudDataUseCase,
-        networkMonitor: NetworkMonitor
+        syncRepository: CloudSyncRepository,
+        networkMonitor: NetworkMonitor,
+        @IoDispatcher ioDispatcher: kotlinx.coroutines.CoroutineDispatcher
     ): HomeRepository {
-        return HomeRepositoryImpl(bookDao, chapterDao, seeder, syncCloudDataUseCase, networkMonitor)
+        return HomeRepositoryImpl(
+            bookDao,
+            chapterDao,
+            seeder,
+            syncCloudDataUseCase,
+            syncRepository,
+            networkMonitor,
+            ioDispatcher
+        )
     }
 
     @Provides
@@ -118,7 +129,24 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSettingsRepository(@ApplicationContext context: Context): SettingsRepository {
-        return SettingsRepositoryImpl(context)
+    fun provideSettingsRepository(
+        @ApplicationContext context: Context,
+        @IoDispatcher ioDispatcher: kotlinx.coroutines.CoroutineDispatcher
+    ): SettingsRepository {
+        return SettingsRepositoryImpl(context, ioDispatcher)
+    }
+
+    @Provides
+    fun provideNotificationDao(database: AppDatabase): com.helptrickbd.class1.core.database.NotificationDao {
+        return database.notificationDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationRepository(
+        notificationDao: com.helptrickbd.class1.core.database.NotificationDao,
+        @IoDispatcher ioDispatcher: kotlinx.coroutines.CoroutineDispatcher
+    ): com.helptrickbd.class1.core.notification.domain.repository.NotificationRepository {
+        return com.helptrickbd.class1.core.notification.data.NotificationRepositoryImpl(notificationDao, ioDispatcher)
     }
 }

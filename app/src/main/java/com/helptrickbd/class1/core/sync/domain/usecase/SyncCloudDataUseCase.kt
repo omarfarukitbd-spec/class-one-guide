@@ -12,7 +12,8 @@ import com.helptrickbd.class1.feature.home.domain.model.LanguageVersion
 import com.helptrickbd.class1.feature.home.domain.model.Resource
 import com.helptrickbd.class1.feature.home.domain.model.ResourceType
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
+import com.helptrickbd.class1.core.di.IoDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
@@ -23,14 +24,18 @@ class SyncCloudDataUseCase @Inject constructor(
     private val syncRepository: CloudSyncRepository,
     private val bookDao: BookDao,
     private val chapterDao: ChapterDao,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
-    suspend operator fun invoke(forceSync: Boolean = false): Boolean = withContext(Dispatchers.IO) {
+    suspend operator fun invoke(forceSync: Boolean = false): Boolean = withContext(ioDispatcher) {
         if (!AppConfig.FEATURE_CLOUD_SYNC) return@withContext false
 
         try {
             val metadata = syncRepository.getRemoteClassMetadata(AppConfig.TARGET_CLASS_ID) ?: return@withContext false
             val localTimestamp = syncRepository.getLocalLastSyncTimestamp()
+
+            // Save remote notice locally for immediate UI display
+            syncRepository.saveCachedNotice(metadata.notice)
 
             // 1. Timestamp Delta Optimization (0 bandwidth wasted if up to date)
             if (!forceSync && metadata.lastUpdated > 0 && metadata.lastUpdated <= localTimestamp) {

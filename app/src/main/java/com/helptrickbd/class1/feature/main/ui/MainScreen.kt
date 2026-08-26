@@ -22,6 +22,7 @@ import com.helptrickbd.class1.feature.settings.ui.SettingsScreen
 fun MainScreen(
     onBookClick: (String, String) -> Unit,
     onResumeClick: (Book) -> Unit,
+    onNotificationClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var currentTab by remember { mutableStateOf<Screen>(Screen.Home) }
@@ -51,7 +52,8 @@ fun MainScreen(
                     HomeScreen(
                         viewModel = homeViewModel,
                         onBookClick = onBookClick,
-                        onResumeClick = onResumeClick
+                        onResumeClick = onResumeClick,
+                        onNotificationClick = onNotificationClick
                     )
                 }
                 is Screen.Favorites -> {

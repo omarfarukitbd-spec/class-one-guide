@@ -19,11 +19,16 @@ import com.helptrickbd.class1.feature.home.ui.components.HomeBody
 import com.helptrickbd.class1.feature.home.ui.components.drawer.AppNavigationDrawer
 import kotlinx.coroutines.launch
 
+import androidx.compose.material.icons.rounded.Notifications
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
     onBookClick: (String, String) -> Unit = { _, _ -> },
-    onResumeClick: (Book) -> Unit = { book -> onBookClick(book.bookId, book.title) }
+    onResumeClick: (Book) -> Unit = { book -> onBookClick(book.bookId, book.title) },
+    onNotificationClick: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -61,6 +66,29 @@ fun HomeScreen(
                     navigationIcon = Icons.Rounded.Menu,
                     onNavigationClick = { 
                         coroutineScope.launch { drawerState.open() }
+                    },
+                    actions = {
+                        val unread = (uiState as? HomeUiState.Success)?.unreadNotifications ?: 0
+                        IconButton(onClick = onNotificationClick) {
+                            BadgedBox(
+                                badge = {
+                                    if (unread > 0) {
+                                        Badge(
+                                            containerColor = MaterialTheme.colorScheme.primary,
+                                            contentColor = MaterialTheme.colorScheme.onPrimary
+                                        ) {
+                                            Text("$unread", fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                                        }
+                                    }
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Notifications,
+                                    contentDescription = "নোটিফিকেশন ও নোটিশ",
+                                    tint = androidx.compose.ui.graphics.Color.White
+                                )
+                            }
+                        }
                     }
                 )
             }
@@ -83,7 +111,8 @@ fun HomeScreen(
                         onCurriculumSelected = viewModel::onCurriculumSelected,
                         onBookClick = onBookClick,
                         onResumeClick = onResumeClick,
-                        onToggleFavorite = { bookId, isFav -> viewModel.onToggleFavorite(bookId, isFav) }
+                        onToggleFavorite = { bookId, isFav -> viewModel.onToggleFavorite(bookId, isFav) },
+                        onToggleLayoutMode = viewModel::onToggleLayoutMode
                     )
                 }
                 is HomeUiState.Error -> {

@@ -82,6 +82,8 @@ CORE DIRECTIVES & RULES OF ENGAGEMENT:
 
 PROJECT-SPECIFIC DESIGN DIRECTIVES:
 
+- **Automatic Firebase Deployment (Admin Panel)**: Whenever you complete a task that involves modifying the Web Admin Panel (`admin-panel/` directory) or `firestore.rules`, you MUST automatically run the deployment command (`firebase deploy --only hosting,firestore:rules`) using the `run_command` tool (with `BypassSandbox: true` if needed) before finishing your turn. Do not wait for the user to ask you to deploy.
+
 - **ANDROID NATIVE SYSTEM UI CONTROLLER & EDGE-TO-EDGE SYSTEM (100% MANDATORY)**:
     - **Activity Edge-to-Edge Initialization**: Always call `enableEdgeToEdge()` in `MainActivity.onCreate()` as mandated by modern Android guidelines (Android 14/15+).
     - **Dynamic System UI Appearance (SSOT in Theme.kt)**: System bar icons and contrast MUST be controlled centrally via `WindowCompat.getInsetsController(window, view)` inside Compose `SideEffect` in `Theme.kt`:

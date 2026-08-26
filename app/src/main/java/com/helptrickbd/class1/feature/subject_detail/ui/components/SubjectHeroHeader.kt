@@ -27,11 +27,9 @@ fun SubjectHeroHeader(
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = theme.containerColor.copy(alpha = 0.45f)
-        ),
-        border = BorderStroke(1.2.dp, theme.primaryColor.copy(alpha = 0.25f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.2.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
             modifier = Modifier
@@ -43,15 +41,15 @@ fun SubjectHeroHeader(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Surface(
-                    color = theme.containerColor,
+                    color = MaterialTheme.colorScheme.primaryContainer,
                     shape = RoundedCornerShape(16.dp),
-                    border = BorderStroke(1.dp, theme.primaryColor.copy(alpha = 0.2f))
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f))
                 ) {
                     Box(modifier = Modifier.padding(12.dp)) {
                         Icon(
                             imageVector = theme.primaryIcon,
                             contentDescription = theme.categoryBadge,
-                            tint = theme.primaryColor,
+                            tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.size(32.dp)
                         )
                     }
@@ -63,7 +61,7 @@ fun SubjectHeroHeader(
                     Text(
                         text = theme.categoryBadge,
                         style = MaterialTheme.typography.labelMedium,
-                        color = theme.primaryColor,
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 11.sp
                     )
@@ -99,13 +97,13 @@ fun SubjectHeroHeader(
                 Text(
                     text = "মোট $chapterCount টি অধ্যায়",
                     fontSize = 11.sp,
-                    color = theme.primaryColor,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = "$progressPercent% সম্পন্ন",
                     fontSize = 11.sp,
-                    color = theme.primaryColor,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -118,8 +116,8 @@ fun SubjectHeroHeader(
                     .fillMaxWidth()
                     .height(6.dp)
                     .clip(CircleShape),
-                color = theme.primaryColor,
-                trackColor = theme.containerColor
+                color = MaterialTheme.colorScheme.primary,
+                trackColor = MaterialTheme.colorScheme.surfaceVariant
             )
         }
     }

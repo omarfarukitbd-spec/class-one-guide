@@ -38,3 +38,11 @@
 -keep class com.helptrickbd.class1.feature.home.domain.model.** { *; }
 -keep class com.helptrickbd.class1.core.database.** { *; }
 -keep class com.helptrickbd.class1.core.settings.domain.model.** { *; }
+
+# 7. Firebase Crashlytics & Analytics De-obfuscation
+-keepattributes SourceFile, LineNumberTable
+-keep public class * extends java.lang.Exception
+-keepclassmembers enum * { *; }
+-dontwarn com.google.firebase.crashlytics.**
+-dontwarn com.google.firebase.analytics.**
+-keep class com.helptrickbd.class1.core.analytics.** { *; }

@@ -13,6 +13,9 @@ import com.helptrickbd.class1.feature.pdf_viewer.ui.PdfViewerViewModel
 import com.helptrickbd.class1.feature.subject_detail.ui.SubjectDetailScreen
 import com.helptrickbd.class1.feature.subject_detail.ui.SubjectDetailViewModel
 
+import com.helptrickbd.class1.feature.splash.presentation.SplashViewModel
+import com.helptrickbd.class1.feature.splash.ui.SplashScreen
+
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
@@ -20,9 +23,21 @@ fun AppNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Home,
+        startDestination = Screen.Splash,
         modifier = modifier
     ) {
+        composable<Screen.Splash> {
+            val splashViewModel: SplashViewModel = hiltViewModel()
+            SplashScreen(
+                viewModel = splashViewModel,
+                onSplashComplete = {
+                    navController.navigate(Screen.Home) {
+                        popUpTo(Screen.Splash) { inclusive = true }
+                    }
+                }
+            )
+        }
+
         composable<Screen.Home> {
             MainScreen(
                 onBookClick = { bookId, bookTitle ->
@@ -51,6 +66,25 @@ fun AppNavGraph(
                             )
                         )
                     }
+                },
+                onNotificationClick = {
+                    navController.navigate(Screen.NotificationInbox)
+                }
+            )
+        }
+
+        composable<Screen.NotificationInbox> {
+            val notifViewModel: com.helptrickbd.class1.feature.notifications.presentation.NotificationViewModel = hiltViewModel()
+            com.helptrickbd.class1.feature.notifications.ui.NotificationInboxScreen(
+                viewModel = notifViewModel,
+                onBackClick = { navController.popBackStack() },
+                onBookClick = { bookId ->
+                    navController.navigate(
+                        Screen.SubjectDetail(
+                            subjectId = bookId,
+                            subjectName = ""
+                        )
+                    )
                 }
             )
         }

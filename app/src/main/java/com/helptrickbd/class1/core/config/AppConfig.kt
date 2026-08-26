@@ -51,11 +51,26 @@ object AppConfig {
     const val FEATURE_PDF_THUMBNAIL_PREVIEW = true
     const val FEATURE_PDF_READING_THEMES = true
     const val FEATURE_PDF_HORIZONTAL_SCROLL = true
+    const val FEATURE_LAYOUT_SWITCHER = true
+    const val FEATURE_PUSH_NOTIFICATIONS = true
+    const val FEATURE_IN_APP_INBOX = true
+    const val FEATURE_DAILY_STUDY_REMINDER = true
+    const val FEATURE_CRASHLYTICS = true
+    const val FEATURE_ANALYTICS = true
+
+    val DEFAULT_LAYOUT_MODE = com.helptrickbd.class1.feature.home.domain.model.LayoutMode.GRID
+    
+    // Notification & FCM Topics (SSOT)
+    const val FCM_TOPIC_CLASS = "nctb_class_1"
+    const val FCM_TOPIC_GLOBAL = "nctb_all_classes"
     
     // ==========================================
     // 5. Enterprise Security, DRM & Anti-Theft Protection
     // ==========================================
-    const val FLAG_SECURE_ENABLED = true             // 100% Anti-Screenshot & Screen Recording Prevention
+    // অ্যান্ড্রয়েড স্টুডিওতে প্রিভিউ / ডিভাইস মিররিং দেখার জন্য false রাখুন।
+    // প্লে স্টোর রিলিজ বিল্ডের সময় true করে দিলে ১০০% অ্যান্টি-স্ক্রিনশট সক্রিয় হবে।
+    const val FLAG_SECURE_ENABLED = false
+
     const val ROOT_DETECTION_ENABLED = true          // Proactive Root & Magisk integrity check
     const val FRIDA_TAMPER_PROTECTION_ENABLED = true  // Anti-Hooking & Memory tampering shield
     const val ENCRYPTED_PDF_CACHE_ENABLED = true     // AES-256 GCM in-memory & scoped cache protection

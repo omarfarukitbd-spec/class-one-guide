@@ -13,12 +13,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.Locale
+import com.helptrickbd.class1.core.di.IoDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SettingsRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : SettingsRepository {
 
     private val prefs by lazy {
@@ -27,6 +30,7 @@ class SettingsRepositoryImpl @Inject constructor(
 
     private val themeState = MutableStateFlow(loadInitialTheme())
     private val storageState = MutableStateFlow(calculateStorage())
+    private val layoutState = MutableStateFlow(loadInitialLayoutMode())
 
     private val pdfCacheDir: File
         get() = File(context.cacheDir, "pdfs")
@@ -36,7 +40,7 @@ class SettingsRepositoryImpl @Inject constructor(
         return storageState.asStateFlow()
     }
 
-    override suspend fun clearPdfCache(): Boolean = withContext(Dispatchers.IO) {
+    override suspend fun clearPdfCache(): Boolean = withContext(ioDispatcher) {
         try {
             if (pdfCacheDir.exists()) {
                 val files = pdfCacheDir.listFiles() ?: emptyArray()
@@ -51,14 +55,27 @@ class SettingsRepositoryImpl @Inject constructor(
 
     override fun getThemeMode(): Flow<ThemeMode> = themeState.asStateFlow()
 
-    override suspend fun setThemeMode(mode: ThemeMode) = withContext(Dispatchers.IO) {
+    override suspend fun setThemeMode(mode: ThemeMode) = withContext(ioDispatcher) {
         prefs.edit().putString("saved_theme_mode", mode.name).apply()
         themeState.value = mode
+    }
+
+    override fun getLayoutMode(): Flow<com.helptrickbd.class1.feature.home.domain.model.LayoutMode> = layoutState.asStateFlow()
+
+    override suspend fun setLayoutMode(mode: com.helptrickbd.class1.feature.home.domain.model.LayoutMode) = withContext(ioDispatcher) {
+        prefs.edit().putString("saved_layout_mode", mode.name).apply()
+        layoutState.value = mode
     }
 
     private fun loadInitialTheme(): ThemeMode {
         val saved = prefs.getString("saved_theme_mode", ThemeMode.SYSTEM.name)
         return runCatching { ThemeMode.valueOf(saved ?: "") }.getOrDefault(ThemeMode.SYSTEM)
+    }
+
+    private fun loadInitialLayoutMode(): com.helptrickbd.class1.feature.home.domain.model.LayoutMode {
+        val saved = prefs.getString("saved_layout_mode", com.helptrickbd.class1.core.config.AppConfig.DEFAULT_LAYOUT_MODE.name)
+        return runCatching { com.helptrickbd.class1.feature.home.domain.model.LayoutMode.valueOf(saved ?: "") }
+            .getOrDefault(com.helptrickbd.class1.core.config.AppConfig.DEFAULT_LAYOUT_MODE)
     }
 
     private fun calculateStorage(): StorageInfo {

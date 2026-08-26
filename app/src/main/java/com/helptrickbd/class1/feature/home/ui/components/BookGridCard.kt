@@ -36,7 +36,7 @@ fun BookGridCard(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp, pressedElevation = 5.dp),
-        border = BorderStroke(1.2.dp, theme.primaryColor.copy(alpha = 0.2f))
+        border = BorderStroke(1.2.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
     ) {
         Column(
             modifier = Modifier
@@ -51,14 +51,15 @@ fun BookGridCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Surface(
-                    color = theme.containerColor,
-                    shape = RoundedCornerShape(14.dp)
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = RoundedCornerShape(14.dp),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f))
                 ) {
                     Box(modifier = Modifier.padding(10.dp)) {
                         Icon(
                             imageVector = theme.primaryIcon,
                             contentDescription = theme.categoryBadge,
-                            tint = theme.primaryColor,
+                            tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.size(28.dp)
                         )
                     }
@@ -66,12 +67,13 @@ fun BookGridCard(
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Surface(
-                        color = theme.primaryColor.copy(alpha = 0.1f),
-                        shape = RoundedCornerShape(8.dp)
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = RoundedCornerShape(8.dp),
+                        border = BorderStroke(0.8.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f))
                     ) {
                         Text(
                             text = "$chapterCount টি অধ্যায়",
-                            color = theme.primaryColor,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp)
@@ -79,7 +81,7 @@ fun BookGridCard(
                     }
 
                     if (onToggleFavorite != null) {
-                        Spacer(modifier = Modifier.width(2.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
                         IconButton(
                             onClick = onToggleFavorite,
                             modifier = Modifier.size(28.dp)
@@ -87,8 +89,8 @@ fun BookGridCard(
                             Icon(
                                 imageVector = if (book.isFavorite) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder,
                                 contentDescription = if (book.isFavorite) "বুকমার্ক সরান" else "বুকমার্কে যোগ করুন",
-                                tint = if (book.isFavorite) theme.primaryColor else MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.size(18.dp)
+                                tint = if (book.isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(20.dp)
                             )
                         }
                     }
@@ -101,7 +103,7 @@ fun BookGridCard(
             Text(
                 text = theme.categoryBadge,
                 style = MaterialTheme.typography.labelSmall,
-                color = theme.primaryColor,
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold,
                 fontSize = 11.sp
             )
@@ -119,13 +121,13 @@ fun BookGridCard(
             // Subtitle or Search Match Result
             if (matchedLessonHighlight != null) {
                 Surface(
-                    color = theme.primaryColor.copy(alpha = 0.08f),
+                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
                     shape = RoundedCornerShape(6.dp),
                     modifier = Modifier.fillMaxWidth().padding(top = 4.dp)
                 ) {
                     Text(
                         text = "মিলেছে: $matchedLessonHighlight",
-                        color = theme.primaryColor,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Medium,
                         maxLines = 1,
@@ -158,14 +160,14 @@ fun BookGridCard(
                         .weight(1f)
                         .height(6.dp)
                         .clip(CircleShape),
-                    color = theme.primaryColor,
-                    trackColor = theme.containerColor
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "$progressPercent%",
                     style = MaterialTheme.typography.labelSmall,
-                    color = theme.primaryColor,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 10.sp
                 )
@@ -175,8 +177,7 @@ fun BookGridCard(
 
             // Action Pill Button (Child-Friendly & 100% Readable)
             BookCardActionPrompt(
-                progressPercent = book.progressPercent,
-                theme = theme
+                progressPercent = book.progressPercent
             )
         }
     }

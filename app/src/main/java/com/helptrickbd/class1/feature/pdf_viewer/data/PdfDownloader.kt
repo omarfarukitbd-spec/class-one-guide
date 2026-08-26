@@ -12,6 +12,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import com.helptrickbd.class1.core.di.IoDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,7 +23,8 @@ import javax.inject.Singleton
  */
 @Singleton
 class PdfDownloader @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
     private val pdfCacheDir: File
         get() = File(context.cacheDir, "pdfs").apply {
@@ -94,7 +97,7 @@ class PdfDownloader @Inject constructor(
         } finally {
             connection?.disconnect()
         }
-    }.flowOn(Dispatchers.IO)
+    }.flowOn(ioDispatcher)
 
     private fun resolveFullUrl(url: String): String {
         return if (url.startsWith("http://", ignoreCase = true) || url.startsWith("https://", ignoreCase = true)) {

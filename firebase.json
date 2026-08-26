@@ -1,4 +1,7 @@
 {
+  "firestore": {
+    "rules": "firestore.rules"
+  },
   "hosting": {
     "public": "admin-panel",
     "ignore": [
@@ -13,6 +16,10 @@
           {
             "key": "Cache-Control",
             "value": "max-age=0"
+          },
+          {
+            "key": "Cross-Origin-Opener-Policy",
+            "value": "same-origin-allow-popups"
           }
         ]
       }

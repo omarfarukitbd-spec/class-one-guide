@@ -17,6 +17,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import com.helptrickbd.class1.core.di.IoDispatcher
+import com.helptrickbd.class1.core.sync.domain.repository.CloudSyncRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,11 +31,13 @@ class HomeRepositoryImpl @Inject constructor(
     private val chapterDao: ChapterDao,
     private val seeder: DatabaseSeeder,
     private val syncCloudDataUseCase: SyncCloudDataUseCase,
-    private val networkMonitor: NetworkMonitor
+    private val syncRepository: CloudSyncRepository,
+    private val networkMonitor: NetworkMonitor,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : HomeRepository {
 
     init {
-        val scope = CoroutineScope(Dispatchers.IO)
+        val scope = CoroutineScope(ioDispatcher)
         scope.launch {
             seeder.seedIfNeeded()
             syncCloudDataUseCase()
@@ -46,6 +51,10 @@ class HomeRepositoryImpl @Inject constructor(
                 }
             }
         }
+    }
+
+    override fun getCloudNotice(): Flow<String?> {
+        return syncRepository.getCachedNoticeFlow()
     }
 
     override fun getBooks(curriculum: Curriculum): Flow<List<Book>> {
