@@ -13,18 +13,63 @@ const SVG_ICONS = {
 };
 
 const BENGALI_VOWELS = [
-    { letter: "অ", name: "স্বর অ", word: "অজগর", sentence: "অ তে অজগর! অজগরটি আসছে তেড়ে!", icon: "🐍", color: "#10B981", audioUrl: "audio/shorboborno/vowel_1_o.mp3" },
-    { letter: "আ", name: "স্বর আ", word: "আম", sentence: "আ তে আম! আমটি আমি খাব পেড়ে!", icon: "🥭", color: "#F59E0B", audioUrl: "audio/shorboborno/vowel_2_aa.mp3" },
-    { letter: "ই", name: "হ্রস্ব ই", word: "ইলিশ", sentence: "ই তে ইলিশ! ইলিশ ভাজা খেতে মজা!", icon: "🐟", color: "#06B6D4", audioUrl: "audio/shorboborno/vowel_3_i.mp3" },
-    { letter: "ঈ", name: "দীর্ঘ ঈ", word: "ঈগল", sentence: "ঈ তে ঈগল! ঈগল পাখি আকাশে ওড়ে!", icon: "🦅", color: "#8B5CF6", audioUrl: "audio/shorboborno/vowel_4_ee.mp3" },
-    { letter: "উ", name: "হ্রস্ব উ", word: "উট", sentence: "উ তে উট! উট চলেছে মরুর দেশে!", icon: "🐫", color: "#EC4899", audioUrl: "audio/shorboborno/vowel_5_u.mp3" },
-    { letter: "ঊ", name: "দীর্ঘ ঊ", word: "ঊষা", sentence: "ঊ তে ঊষা! ঊষার আলো মিষ্টি আলো!", icon: "🌅", color: "#F97316", audioUrl: "audio/shorboborno/vowel_6_oo.mp3" },
-    { letter: "ঋ", name: "ঋ", word: "ঋষি", sentence: "ঋ তে ঋষি! ঋষি মশাই বসেন ধ্যানে!", icon: "🧘‍♂️", color: "#14B8A6", audioUrl: "audio/shorboborno/vowel_7_ri.mp3" },
-    { letter: "এ", name: "এ", word: "একতারা", sentence: "এ তে একতারা! একতারাটি বাজে বেশ!", icon: "🪕", color: "#3B82F6", audioUrl: "audio/shorboborno/vowel_8_e.mp3" },
-    { letter: "ঐ", name: "ঐ", word: "ঐরাবত", sentence: "ঐ তে ঐরাবত! ঐরাবত হাতি চলে হেলেদুলে!", icon: "🐘", color: "#6366F1", audioUrl: "audio/shorboborno/vowel_9_oi.mp3" },
-    { letter: "ও", name: "ও", word: "ওল", sentence: "ও তে ওল! ওল খেলে কিন্তু ধরবে গলা!", icon: "🥔", color: "#84CC16", audioUrl: "audio/shorboborno/vowel_10_o.mp3" },
-    { letter: "ঔ", name: "ঔ", word: "ঔষধ", sentence: "ঔ তে ঔষধ! ঔষধ খেলে রোগ সারে!", icon: "💊", color: "#E11D48", audioUrl: "audio/shorboborno/vowel_11_ou.mp3" }
+    { letter: "অ", name: "স্বর অ", word: "অজগর", sentence: "অ তে অজগর! অজগরটি আসছে তেড়ে!", color: "#10B981", audioUrl: "audio/shorboborno/vowel_1_o.mp3" },
+    { letter: "আ", name: "স্বর আ", word: "আম", sentence: "আ তে আম! আমটি আমি খাব পেড়ে!", color: "#F59E0B", audioUrl: "audio/shorboborno/vowel_2_aa.mp3" },
+    { letter: "ই", name: "হ্রস্ব ই", word: "ইলিশ", sentence: "ই তে ইলিশ! ইলিশ ভাজা খেতে মজা!", color: "#06B6D4", audioUrl: "audio/shorboborno/vowel_3_i.mp3" },
+    { letter: "ঈ", name: "দীর্ঘ ঈ", word: "ঈগল", sentence: "ঈ তে ঈগল! ঈগল পাখি আকাশে ওড়ে!", color: "#8B5CF6", audioUrl: "audio/shorboborno/vowel_4_ee.mp3" },
+    { letter: "উ", name: "হ্রস্ব উ", word: "উট", sentence: "উ তে উট! উট চলেছে মরুর দেশে!", color: "#EC4899", audioUrl: "audio/shorboborno/vowel_5_u.mp3" },
+    { letter: "ঊ", name: "দীর্ঘ ঊ", word: "ঊষা", sentence: "ঊ তে ঊষা! ঊষার আলো মিষ্টি আলো!", color: "#F97316", audioUrl: "audio/shorboborno/vowel_6_oo.mp3" },
+    { letter: "ঋ", name: "ঋ", word: "ঋষি", sentence: "ঋ তে ঋষি! ঋষি মশাই বসেন ধ্যানে!", color: "#14B8A6", audioUrl: "audio/shorboborno/vowel_7_ri.mp3" },
+    { letter: "এ", name: "এ", word: "একতারা", sentence: "এ তে একতারা! একতারাটি বাজে বেশ!", color: "#3B82F6", audioUrl: "audio/shorboborno/vowel_8_e.mp3" },
+    { letter: "ঐ", name: "ঐ", word: "ঐরাবত", sentence: "ঐ তে ঐরাবত! ঐরাবত হাতি চলে হেলেদুলে!", color: "#6366F1", audioUrl: "audio/shorboborno/vowel_9_oi.mp3" },
+    { letter: "ও", name: "ও", word: "ওল", sentence: "ও তে ওল! ওল খেলে কিন্তু ধরবে গলা!", color: "#84CC16", audioUrl: "audio/shorboborno/vowel_10_o.mp3" },
+    { letter: "ঔ", name: "ঔ", word: "ঔষধ", sentence: "ঔ তে ঔষধ! ঔষধ খেলে রোগ সারে!", color: "#E11D48", audioUrl: "audio/shorboborno/vowel_11_ou.mp3" }
 ];
+
+const BENGALI_CONSONANTS = [
+    { id: 1, letter: "ক", name: "ক", word: "কলম", sentence: "ক তে কলম! কলম দিয়ে লেখা যায়", color: "#10B981", audioUrl: "audio/banjonborno/consonant_1_k.mp3", isReady: true },
+    { id: 2, letter: "খ", name: "খ", word: "খরগোশ", sentence: "খ তে খরগোশ! খরগোশ তুই খেতে আয়", color: "#06B6D4", audioUrl: "audio/banjonborno/consonant_2_kh.mp3", isReady: true },
+    { id: 3, letter: "গ", name: "গ", word: "গরু", sentence: "গ তে গরু! গরুর দুধে পুষ্টি আছে", color: "#8B5CF6", audioUrl: "audio/banjonborno/consonant_3_g.mp3", isReady: true },
+    { id: 4, letter: "ঘ", name: "ঘ", word: "ঘড়ি", sentence: "ঘ তে ঘড়ি! ঘড়ি রাখো হাতের কাছে", color: "#EC4899", audioUrl: "audio/banjonborno/consonant_4_gh.mp3", isReady: true },
+    { id: 5, letter: "ঙ", name: "ঙ", word: "ব্যাঙ", sentence: "ঙ তে ব্যাঙ! ব্যাঙ ডাকে বর্ষায়", color: "#F59E0B", audioUrl: "audio/banjonborno/consonant_5_ng.mp3", isReady: true },
+    { id: 6, letter: "চ", name: "চ", word: "চাঁদ", sentence: "চ তে চাঁদ! চাঁদ উঠেছে আকাশ পানে", color: "#14B8A6", audioUrl: "audio/banjonborno/consonant_6_ch.mp3", isReady: true },
+    { id: 7, letter: "ছ", name: "ছ", word: "ছাতা", sentence: "ছ তে ছাতা! ছাতা লাগে বৃষ্টি হলে", color: "#3B82F6", audioUrl: "audio/banjonborno/consonant_7_chh.mp3", isReady: true },
+    { id: 8, letter: "জ", name: "বর্গীয় জ", word: "জাহাজ", sentence: "জ তে জাহাজ! জাহাজ চলে সাগর জলে", color: "#6366F1", audioUrl: "audio/banjonborno/consonant_8_j.mp3", isReady: true },
+    { id: 9, letter: "ঝ", name: "ঝ", word: "ঝিনুক", sentence: "ঝ তে ঝিনুক! ঝিনুক থেকে মুক্তা মিলে", color: "#84CC16", audioUrl: "audio/banjonborno/consonant_9_jh.mp3", isReady: true },
+    { id: 10, letter: "ঞ", name: "ঞ", word: "মিঞা", sentence: "ঞ তে মিঞা! মিঞা ভাইয়ের দাড়ি গালে", color: "#E11D48", audioUrl: "audio/banjonborno/consonant_10_yno.mp3", isReady: true },
+    { id: 11, letter: "ট", name: "ট", word: "টিয়া", sentence: "ট তে টিয়া! টিয়া পাখির ঠোঁটটি লাল", color: "#10B981", audioUrl: "audio/banjonborno/consonant_11_t.mp3", isReady: true },
+    { id: 12, letter: "ঠ", name: "ঠ", word: "ঠেলাগাড়ি", sentence: "ঠ তে ঠেলাগাড়ি! ঠেলাগাড়ি টানে মাল", color: "#06B6D4", audioUrl: "audio/banjonborno/consonant_12_th.mp3", isReady: true },
+    { id: 13, letter: "ড", name: "ড", word: "ডিম", sentence: "ড তে ডিম! ডিমে অনেক শক্তি আছে", color: "#8B5CF6", audioUrl: "audio/banjonborno/consonant_13_d.mp3", isReady: true },
+    { id: 14, letter: "ঢ", name: "ঢ", word: "ঢোল", sentence: "ঢ তে ঢোল! ঢোল বাজালে শব্দ আসে", color: "#EC4899", audioUrl: "audio/banjonborno/consonant_14_dh.mp3", isReady: true },
+    { id: 15, letter: "ণ", name: "মূর্ধন্য ণ", word: "হরিণ", sentence: "ণ তে হরিণ! হরিণ থাকে বনের ধারে", color: "#F59E0B", audioUrl: "audio/banjonborno/consonant_15_n_murdhanya.mp3", isReady: true },
+    { id: 16, letter: "ত", name: "ত", word: "তরমুজ", sentence: "ত তে তরমুজ! তরমুজ খাব মজা করে", color: "#14B8A6", audioUrl: "audio/banjonborno/consonant_16_t.mp3", isReady: true },
+    { id: 17, letter: "থ", name: "থ", word: "থালা", sentence: "থ তে থালা! থালার খাবার খাবে খুকি", color: "#3B82F6", audioUrl: "audio/banjonborno/consonant_17_th.mp3", isReady: true },
+    { id: 18, letter: "দ", name: "দ", word: "দাদু", sentence: "দ তে দাদু! দাদুর চোখে চশমা রয়", color: "#6366F1", audioUrl: "audio/banjonborno/consonant_18_d.mp3", isReady: true },
+    { id: 19, letter: "ধ", name: "ধ", word: "ধান", sentence: "ধ তে ধান! ধান ফলিয়ে আমরা বাঁচি", color: "#84CC16", audioUrl: "audio/banjonborno/consonant_19_dh.mp3", isReady: true },
+    { id: 20, letter: "ন", name: "দন্ত্য ন", word: "নৌকা", sentence: "ন তে নৌকা! নৌকা চালায় নয়ন মাঝি", color: "#E11D48", audioUrl: "audio/banjonborno/consonant_20_n.mp3", isReady: true },
+    { id: 21, letter: "প", name: "প", word: "পাখি", sentence: "প তে পাখি! পাখি গান গায় গাছে গাছে", color: "#10B981", audioUrl: "audio/banjonborno/consonant_21_p.mp3", isReady: true },
+    { id: 22, letter: "ফ", name: "ফ", word: "ফুল", sentence: "ফ তে ফুল! ফুলেতে মধু আছে", color: "#06B6D4", audioUrl: "audio/banjonborno/consonant_22_ph.mp3", isReady: true },
+    { id: 23, letter: "ব", name: "ব", word: "বই", sentence: "ব তে বই! বই পড়লে জ্ঞান বাড়ে", color: "#8B5CF6", audioUrl: "audio/banjonborno/consonant_23_b.mp3", isReady: true },
+    { id: 24, letter: "ভ", name: "ভ", word: "ভাল্লুক", sentence: "ভ তে ভাল্লুক! ভাল্লুক থাকে নদীর ধারে", color: "#EC4899", audioUrl: "audio/banjonborno/consonant_24_bh.mp3", isReady: true },
+    { id: 25, letter: "ম", name: "ম", word: "ময়ূর", sentence: "ম তে ময়ূর! ময়ূর নাচে তালে তালে", color: "#F59E0B", audioUrl: "audio/banjonborno/consonant_25_m.mp3", isReady: true },
+    { id: 26, letter: "য", name: "অন্তঃস্থ য", word: "যব", sentence: "য তে যব! যব ভালো হয় আটা হলে", color: "#14B8A6", audioUrl: "audio/banjonborno/consonant_26_j.mp3", isReady: true },
+    { id: 27, letter: "র", name: "ব-এ শূন্য র", word: "রাজহাঁস", sentence: "র তে রাজহাঁস! রাজহাঁসের গলা বড়", color: "#3B82F6", audioUrl: "audio/banjonborno/consonant_27_r.mp3", isReady: true },
+    { id: 28, letter: "ল", name: "ল", word: "লেবু", sentence: "ল তে লেবু! লেবুর শরবত খেতে ভালো", color: "#6366F1", audioUrl: "audio/banjonborno/consonant_28_l.mp3", isReady: true },
+    { id: 29, letter: "শ", name: "তালব্য শ", word: "শাপলা", sentence: "শ তে শাপলা! শাপলা ফুটে দিঘির জলে", color: "#84CC16", audioUrl: "audio/banjonborno/consonant_29_sh.mp3", isReady: true },
+    { id: 30, letter: "ষ", name: "মূর্ধন্য ষ", word: "ষাঁড়", sentence: "ষ তে ষাঁড়! ষাঁড় খুশি ঘাস পেলে", color: "#E11D48", audioUrl: "audio/banjonborno/consonant_30_sh_murdhanya.mp3", isReady: true },
+    { id: 31, letter: "স", name: "দন্ত্য স", word: "সিংহ", sentence: "স তে সিংহ! সিংহ হলো বনের রাজা", color: "#10B981", audioUrl: "audio/banjonborno/consonant_31_s.mp3", isReady: true },
+    { id: 32, letter: "হ", name: "হ", word: "হাতি", sentence: "হ তে হাতি! হাতি চলে ধীরে ধীরে", color: "#06B6D4", audioUrl: "audio/banjonborno/consonant_32_h.mp3", isReady: true },
+    { id: 33, letter: "ড়", name: "ড-এ বিন্দু ড়", word: "গাড়ি", sentence: "ড় তে গাড়ি! গাড়ি নিয়ে ঘুরি চলো", color: "#8B5CF6", audioUrl: "audio/banjonborno/consonant_33_rh.mp3", isReady: true },
+    { id: 34, letter: "ঢ়", name: "ঢ-এ বিন্দু ঢ়", word: "আষাঢ়", sentence: "ঢ় তে আষাঢ়! আষাঢ় মাসে বৃষ্টি হয়", color: "#EC4899", audioUrl: "audio/banjonborno/consonant_34_rh_dh.mp3", isReady: true },
+    { id: 35, letter: "য়", name: "অন্তঃস্থ য়", word: "পায়রা", sentence: "য় তে পায়রা! পায়রাটি দাঁড়িয়ে রয়", color: "#F59E0B", audioUrl: "audio/banjonborno/consonant_35_y.mp3", isReady: true },
+    { id: 36, letter: "ৎ", name: "খণ্ড ত", word: "উৎসব", sentence: "ৎ তে উৎসব! উৎসব আনন্দ দেয়", color: "#14B8A6", audioUrl: "audio/banjonborno/consonant_36_khondo_t.mp3", isReady: true },
+    { id: 37, letter: "ং", name: "অনুস্বার", word: "রংধনু", sentence: "ং তে রংধনু! রংধনু বাঁকা হয়", color: "#3B82F6", audioUrl: "audio/banjonborno/consonant_37_onushor.mp3", isReady: true },
+    { id: 38, letter: "ঃ", name: "বিসর্গ", word: "দুঃখ", sentence: "ঃ তে দুঃখ! দুঃখ দেবে না কারো মনে", color: "#6366F1", audioUrl: "audio/banjonborno/consonant_38_bishorgo.mp3", isReady: true },
+    { id: 39, letter: "ঁ", name: "চন্দ্রবিন্দু", word: "চাঁদ", sentence: "ঁ তে চাঁদ! চাঁদ উঠেছে আকাশ পানে", color: "#E11D48", audioUrl: "audio/banjonborno/consonant_39_chondrobindu.mp3", isReady: true }
+];
+
+window.BENGALI_VOWELS = BENGALI_VOWELS;
+window.BENGALI_CONSONANTS = BENGALI_CONSONANTS;
 
 const INITIAL_CLASS_1_BOOKS = [
     {

@@ -10,13 +10,14 @@ window.addEventListener("DOMContentLoaded", () => {
     initEventListeners();
     initClassCloneModal();
     renderVowelsGrid();
+    renderConsonantsGrid();
     loadClassData(currentClassId);
 });
 
 function initTheme() {
     const savedTheme = localStorage.getItem("admin_theme") || "dark";
     document.documentElement.setAttribute("data-theme", savedTheme);
-    const themeBtn = document.getElementById("btn-theme-toggle");
+    const themeBtn = document.getElementById("btn-theme-toggle") || document.getElementById("btn-toggle-theme");
     if (themeBtn) {
         themeBtn.onclick = () => {
             const current = document.documentElement.getAttribute("data-theme");
@@ -35,7 +36,7 @@ function initNavigation() {
             navItems.forEach(n => n.classList.remove("active"));
             item.classList.add("active");
 
-            document.querySelectorAll(".tab-content").forEach(tab => {
+            document.querySelectorAll(".tab-section, .tab-content").forEach(tab => {
                 tab.classList.remove("active");
             });
 
@@ -54,28 +55,36 @@ function initEventListeners() {
 
     document.getElementById("btn-view-grid")?.addEventListener("click", () => {
         currentViewMode = 'grid';
-        document.getElementById("btn-view-grid").classList.add("btn-primary");
-        document.getElementById("btn-view-grid").classList.remove("btn-outline");
-        document.getElementById("btn-view-table").classList.remove("btn-primary");
-        document.getElementById("btn-view-table").classList.add("btn-outline");
+        document.getElementById("btn-view-grid")?.classList.add("btn-primary");
+        document.getElementById("btn-view-grid")?.classList.remove("btn-outline");
+        document.getElementById("btn-view-table")?.classList.remove("btn-primary");
+        document.getElementById("btn-view-table")?.classList.add("btn-outline");
         renderBooks();
     });
 
     document.getElementById("btn-view-table")?.addEventListener("click", () => {
         currentViewMode = 'table';
-        document.getElementById("btn-view-table").classList.add("btn-primary");
-        document.getElementById("btn-view-table").classList.remove("btn-outline");
-        document.getElementById("btn-view-grid").classList.remove("btn-primary");
-        document.getElementById("btn-view-grid").classList.add("btn-outline");
+        document.getElementById("btn-view-table")?.classList.add("btn-primary");
+        document.getElementById("btn-view-table")?.classList.remove("btn-outline");
+        document.getElementById("btn-view-grid")?.classList.remove("btn-primary");
+        document.getElementById("btn-view-grid")?.classList.add("btn-outline");
         renderBooks();
     });
 
-    document.getElementById("btn-sync-all")?.addEventListener("click", triggerBroadcastSync);
-    document.getElementById("btn-seed-class1")?.addEventListener("click", seedClass1Data);
-    document.getElementById("btn-export-backup")?.addEventListener("click", exportBackupJSON);
-    document.getElementById("btn-import-backup")?.addEventListener("change", (e) => importBackupJSON(e.target.files[0]));
+    const syncBtn = document.getElementById("btn-sync-all") || document.getElementById("btn-broadcast-sync");
+    syncBtn?.addEventListener("click", triggerBroadcastSync);
 
-    const searchInput = document.getElementById("global-search");
+    const seedBtn = document.getElementById("btn-seed-class1") || document.getElementById("btn-seed-data");
+    seedBtn?.addEventListener("click", seedClass1Data);
+
+    document.getElementById("btn-export-backup")?.addEventListener("click", exportBackupJSON);
+    
+    const importInput = document.getElementById("import-file-input") || document.getElementById("btn-import-backup");
+    importInput?.addEventListener("change", (e) => {
+        if (e.target.files && e.target.files[0]) importBackupJSON(e.target.files[0]);
+    });
+
+    const searchInput = document.getElementById("global-search") || document.getElementById("global-search-input");
     if (searchInput) {
         searchInput.addEventListener("input", (e) => {
             const query = e.target.value.toLowerCase().trim();
@@ -92,7 +101,8 @@ function initEventListeners() {
         });
     }
 
-    document.getElementById("curriculum-filter")?.addEventListener("change", (e) => {
+    const currFilter = document.getElementById("curriculum-filter") || document.getElementById("filter-curriculum");
+    currFilter?.addEventListener("change", (e) => {
         const val = e.target.value;
         if (val === "ALL") renderBooks(currentBooks);
         else renderBooks(currentBooks.filter(b => b.curriculum === val));
@@ -237,7 +247,7 @@ function renderDashboardPreview() {
                 <h3 class="book-title">${book.title}</h3>
                 <p class="book-sub">${book.subtitle || ""}</p>
             </div>
-            <button class="btn btn-sm btn-secondary" onclick="document.querySelector('[data-tab=\\'tab-books\\']').click()">বিস্তারিত দেখুন ➔</button>
+            <button class="btn btn-sm btn-secondary" onclick="document.querySelector('[data-tab=\\'tab-books\\']').click()">বিস্তারিত দেখুন</button>
         `;
         previewContainer.appendChild(card);
     });

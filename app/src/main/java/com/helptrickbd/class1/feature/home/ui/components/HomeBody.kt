@@ -56,15 +56,8 @@ fun HomeBody(
         if (AppConfig.FEATURE_SEARCH) {
             item(span = { GridItemSpan(spanCount) }) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    AppSearchBar(
-                        query = state.searchQuery,
-                        onQueryChange = onSearchQueryChange,
-                        onClearQuery = onClearSearch
-                    )
-                    SearchSuggestionChips(
-                        selectedQuery = state.searchQuery,
-                        onSuggestionClick = onSearchQueryChange
-                    )
+                    AppSearchBar(query = state.searchQuery, onQueryChange = onSearchQueryChange, onClearQuery = onClearSearch)
+                    SearchSuggestionChips(selectedQuery = state.searchQuery, onSuggestionClick = onSearchQueryChange)
                 }
             }
         }
@@ -72,131 +65,53 @@ fun HomeBody(
         if (isSearching) {
             if (state.searchResults.isNotEmpty()) {
                 item(span = { GridItemSpan(spanCount) }) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "অনুসন্ধানের ফলাফল (${state.searchResults.size} টি বিষয়)",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontWeight = FontWeight.Bold
-                        )
-
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = "অনুসন্ধানের ফলাফল (${state.searchResults.size} টি বিষয়)", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onBackground, fontWeight = FontWeight.Bold)
                         if (AppConfig.FEATURE_LAYOUT_SWITCHER) {
-                            LayoutSwitchToggle(
-                                layoutMode = state.layoutMode,
-                                onToggle = onToggleLayoutMode
-                            )
+                            LayoutSwitchToggle(layoutMode = state.layoutMode, onToggle = onToggleLayoutMode)
                         }
                     }
                 }
-
                 items(state.searchResults, key = { it.book.bookId }) { result ->
-                    val highlight = if (result.matchedUnitNo != null && result.matchedChapterTitle != null) {
-                        "${result.matchedUnitNo} • ${result.matchedChapterTitle}"
-                    } else result.matchedChapterTitle ?: result.matchedUnitNo
-
+                    val highlight = if (result.matchedUnitNo != null && result.matchedChapterTitle != null) "${result.matchedUnitNo} • ${result.matchedChapterTitle}" else result.matchedChapterTitle ?: result.matchedUnitNo
                     if (isGrid) {
-                        BookGridCard(
-                            book = result.book,
-                            onClick = { onBookClick(result.book.bookId, result.book.title) },
-                            onToggleFavorite = { onToggleFavorite(result.book.bookId, !result.book.isFavorite) },
-                            matchedLessonHighlight = highlight
-                        )
+                        BookGridCard(book = result.book, onClick = { onBookClick(result.book.bookId, result.book.title) }, onToggleFavorite = { onToggleFavorite(result.book.bookId, !result.book.isFavorite) }, matchedLessonHighlight = highlight)
                     } else {
-                        BookListCard(
-                            book = result.book,
-                            onClick = { onBookClick(result.book.bookId, result.book.title) },
-                            onToggleFavorite = { onToggleFavorite(result.book.bookId, !result.book.isFavorite) },
-                            matchedLessonHighlight = highlight
-                        )
+                        BookListCard(book = result.book, onClick = { onBookClick(result.book.bookId, result.book.title) }, onToggleFavorite = { onToggleFavorite(result.book.bookId, !result.book.isFavorite) }, matchedLessonHighlight = highlight)
                     }
                 }
             } else {
                 item(span = { GridItemSpan(spanCount) }) {
-                    EmptySearchState(
-                        query = state.searchQuery,
-                        onClearSearch = onClearSearch
-                    )
+                    EmptySearchState(query = state.searchQuery, onClearSearch = onClearSearch)
                 }
             }
         } else {
             val noticeText = state.cloudNotice?.takeIf { it.isNotBlank() } ?: "২০২৬ শিক্ষাক্রমের সকল পাঠ্যবই ও সমাধান নিয়মিত হালনাগাদ করা হচ্ছে।"
-            item(span = { GridItemSpan(spanCount) }) {
-                CloudNoticeBanner(notice = noticeText)
-            }
-
-            item(span = { GridItemSpan(spanCount) }) {
-                CurriculumSelector(
-                    selectedCurriculum = state.selectedCurriculum,
-                    onCurriculumSelected = onCurriculumSelected
-                )
-            }
-
+            item(span = { GridItemSpan(spanCount) }) { CloudNoticeBanner(notice = noticeText) }
+            item(span = { GridItemSpan(spanCount) }) { CurriculumSelector(selectedCurriculum = state.selectedCurriculum, onCurriculumSelected = onCurriculumSelected) }
             state.resumeBook?.let { resume ->
-                item(span = { GridItemSpan(spanCount) }) {
-                    ResumeReadingSection(
-                        book = resume,
-                        onClick = { onResumeClick(resume) }
-                    )
-                }
+                item(span = { GridItemSpan(spanCount) }) { ResumeReadingSection(book = resume, onClick = { onResumeClick(resume) }) }
             }
 
             item(span = { GridItemSpan(spanCount) }) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(
-                            text = "${state.selectedCurriculum.titleBangla} পাঠ্যবইসমূহ",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Surface(
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                            shape = RoundedCornerShape(8.dp),
-                            border = BorderStroke(0.8.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f))
-                        ) {
-                            Text(
-                                text = "${state.books.size} টি বই",
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp)
-                            )
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(text = "${state.selectedCurriculum.titleBangla} পাঠ্যবইসমূহ", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onBackground, fontWeight = FontWeight.Bold)
+                        Surface(color = MaterialTheme.colorScheme.primaryContainer, shape = RoundedCornerShape(8.dp), border = BorderStroke(0.8.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f))) {
+                            Text(text = "${state.books.size} টি বই", color = MaterialTheme.colorScheme.onPrimaryContainer, fontSize = 11.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp))
                         }
                     }
-
                     if (AppConfig.FEATURE_LAYOUT_SWITCHER) {
-                        LayoutSwitchToggle(
-                            layoutMode = state.layoutMode,
-                            onToggle = onToggleLayoutMode
-                        )
+                        LayoutSwitchToggle(layoutMode = state.layoutMode, onToggle = onToggleLayoutMode)
                     }
                 }
             }
 
             items(state.books, key = { it.bookId }) { book ->
                 if (isGrid) {
-                    BookGridCard(
-                        book = book,
-                        onClick = { onBookClick(book.bookId, book.title) },
-                        onToggleFavorite = { onToggleFavorite(book.bookId, !book.isFavorite) }
-                    )
+                    BookGridCard(book = book, onClick = { onBookClick(book.bookId, book.title) }, onToggleFavorite = { onToggleFavorite(book.bookId, !book.isFavorite) })
                 } else {
-                    BookListCard(
-                        book = book,
-                        onClick = { onBookClick(book.bookId, book.title) },
-                        onToggleFavorite = { onToggleFavorite(book.bookId, !book.isFavorite) }
-                    )
+                    BookListCard(book = book, onClick = { onBookClick(book.bookId, book.title) }, onToggleFavorite = { onToggleFavorite(book.bookId, !book.isFavorite) })
                 }
             }
         }

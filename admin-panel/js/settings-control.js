@@ -58,7 +58,7 @@ function updateMobileSimulator() {
                     <div style="font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${b.title}</div>
                     <div style="font-size: 9px; color: #94A3B8;">${b.chapters?.length || 0} টি অধ্যায়</div>
                 </div>
-                <div style="font-size: 10px; color: #10B981; font-weight: 700;">পড়ুন ➔</div>
+                <div style="font-size: 10px; color: #10B981; font-weight: 700;">পড়ুন</div>
             </div>
         `).join("");
     }
@@ -104,6 +104,6 @@ function initClassCloneModal() {
         }
 
         modal.classList.remove("active");
-        showToast(`🎉 সফলভাবে ${targetClassName} তৈরি ও সিঙ্ক হয়েছে!`, "success");
+        showToast(`সফলভাবে ${targetClassName} তৈরি ও সিঙ্ক হয়েছে!`, "success");
     };
 }

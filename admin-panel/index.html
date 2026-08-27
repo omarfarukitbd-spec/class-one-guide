@@ -54,7 +54,7 @@
                             <label>পাসওয়ার্ড</label>
                             <input type="password" id="login-password" class="custom-input auth-input" placeholder="••••••••" required>
                         </div>
-                        <button type="submit" id="login-btn" class="btn btn-primary" style="width: 100%; height: 44px; margin-top: 10px; font-size: 14px;">লগইন করুন ➔</button>
+                        <button type="submit" id="login-btn" class="btn btn-primary" style="width: 100%; height: 44px; margin-top: 10px; font-size: 14px;">লগইন করুন</button>
                     </form>
                     
                     <div id="login-error" style="color: var(--danger); font-size: 12px; font-weight: 600; text-align: center; margin-top: 16px; min-height: 18px;"></div>
@@ -119,21 +119,29 @@
                         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2v9.67z"/></svg>
                         <span>ব্যাকআপ ও রিস্টোর</span>
                     </li>
-                    <li class="nav-item" data-tab="tab-audio">
-                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/></svg>
-                        <span>স্বরবর্ণ ও অডিও ল্যাব</span>
-                    </li>
                     <li class="nav-item" data-tab="tab-security">
                         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
                         <span>নিরাপত্তা ও অ্যাক্সেস</span>
+                    </li>
+                    <li class="nav-item" data-tab="tab-audio">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                        <span>স্বরবর্ণ অডিও ল্যাব</span>
                     </li>
                 </ul>
             </div>
 
             <div class="sidebar-footer">
+                <div id="user-profile-badge" style="display: none; align-items: center; gap: 10px; margin-bottom: 12px; padding: 10px 12px; background: rgba(255,255,255,0.03); border-radius: var(--radius-md); border: 1px solid var(--border-glass);">
+                    <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-container); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px;" id="user-avatar-initial">A</div>
+                    <div style="overflow: hidden; flex: 1;">
+                        <div id="user-display-name" style="font-size: 12px; font-weight: 700; color: var(--text-main); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">অ্যাডমিন ইউজার</div>
+                        <div id="user-email-text" style="font-size: 10px; color: var(--text-muted); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">admin@helptrickbd.com</div>
+                    </div>
+                </div>
+
                 <button id="btn-lock-admin" class="btn btn-outline" style="width: 100%; justify-content: flex-start;">
                     <svg class="svg-icon" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-                    <span>লক করুন</span>
+                    <span>লগআউট / লক করুন</span>
                 </button>
             </div>
         </aside>
@@ -168,41 +176,31 @@
                         <option value="class_10">Class 10 (১০ম শ্রেণি)</option>
                     </select>
 
-                    <div id="payload-gauge-badge" class="payload-gauge" title="ফায়ারবেস সিঙ্গেল-ডকুমেন্ট পেলোড সাইজ (সর্বোচ্চ ১০০০ KB)">
-                        <div class="payload-gauge-header">
-                            <span class="payload-title">পেলোড:</span>
-                            <strong id="payload-size-text">0 KB / 1000 KB</strong>
-                        </div>
-                        <div class="payload-bar-track">
-                            <div id="payload-bar-fill" class="payload-bar-fill" style="width: 2%;"></div>
-                        </div>
-                    </div>
-
-                    <button id="btn-clone-class" class="btn btn-secondary" title="বর্তমান ক্লাসের ডাটা অন্য ক্লাসে ক্লোন করুন">
+                    <button id="btn-clone-class" class="btn btn-outline" style="border-color: var(--primary-border); color: var(--primary);" title="অন্য ক্লাসে কপি করুন">
                         <svg class="svg-icon-sm" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-                        <span>ক্লাস ক্লোন</span>
+                        <span>ক্লোন ডাটা</span>
                     </button>
 
-                    <button id="btn-broadcast-sync" class="btn btn-primary">
+                    <button id="btn-seed-data" class="btn btn-secondary" title="ডিফল্ট এনসিটিবি বইসমূহ লোড করুন">
+                        <svg class="svg-icon-sm" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
+                        <span>১ম শ্রেণি সিড</span>
+                    </button>
+
+                    <button id="btn-broadcast-sync" class="btn btn-primary" title="সকল ছাত্রছাত্রীর ডিভাইসে লাইভ পুশ করুন">
                         <svg class="svg-icon-sm" viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
                         <span>ব্রডকাস্ট সিঙ্ক</span>
                     </button>
 
-                    <button id="btn-seed-data" class="btn btn-secondary">
-                        <svg class="svg-icon-sm" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
-                        <span>১ম শ্রেণি সিড</span>
-                    </button>
-
-                    <button id="btn-toggle-theme" class="btn btn-icon-only btn-outline" title="থিম পরিবর্তন">
-                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
+                    <button id="btn-toggle-theme" class="btn btn-icon-only btn-outline" title="থিম পরিবর্তন করুন">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
                     </button>
                 </div>
             </header>
 
-            <!-- Tab Content Viewports -->
+            <!-- Scrollable Tab Contents -->
             <div class="content-body">
 
-                <!-- 1. TAB: Dashboard Overview -->
+                <!-- 1. TAB: Dashboard & Analytics Overview -->
                 <section id="tab-dashboard" class="tab-section active">
                     <div class="stats-grid">
                         <div class="stat-card glass-panel">
@@ -211,50 +209,23 @@
                             </div>
                             <div class="stat-info">
                                 <h3 id="stat-total-books">0</h3>
-                                <p>মোট পাঠ্যবই</p>
-                            </div>
-                        </div>
-                        <div class="stat-card glass-panel">
-                            <div class="stat-icon icon-primary">
-                                <svg class="svg-icon-lg" viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
-                            </div>
-                            <div class="stat-info">
-                                <h3 id="stat-school-books">0</h3>
-                                <p>সাধারণ বিদ্যালয় বই</p>
+                                <p>মোট সক্রিয় পাঠ্যবই</p>
                             </div>
                         </div>
                         <div class="stat-card glass-panel">
                             <div class="stat-icon icon-indigo">
-                                <svg class="svg-icon-lg" viewBox="0 0 24 24"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
-                            </div>
-                            <div class="stat-info">
-                                <h3 id="stat-madrasah-books">0</h3>
-                                <p>মাদ্রাসা কারিকুলাম বই</p>
-                            </div>
-                        </div>
-                        <div class="stat-card glass-panel">
-                            <div class="stat-icon icon-amber">
-                                <svg class="svg-icon-lg" viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+                                <svg class="svg-icon-lg" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/></svg>
                             </div>
                             <div class="stat-info">
                                 <h3 id="stat-total-chapters">0</h3>
                                 <p>মোট অধ্যায় ও রিসোর্স</p>
                             </div>
                         </div>
-                        <div class="stat-card glass-panel">
-                            <div class="stat-icon icon-green">
-                                <svg class="svg-icon-lg" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
-                            </div>
-                            <div class="stat-info">
-                                <h3 id="stat-payload-size">0 KB</h3>
-                                <p id="stat-payload-status">পেলোড হেলথ (১০০% নিরাপদ)</p>
-                            </div>
-                        </div>
                     </div>
 
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
                         <h2 style="font-size: 17px; font-weight: 700; color: var(--text-main);">দ্রুত পাঠ্যবই ব্যবস্থাপনা</h2>
-                        <button class="btn btn-primary" onclick="document.querySelector('[data-tab=\'tab-books\']').click()">সমস্ত বই দেখুন ➔</button>
+                        <button class="btn btn-primary" onclick="document.querySelector('[data-tab=\'tab-books\']').click()">সমস্ত বই দেখুন</button>
                     </div>
 
                     <div id="dashboard-books-preview" class="books-grid" style="margin-top: 14px;"></div>
@@ -280,7 +251,7 @@
                                 <button id="btn-view-table" class="btn btn-sm btn-outline">টেবিল ভিউ</button>
                             </div>
 
-                            <button id="btn-add-book" class="btn btn-primary">
+                            <button id="btn-add-book" class="btn btn-primary" onclick="window.openBookModal()">
                                 <svg class="svg-icon-sm" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                                 <span>নতুন বই যুক্ত করুন</span>
                             </button>
@@ -297,7 +268,10 @@
                     <div class="simulator-layout">
                         <div class="glass-panel" style="padding: 24px; flex: 1;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                                <h2 style="font-size: 17px; font-weight: 700; color: var(--text-main);">📢 সেন্ট্রাল পুশ নোটিফিকেশন ও নোটিশ ডিসপ্যাচার</h2>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <svg class="svg-icon" style="color: var(--primary);" viewBox="0 0 24 24"><path d="M18 11v2h4v-2h-4zm-2 6.61c.96.71 2.21 1.65 3.2 2.39.4-.53.8-1.07 1.2-1.6-.99-.74-2.24-1.68-3.2-2.4-.4.54-.8 1.08-1.2 1.61zM20.4 5.6c-.4-.53-.8-1.07-1.2-1.6-.99.74-2.24 1.68-3.2 2.4.4.53.8 1.07 1.2 1.6.96-.72 2.21-1.65 3.2-2.4zM4 9c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h1l3 5h2l-2-5h2l4 3V6L10 9H4z"/></svg>
+                                    <h2 style="font-size: 17px; font-weight: 700; color: var(--text-main);">সেন্ট্রাল পুশ নোটিফিকেশন ও নোটিশ ডিসপ্যাচার</h2>
+                                </div>
                                 <span class="badge" style="background: var(--primary-container); color: var(--primary); font-size: 11px;">FCM & Cloud Sync</span>
                             </div>
 
@@ -305,10 +279,10 @@
                             <div style="margin-bottom: 18px;">
                                 <label style="font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px;">১-ক্লিক রেডিমেড টেমপ্লেট:</label>
                                 <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                                    <button type="button" class="btn btn-sm btn-outline template-btn" data-type="book">📚 নতুন পাঠ্যবই</button>
-                                    <button type="button" class="btn btn-sm btn-outline template-btn" data-type="solution">📝 মডেল টেস্ট সমাধান</button>
-                                    <button type="button" class="btn btn-sm btn-outline template-btn" data-type="exam">🔔 পরীক্ষার নোটিশ</button>
-                                    <button type="button" class="btn btn-sm btn-outline template-btn" data-type="update">🚀 অ্যাপ আপডেট</button>
+                                    <button type="button" class="btn btn-sm btn-outline template-btn" data-type="book">নতুন পাঠ্যবই</button>
+                                    <button type="button" class="btn btn-sm btn-outline template-btn" data-type="solution">মডেল টেস্ট সমাধান</button>
+                                    <button type="button" class="btn btn-sm btn-outline template-btn" data-type="exam">পরীক্ষার নোটিশ</button>
+                                    <button type="button" class="btn btn-sm btn-outline template-btn" data-type="update">অ্যাপ আপডেট</button>
                                 </div>
                             </div>
 
@@ -350,8 +324,9 @@
                                 <textarea id="notice-text" class="custom-input" rows="3" placeholder="বিস্তারিত বার্তা লিখুন...">২০২৬ শিক্ষাক্রমের সকল পাঠ্যবই ও অধ্যায়ভিত্তিক সমাধান নিয়মিত হালনাগাদ করা হচ্ছে।</textarea>
                             </div>
 
-                            <button id="btn-save-notice" class="btn btn-primary" style="width: 100%; height: 46px; font-size: 14px; font-weight: 700;">
-                                📢 সেন্ড ও রিয়েল-টাইম ব্রডকাস্ট করুন
+                            <button id="btn-save-notice" class="btn btn-primary" style="width: 100%; height: 46px; font-size: 14px; font-weight: 700; gap: 8px;">
+                                <svg class="svg-icon-sm" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                                <span>সেন্ড ও রিয়েল-টাইম ব্রডকাস্ট করুন</span>
                             </button>
 
                             <!-- FCM Direct Push Status Bar -->
@@ -360,7 +335,7 @@
                                     <span id="fcm-status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block; box-shadow: 0 0 8px #10B981;"></span>
                                     <span id="fcm-status-label" style="color: var(--text-sub);">FCM v1 ডিরেক্ট পুশ ইঞ্জিন সক্রিয়</span>
                                 </div>
-                                <button type="button" id="btn-open-fcm-config" class="btn btn-sm btn-outline" style="font-size: 11px; padding: 4px 10px;">🔑 কি কনফিগ</button>
+                                <button type="button" id="btn-open-fcm-config" class="btn btn-sm btn-outline" style="font-size: 11px; padding: 4px 10px;">সার্ভার কি কনফিগ</button>
                             </div>
                         </div>
 
@@ -378,7 +353,9 @@
                                     <div id="sim-heads-up-card" class="sim-heads-up-card">
                                         <div class="sim-heads-up-header">
                                             <div style="display: flex; align-items: center; gap: 6px;">
-                                                <div class="sim-app-badge-icon">📖</div>
+                                                <div class="sim-app-badge-icon">
+                                                    <svg class="svg-icon-xs" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+                                                </div>
                                                 <span style="font-size: 11px; font-weight: 700; color: #fff;">NCTB ক্লাস ১</span>
                                                 <span style="font-size: 10px; color: #94a3b8;">• এখন</span>
                                             </div>
@@ -389,14 +366,14 @@
 
                                     <div class="mobile-app-header">
                                         <span class="mobile-app-title">প্রথম শ্রেণির গাইড ও পাঠ্যবই</span>
-                                        <div style="position: relative;">
-                                            <span style="font-size: 14px;">🔔</span>
+                                        <div style="position: relative; display: flex; align-items: center;">
+                                            <svg class="svg-icon-xs" style="color: #fff;" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
                                             <span class="sim-bell-badge">1</span>
                                         </div>
                                     </div>
 
                                     <div id="sim-notice-banner" class="sim-notice-banner">
-                                        <span class="sim-bell-icon">📢</span>
+                                        <svg class="svg-icon-xs" style="color: var(--amber);" viewBox="0 0 24 24"><path d="M18 11v2h4v-2h-4zm-2 6.61c.96.71 2.21 1.65 3.2 2.39.4-.53.8-1.07 1.2-1.6-.99-.74-2.24-1.68-3.2-2.4-.4.54-.8 1.08-1.2 1.61zM4 9c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h1l3 5h2l-2-5h2l4 3V6L10 9H4z"/></svg>
                                         <span id="sim-notice-text">২০২৬ শিক্ষাক্রমের সকল পাঠ্যবই ও সমাধান নিয়মিত হালনাগাদ করা হচ্ছে।</span>
                                     </div>
 
@@ -406,13 +383,13 @@
                                     </div>
                                     <div id="sim-maintenance-overlay" class="sim-maintenance-overlay" style="display: none;">
                                         <div class="sim-dialog">
-                                            <h4>⚠️ রক্ষণাবেক্ষণ চলছে</h4>
+                                            <h4>রক্ষণাবেক্ষণ চলছে</h4>
                                             <p>অ্যাপটি সাময়িকভাবে বন্ধ আছে। কিছুক্ষণের মধ্যে ঠিক হবে।</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <span class="simulator-label">📱 লাইভ পুশ ও হোম স্ক্রিন প্রিভিউ</span>
+                            <span class="simulator-label">লাইভ পুশ ও হোম স্ক্রিন প্রিভিউ</span>
                         </div>
                     </div>
                 </section>
@@ -477,13 +454,13 @@
                                     </div>
                                     <div id="sim-update-overlay" class="sim-maintenance-overlay" style="display: none;">
                                         <div class="sim-dialog">
-                                            <h4>🚀 নতুন আপডেট উপলব্ধ</h4>
+                                            <h4>নতুন আপডেট উপলব্ধ</h4>
                                             <p>দয়া করে প্লে-স্টোর থেকে লেটেস্ট ভার্সন ডাউনলোড করুন।</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <span class="simulator-label">📱 রিমোট কন্ট্রোল প্রিভিউ</span>
+                            <span class="simulator-label">রিমোট কন্ট্রোল প্রিভিউ</span>
                         </div>
                     </div>
                 </section>
@@ -560,7 +537,7 @@
                             </div>
 
                             <div style="background: var(--bg-base); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-glass); margin-bottom: 16px; font-size: 12px; color: var(--text-sub);">
-                                💡 এটি বর্তমান সিলেক্টেড ক্লাসের সকল অধ্যায় ও ফুল-বুকের সব পিডিএফ লিঙ্কের উপর কাজ করবে।
+                                এটি বর্তমান সিলেক্টেড ক্লাসের সকল অধ্যায় ও ফুল-বুকের সব পিডিএফ লিঙ্কের উপর কাজ করবে।
                             </div>
 
                             <button id="btn-apply-bulk-replace" class="btn btn-primary" style="width: 100%;">সকল লিংকে রিপ্লেস করুন</button>
@@ -663,7 +640,7 @@
                                     <textarea id="fcm-service-json" class="custom-input" rows="4" placeholder="Firebase Console > Project Settings > Service Accounts থেকে JSON পেস্ট করুন..." style="font-family: monospace; font-size: 11px;"></textarea>
                                 </div>
                                 <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4;">
-                                    💡 এটি মাস্টার পিন (451060) দ্বারা এনক্রিপ্ট হয়ে শুধুমাত্র অ্যাডমিন কনফিগে সংরক্ষিত থাকবে।
+                                    এটি মাস্টার পিন দ্বারা এনক্রিপ্ট হয়ে শুধুমাত্র অ্যাডমিন কনফিগে সংরক্ষিত থাকবে।
                                 </div>
                                 <button type="submit" class="btn btn-outline" style="width: 100%;">ভল্টে সার্ভিস কি সংরক্ষণ করুন</button>
                             </form>
@@ -693,7 +670,7 @@
 
                             <div style="background: var(--bg-base); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-glass); margin-top: 16px;">
                                 <p style="font-size: 12px; color: var(--text-sub); line-height: 1.5;">
-                                    <strong>🛡️ সক্রিয় সিকিউরিটি শিল্ড:</strong>
+                                    <strong>সক্রিয় সিকিউরিটি শিল্ড:</strong>
                                     <br>• যেকোনো বই বা চ্যাপ্টার ডিলিটের পূর্বে মাস্টার পিন বাধ্যতামূলক।
                                     <br>• ৫ বার ভুল পিন দিলে ৩০ সেকেন্ড লকআউট প্রটেকশন।
                                     <br>• আনঅথরাইজড নেটওয়ার্ক কল প্রতিরোধ।
@@ -733,7 +710,7 @@
                     <div class="glass-panel" style="padding: 24px; margin-bottom: 20px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
                             <div>
-                                <h2 style="font-size: 20px; font-weight: 800; color: var(--primary);">🎨 ১ম শ্রেণি: স্বরবর্ণ অডিও ও সাউন্ড ল্যাব</h2>
+                                <h2 style="font-size: 20px; font-weight: 800; color: var(--primary);">১ম শ্রেণি: স্বরবর্ণ অডিও ও সাউন্ড ল্যাব</h2>
                                 <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">শিশুদের জন্য স্নেহমাখা মিষ্টি কণ্ঠ, ছড়ার ছন্দ ও সাউন্ড এফেক্টস লাইভ প্লেয়ার</p>
                             </div>
                             
@@ -742,13 +719,19 @@
                                 <div style="display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.04); padding: 6px 12px; border-radius: var(--radius-md); border: 1px solid var(--border-glass);">
                                     <label style="font-size: 12px; font-weight: 700; color: var(--text-sub);">ভয়েস মোড:</label>
                                     <select id="audio-voice-persona" class="custom-select" style="padding: 4px 8px; font-size: 12px;">
-                                        <option value="sweet_teacher" selected>👩‍🏫 মিষ্টি আপুর কণ্ঠ</option>
-                                        <option value="cute_child">👶 কিউট শিশুর কণ্ঠ</option>
-                                        <option value="cheerful_rhyme">🎵 হাসিখুশি ছড়ার সুর</option>
+                                        <option value="sweet_teacher" selected>মিষ্টি আপুর কণ্ঠ</option>
+                                        <option value="cute_child">কিউট শিশুর কণ্ঠ</option>
+                                        <option value="cheerful_rhyme">হাসিখুশি ছড়ার সুর</option>
                                     </select>
                                 </div>
-                                <button type="button" id="btn-play-applause" class="btn btn-sm btn-outline" style="border-color: #F59E0B; color: #F59E0B;">👏 হাততালি টেস্ট</button>
-                                <button type="button" id="btn-play-chime" class="btn btn-sm btn-outline" style="border-color: #38BDF8; color: #38BDF8;">✨ ম্যাজিক চিম</button>
+                                <button type="button" id="btn-play-applause" class="btn btn-sm btn-outline" style="border-color: #F59E0B; color: #F59E0B;">
+                                    <svg class="svg-icon-xs" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                                    <span>হাততালি টেস্ট</span>
+                                </button>
+                                <button type="button" id="btn-play-chime" class="btn btn-sm btn-outline" style="border-color: #38BDF8; color: #38BDF8;">
+                                    <svg class="svg-icon-xs" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                    <span>ম্যাজিক চিম</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -757,7 +740,7 @@
                     <div class="glass-panel" style="padding: 20px; margin-bottom: 20px; border-left: 4px solid #38BDF8; background: linear-gradient(135deg, rgba(56,189,248,0.08) 0%, rgba(16,185,129,0.05) 100%);">
                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 16px;">
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <span style="font-size: 24px;">🤖</span>
+                                <svg class="svg-icon-lg" style="color: #7DD3FC;" viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2zM7.5 13A2.5 2.5 0 0 0 5 15.5 2.5 2.5 0 0 0 7.5 18a2.5 2.5 0 0 0 2.5-2.5A2.5 2.5 0 0 0 7.5 13zm9 0a2.5 2.5 0 0 0-2.5 2.5 2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5z"/></svg>
                                 <div>
                                     <h3 style="font-size: 16px; font-weight: 800; color: #7DD3FC;">Google AI Studio (Gemini) বাংলা ভয়েস ইঞ্জিন</h3>
                                     <p style="font-size: 12px; color: var(--text-muted);">গুগল জেমিনাই এআই মডেল দিয়ে শিশুদের জন্য মিষ্টি ও প্রমিত বাংলা ভয়েস তৈরি করুন</p>
@@ -774,9 +757,9 @@
                             <div class="form-group" style="margin-bottom: 0;">
                                 <label style="font-size: 11px; color: #38BDF8; font-weight: 700;">AI ভয়েস টোন (Tone):</label>
                                 <select id="select-gemini-tone" class="custom-select" style="font-size: 12px; padding: 6px 10px; width: 100%;">
-                                    <option value="sweet_teacher" selected>👩‍🏫 মিষ্টি কিন্ডারগার্টেন আপু (Affectionate & Cheerful)</option>
-                                    <option value="storyteller">📖 মজার গল্প বলিয়ে আপু (Expressive Storyteller)</option>
-                                    <option value="child_friend">👶 কিউট সহপাঠী বন্ধু (Playful Kid Tone)</option>
+                                    <option value="sweet_teacher" selected>মিষ্টি কিন্ডারগার্টেন আপু (Affectionate & Cheerful)</option>
+                                    <option value="storyteller">মজার গল্প বলিয়ে আপু (Expressive Storyteller)</option>
+                                    <option value="child_friend">কিউট সহপাঠী বন্ধু (Playful Kid Tone)</option>
                                 </select>
                             </div>
                             <div style="display: flex; gap: 8px;">
@@ -789,14 +772,36 @@
                             <input type="text" id="input-gemini-prompt" class="custom-input" placeholder="বাংলায় যেকোনো কথা লিখুন (যেমন: অ তে অজগর! অজগরটি আসছে তেড়ে!)..." value="অ তে অজগর! অজগরটি আসছে তেড়ে!" style="flex: 1; min-width: 250px; font-size: 13px;">
                             <button type="button" id="btn-gemini-speak" class="btn btn-primary" style="background: #0284C7; border-color: #0284C7; font-weight: 700; gap: 6px;">
                                 <svg class="svg-icon-sm" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-                                <span>🎙️ Google AI দিয়ে কথা বলান</span>
+                                <span>Google AI দিয়ে কথা বলান</span>
                             </button>
                         </div>
                     </div>
 
+                    <!-- Sub-Navigation for Audio Lab: Sworoborno vs Banjonborno -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
+                        <div style="display: flex; gap: 10px; border-bottom: 2px solid var(--border-glass); padding-bottom: 4px;">
+                            <button id="btn-tab-vowels" class="btn btn-sm btn-primary audio-subtab-btn" onclick="window.switchAudioSubtab('vowels')">
+                                <svg class="svg-icon-xs" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                                <span>স্বরবর্ণ ল্যাব (১১টি)</span>
+                            </button>
+                            <button id="btn-tab-consonants" class="btn btn-sm btn-outline audio-subtab-btn" onclick="window.switchAudioSubtab('consonants')">
+                                <svg class="svg-icon-xs" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                                <span>ব্যঞ্জনবর্ণ ল্যাব (৩৯টি)</span>
+                            </button>
+                        </div>
+                        <div id="audio-stats-pill" style="font-size: 11px; font-weight: 700; color: var(--primary); background: var(--primary-container); padding: 4px 12px; border-radius: 999px; border: 1px solid var(--primary-border);">
+                            স্বরবর্ণ: ১১/১১ প্রস্তুত | ব্যঞ্জনবর্ণ: ৩৯/৩৯ প্রস্তুত
+                        </div>
+                    </div>
+
                     <!-- 11 Bengali Vowels (স্বরবর্ণ) Interactive Cards Grid -->
-                    <div id="vowels-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px;">
-                        <!-- Cards will be populated dynamically or static rich templates -->
+                    <div id="vowels-grid" class="audio-subtab-content" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                        <!-- Populated by audio-lab.js -->
+                    </div>
+
+                    <!-- 39 Bengali Consonants (ব্যঞ্জনবর্ণ) Interactive Cards Grid -->
+                    <div id="consonants-grid" class="audio-subtab-content" style="display: none; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                        <!-- Populated by audio-lab.js -->
                     </div>
                 </section>
 
@@ -831,9 +836,9 @@
                     <label>সম্পূর্ণ বইয়ের পিডিএফ লিংক (Full Book PDF URL / File Name):</label>
                     <input type="text" id="modal-book-pdf" class="custom-input" required placeholder="যেমন: bangla_class1_full.pdf বা https://...">
                     <div class="quick-cdn-actions">
-                        <button type="button" class="btn btn-xs btn-outline" onclick="window.quickFillCdn('modal-book-pdf', 'JSDELIVR')">⚡ jsDelivr CDN</button>
-                        <button type="button" class="btn btn-xs btn-outline" onclick="window.quickFillCdn('modal-book-pdf', 'RAW')">⚡ Raw GitHub</button>
-                        <button type="button" class="btn btn-xs btn-outline" onclick="window.testAndPreviewPdf(document.getElementById('modal-book-pdf').value)">🔍 টেস্ট</button>
+                        <button type="button" class="btn btn-xs btn-outline" onclick="window.quickFillCdn('modal-book-pdf', 'JSDELIVR')">jsDelivr CDN</button>
+                        <button type="button" class="btn btn-xs btn-outline" onclick="window.quickFillCdn('modal-book-pdf', 'RAW')">Raw GitHub</button>
+                        <button type="button" class="btn btn-xs btn-outline" onclick="window.testAndPreviewPdf(document.getElementById('modal-book-pdf').value)">টেস্ট করুন</button>
                     </div>
                 </div>
                 <div class="form-group">
@@ -903,9 +908,9 @@
                     <label>পিডিএফ ইউআরএল বা ফাইল নেইম:</label>
                     <input type="text" id="res-pdf" class="custom-input" required placeholder="যেমন: bangla_u1_text.pdf বা https://...">
                     <div class="quick-cdn-actions">
-                        <button type="button" class="btn btn-xs btn-outline" onclick="window.quickFillCdn('res-pdf', 'JSDELIVR')">⚡ jsDelivr CDN</button>
-                        <button type="button" class="btn btn-xs btn-outline" onclick="window.quickFillCdn('res-pdf', 'RAW')">⚡ Raw GitHub</button>
-                        <button type="button" class="btn btn-xs btn-outline" onclick="window.testAndPreviewPdf(document.getElementById('res-pdf').value)">🔍 টেস্ট</button>
+                        <button type="button" class="btn btn-xs btn-outline" onclick="window.quickFillCdn('res-pdf', 'JSDELIVR')">jsDelivr CDN</button>
+                        <button type="button" class="btn btn-xs btn-outline" onclick="window.quickFillCdn('res-pdf', 'RAW')">Raw GitHub</button>
+                        <button type="button" class="btn btn-xs btn-outline" onclick="window.testAndPreviewPdf(document.getElementById('res-pdf').value)">টেস্ট করুন</button>
                     </div>
                 </div>
                 <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
@@ -969,7 +974,7 @@
 
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
                     <button type="button" class="btn btn-outline" style="flex: 1;" onclick="window.closeAllModals()">বাতিল</button>
-                    <button type="submit" class="btn btn-primary" style="flex: 1;">ক্লোন শুরু করুন ➔</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">ক্লোন শুরু করুন</button>
                 </div>
             </form>
         </div>

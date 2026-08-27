@@ -40,24 +40,16 @@ fun BookListCard(
         border = BorderStroke(1.2.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 14.dp, vertical = 12.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 12.dp),
             verticalAlignment = Alignment.Top
         ) {
-            // 1. Left: Emerald Green Icon Box
             Surface(
                 color = MaterialTheme.colorScheme.primaryContainer,
                 shape = RoundedCornerShape(14.dp),
                 border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f)),
-                modifier = Modifier
-                    .size(54.dp)
-                    .padding(top = 2.dp)
+                modifier = Modifier.size(54.dp).padding(top = 2.dp)
             ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxSize()
-                ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                     Icon(
                         imageVector = theme.primaryIcon,
                         contentDescription = theme.categoryBadge,
@@ -69,15 +61,8 @@ fun BookListCard(
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            // 2. Middle: Content Information
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(3.dp)
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(
                         text = theme.categoryBadge,
                         style = MaterialTheme.typography.labelSmall,
@@ -110,37 +95,19 @@ fun BookListCard(
                 )
 
                 if (matchedLessonHighlight != null) {
-                    Text(
-                        text = "মিলেছে: $matchedLessonHighlight",
-                        fontSize = 11.sp,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        maxLines = 1
-                    )
+                    Text(text = "মিলেছে: $matchedLessonHighlight", fontSize = 11.sp, color = MaterialTheme.colorScheme.onPrimaryContainer, maxLines = 1)
                 } else {
                     book.subtitle?.let {
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            fontSize = 11.sp,
-                            maxLines = 1
-                        )
+                        Text(text = it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp, maxLines = 1)
                     }
                 }
 
                 Spacer(modifier = Modifier.height(6.dp))
 
-                // Mini Reading Progress Bar
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(0.95f)
-                ) {
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth(0.95f)) {
                     LinearProgressIndicator(
                         progress = { book.progressPercent },
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(4.dp)
-                            .clip(CircleShape),
+                        modifier = Modifier.weight(1f).height(4.dp).clip(CircleShape),
                         color = MaterialTheme.colorScheme.primary,
                         trackColor = MaterialTheme.colorScheme.surfaceVariant
                     )
@@ -157,19 +124,13 @@ fun BookListCard(
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            // 3. Right: Bookmark at Top-Right & Action Button at Bottom-Right
             Column(
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .height(68.dp)
-                    .padding(top = 0.dp)
+                modifier = Modifier.height(68.dp)
             ) {
                 if (onToggleFavorite != null) {
-                    IconButton(
-                        onClick = onToggleFavorite,
-                        modifier = Modifier.size(24.dp)
-                    ) {
+                    IconButton(onClick = onToggleFavorite, modifier = Modifier.size(24.dp)) {
                         Icon(
                             imageVector = if (book.isFavorite) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder,
                             contentDescription = if (book.isFavorite) "বুকমার্ক সরান" else "বুকমার্কে যোগ করুন",
@@ -186,10 +147,7 @@ fun BookListCard(
                     shape = RoundedCornerShape(8.dp),
                     border = BorderStroke(0.8.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
                 ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    Row(modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = if (book.progressPercent > 0f) "পড়ুন" else "শুরু করুন",
                             fontSize = 11.sp,

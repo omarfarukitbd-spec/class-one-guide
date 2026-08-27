@@ -72,7 +72,7 @@ function initAuthGate() {
             } finally {
                 if (submitBtn) {
                     submitBtn.disabled = false;
-                    submitBtn.innerText = "লগইন করুন ➔";
+                    submitBtn.innerText = "লগইন করুন";
                 }
             }
         };
@@ -124,7 +124,7 @@ function initAuthGate() {
                 sessionStorage.setItem("active_pin", pin);
                 unlockDashboard();
                 logAuditEvent("AUTH_LOGIN", "মাস্টার পিন ভেরিফিকেশন সফল");
-                showToast("🎉 স্বাগতম! সফলভাবে কমান্ড হাবে প্রবেশ করেছেন!", "success");
+                showToast("স্বাগতম! সফলভাবে কমান্ড হাবে প্রবেশ করেছেন!", "success");
             } else {
                 handleFailedAttempt();
             }

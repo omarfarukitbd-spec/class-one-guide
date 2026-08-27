@@ -109,16 +109,27 @@ body {
 }
 
 /* Universal SVG Icon Engine (Inherits Color & Visibility Globally) */
-svg, .svg-icon, .svg-icon-sm, .svg-icon-lg {
+svg, .svg-icon, .svg-icon-xs, .svg-icon-sm, .svg-icon-md, .svg-icon-lg, .svg-icon-xl {
     fill: currentColor;
     stroke: none;
     display: inline-block;
     vertical-align: middle;
     flex-shrink: 0;
 }
-.svg-icon { width: 20px; height: 20px; }
-.svg-icon-sm { width: 16px; height: 16px; }
-.svg-icon-lg { width: 26px; height: 26px; }
+.svg-icon-xs { width: 14px; height: 14px; max-width: 14px; max-height: 14px; }
+.svg-icon-sm { width: 16px; height: 16px; max-width: 16px; max-height: 16px; }
+.svg-icon { width: 20px; height: 20px; max-width: 20px; max-height: 20px; }
+.svg-icon-md { width: 22px; height: 22px; max-width: 22px; max-height: 22px; }
+.svg-icon-lg { width: 26px; height: 26px; max-width: 26px; max-height: 26px; }
+.svg-icon-xl { width: 32px; height: 32px; max-width: 32px; max-height: 32px; }
+
+.btn svg {
+    flex-shrink: 0;
+}
+.btn-sm svg {
+    width: 14px;
+    height: 14px;
+}
 
 /* -------------------------------------------------------------
    2. SAAS LAYOUT & SIDEBAR NAVIGATION
@@ -915,12 +926,26 @@ select.custom-select:focus, input.custom-input:focus, textarea.custom-input:focu
     margin: 8px;
     border-radius: 8px;
     display: flex;
-    gap: 6px;
+    gap: 8px;
     align-items: center;
     font-size: 10px;
     color: #E2E8F0;
     line-height: 1.3;
     animation: pulseNotice 2s infinite ease-in-out;
+}
+
+.sim-notice-banner svg {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    max-width: 16px !important;
+    flex-shrink: 0 !important;
+}
+
+.mobile-app-header svg {
+    width: 16px !important;
+    height: 16px !important;
+    flex-shrink: 0 !important;
 }
 
 @keyframes pulseNotice {

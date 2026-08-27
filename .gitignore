@@ -14,3 +14,7 @@
 .cxx
 local.properties
 .kotlin
+*.docx
+*.doc
+*.pdf
+*.xlsx

@@ -50,7 +50,7 @@ async function triggerBroadcastSync() {
     const syncBtn = document.getElementById("btn-sync-all");
     if (syncBtn) {
         syncBtn.disabled = true;
-        syncBtn.innerHTML = `<span>🔄 সিঙ্ক হচ্ছে...</span>`;
+        syncBtn.innerHTML = `<span>সিঙ্ক হচ্ছে...</span>`;
     }
     await persistLocalData(true);
     if (syncBtn) {
