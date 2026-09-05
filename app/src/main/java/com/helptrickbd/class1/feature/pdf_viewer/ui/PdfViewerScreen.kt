@@ -1,5 +1,6 @@
 package com.helptrickbd.class1.feature.pdf_viewer.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -7,6 +8,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -15,6 +17,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.platform.LocalContext
+import android.widget.Toast
+import androidx.compose.material3.Text
 import com.helptrickbd.class1.feature.pdf_viewer.domain.model.PdfActiveSheet
 import com.helptrickbd.class1.feature.pdf_viewer.domain.model.PdfViewMode
 import com.helptrickbd.class1.feature.pdf_viewer.ui.components.*
@@ -34,6 +39,24 @@ fun PdfViewerScreen(
     }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
+    LaunchedEffect(viewModel.uiEvent) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is PdfViewerUiEvent.ShowToast -> {
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    val activeSheet = (uiState as? PdfViewerUiState.Success)?.activeSheet ?: PdfActiveSheet.NONE
+
+    // Hierarchical back handling: close reading sheet first before popping screen
+    BackHandler(enabled = activeSheet != PdfActiveSheet.NONE) {
+        viewModel.closeSheet()
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -140,7 +163,15 @@ fun PdfViewerScreen(
                 }
             }
             is PdfViewerUiState.Error -> {
-                PdfErrorView(message = state.message, onRetry = viewModel::retry, innerPadding = innerPadding)
+                PdfErrorView(message = state.message.asString(), onRetry = viewModel::retry, innerPadding = innerPadding)
+            }
+            is PdfViewerUiState.Empty -> {
+                Box(
+                    modifier = Modifier.fillMaxSize().padding(innerPadding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = state.message.asString(), color = MaterialTheme.colorScheme.onBackground)
+                }
             }
         }
     }

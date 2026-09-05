@@ -32,7 +32,7 @@ object AppConfig {
     const val PDF_STORAGE_BASE_URL = "https://raw.githubusercontent.com/omarfarukitbd-spec/class-one-guide/main/pdfs/"
     
     // Cloud Firestore Collection Structure (Global Admin Panel SSOT)
-    const val CLOUD_ROOT_COLLECTION = "nctb_classes"
+    const val CLOUD_ROOT_COLLECTION = "classes"
     const val CLOUD_BOOKS_COLLECTION = "books"
     const val CLOUD_CHAPTERS_COLLECTION = "chapters"
     
@@ -47,6 +47,9 @@ object AppConfig {
     const val FEATURE_NAVIGATION_DRAWER = true
     const val FEATURE_CLOUD_SYNC = true
     const val FEATURE_SEARCH = true
+    const val SEARCH_DEBOUNCE_MS = 250L             // 250ms debounce for lightning fast search without UI frame drops
+    const val SEARCH_MIN_QUERY_LENGTH = 1
+    const val SEARCH_MAX_SUGGESTIONS = 8
     const val FEATURE_PDF_BOOKMARKS = true
     const val FEATURE_PDF_THUMBNAIL_PREVIEW = true
     const val FEATURE_PDF_READING_THEMES = true
@@ -57,6 +60,9 @@ object AppConfig {
     const val FEATURE_DAILY_STUDY_REMINDER = true
     const val FEATURE_CRASHLYTICS = true
     const val FEATURE_ANALYTICS = true
+    const val FEATURE_KIDS_ZONE = true
+    const val FEATURE_PHONICS_AUDIO = true
+    const val FEATURE_SLATE_CANVAS = true
 
     val DEFAULT_LAYOUT_MODE = com.helptrickbd.class1.feature.home.domain.model.LayoutMode.GRID
     

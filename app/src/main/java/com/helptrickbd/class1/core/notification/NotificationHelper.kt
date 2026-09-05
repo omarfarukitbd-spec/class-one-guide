@@ -13,8 +13,13 @@ import com.helptrickbd.class1.MainActivity
 import com.helptrickbd.class1.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import java.net.URL
 
+/**
+ * Universal Utility for handling System Tray Notifications with DRM & Deep Linking.
+ * Optimized for performance with network-aware bitmap fetching.
+ */
 object NotificationHelper {
 
     const val CHANNEL_ANNOUNCEMENTS = "nctb_announcements"
@@ -60,6 +65,9 @@ object NotificationHelper {
         }
     }
 
+    /**
+     * Displays a system notification with optional image and deep linking.
+     */
     suspend fun showNotification(
         context: Context,
         title: String,
@@ -92,7 +100,7 @@ object NotificationHelper {
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
 
-        // Load BigPicture if image URL is present
+        // Security/Performance: Fetch bitmap with 5-second timeout
         if (!imageUrl.isNullOrBlank()) {
             val bitmap = downloadBitmap(imageUrl)
             if (bitmap != null) {
@@ -109,11 +117,14 @@ object NotificationHelper {
     }
 
     private suspend fun downloadBitmap(urlStr: String): Bitmap? = withContext(Dispatchers.IO) {
-        try {
-            val input = URL(urlStr).openStream()
-            BitmapFactory.decodeStream(input)
-        } catch (_: Exception) {
-            null
+        // Logic Fix: Added 5s timeout to prevent UI hang or process death during slow networks
+        withTimeoutOrNull(5000) {
+            try {
+                val input = URL(urlStr).openStream()
+                BitmapFactory.decodeStream(input)
+            } catch (_: Exception) {
+                null
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.helptrickbd.class1.feature.subject_detail.ui
 
 import androidx.compose.runtime.Immutable
+import com.helptrickbd.class1.core.util.UiText
 import com.helptrickbd.class1.feature.home.domain.model.Book
 import com.helptrickbd.class1.feature.home.domain.model.Chapter
 import com.helptrickbd.class1.feature.home.domain.model.LanguageVersion
@@ -8,6 +9,7 @@ import com.helptrickbd.class1.feature.home.domain.model.LanguageVersion
 @Immutable
 sealed interface SubjectDetailUiState {
     data object Loading : SubjectDetailUiState
+    data class Empty(val message: UiText) : SubjectDetailUiState
 
     @Immutable
     data class Success(
@@ -17,5 +19,5 @@ sealed interface SubjectDetailUiState {
         val expandedChapterId: String? = null
     ) : SubjectDetailUiState
 
-    data class Error(val message: String) : SubjectDetailUiState
+    data class Error(val message: UiText) : SubjectDetailUiState
 }

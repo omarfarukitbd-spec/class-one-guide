@@ -1,10 +1,12 @@
 package com.helptrickbd.class1.feature.pdf_viewer.data
 
-import android.content.Context
+import android.os.StatFs
 import com.helptrickbd.class1.core.config.AppConfig
+import com.helptrickbd.class1.core.di.IoDispatcher
+import com.helptrickbd.class1.core.security.PdfCryptoEngine
+import com.helptrickbd.class1.core.util.StorageProvider
 import com.helptrickbd.class1.feature.pdf_viewer.domain.model.DownloadState
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -12,22 +14,21 @@ import java.io.File
 import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import com.helptrickbd.class1.core.di.IoDispatcher
-import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Handles chunked streaming of PDF files to local disk cache.
- * Guarantees 100% offline-first availability.
+ * Handles chunked streaming of PDF files to local disk cache with DRM encryption.
+ * Optimized with Disk Space Guard and Atomic File Operations.
  */
 @Singleton
 class PdfDownloader @Inject constructor(
-    @ApplicationContext private val context: Context,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    private val storageProvider: StorageProvider,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    private val cryptoEngine: PdfCryptoEngine
 ) {
     private val pdfCacheDir: File
-        get() = File(context.cacheDir, "pdfs").apply {
+        get() = File(storageProvider.cacheDir, "pdfs").apply {
             if (!exists()) mkdirs()
         }
 
@@ -41,13 +42,12 @@ class PdfDownloader @Inject constructor(
         val fileName = generateSafeFileName(url)
         val targetFile = File(pdfCacheDir, fileName)
 
-        // 1. Instant Cache Hit (Offline-First)
+        // 1. Instant Cache Hit (Offline-First SSOT)
         if (targetFile.exists() && targetFile.length() > 1024) {
             emit(DownloadState.Success(targetFile))
             return@flow
         }
 
-        // 2. Stream from Remote Storage / CDN
         val tempFile = File(pdfCacheDir, "$fileName.tmp")
         var connection: HttpURLConnection? = null
 
@@ -60,44 +60,71 @@ class PdfDownloader @Inject constructor(
             connection = urlConnection
 
             if (urlConnection.responseCode !in 200..299) {
-                emit(DownloadState.Error("সার্ভার থেকে ফাইল লোড করা যায়নি (${urlConnection.responseCode})"))
+                emit(DownloadState.Error("সার্ভার থেকে ফাইল লোড করা যায়নি (Error: ${urlConnection.responseCode})"))
                 return@flow
             }
 
-            val totalBytes = urlConnection.contentLength
-            val inputStream = urlConnection.inputStream
-            val outputStream = FileOutputStream(tempFile)
+            val totalBytes = urlConnection.contentLength.toLong()
+            
+            // Logic Fix: Disk Space Guard (Ensure at least 2x size available for temp + final copy)
+            if (totalBytes > 0 && !hasEnoughSpace(totalBytes * 2)) {
+                emit(DownloadState.Error("আপনার ফোনে পর্যাপ্ত জায়গা নেই। দয়া করে কিছু মেমোরি খালি করুন।"))
+                return@flow
+            }
 
-            val buffer = ByteArray(8 * 1024)
+            val inputStream = urlConnection.inputStream
+            val fileOutputStream = FileOutputStream(tempFile)
+            val outputStream = cryptoEngine.getEncryptingOutputStream(fileOutputStream)
+
+            val buffer = ByteArray(16 * 1024)
             var bytesRead: Int
             var totalBytesRead = 0L
 
-            while (inputStream.read(buffer).also { bytesRead = it } != -1) {
-                outputStream.write(buffer, 0, bytesRead)
-                totalBytesRead += bytesRead
-                if (totalBytes > 0) {
-                    val progress = (totalBytesRead.toFloat() / totalBytes.toFloat()).coerceIn(0.1f, 0.99f)
-                    emit(DownloadState.Progress(progress))
+            outputStream.use { encryptedOut ->
+                inputStream.use { input ->
+                    while (input.read(buffer).also { bytesRead = it } != -1) {
+                        encryptedOut.write(buffer, 0, bytesRead)
+                        totalBytesRead += bytesRead
+                        if (totalBytes > 0) {
+                            val progress = (totalBytesRead.toFloat() / totalBytes.toFloat()).coerceIn(0.1f, 0.99f)
+                            emit(DownloadState.Progress(progress))
+                        }
+                    }
                 }
             }
+            
+            // SECURITY: Verify file completeness before removing .tmp extension
+            if (totalBytes > 0 && totalBytesRead < totalBytes) {
+                throw Exception("ডাউনলোড সম্পূর্ণ হয়নি। সংযোগ বিচ্ছিন্ন হয়েছে।")
+            }
 
-            outputStream.flush()
-            outputStream.close()
-            inputStream.close()
-
-            // Rename temp file to target file atomically
-            if (tempFile.renameTo(targetFile) || (targetFile.delete() && tempFile.renameTo(targetFile))) {
+            // Atomic Commit: Move temp to final location
+            if (targetFile.exists()) targetFile.delete()
+            if (tempFile.renameTo(targetFile)) {
                 emit(DownloadState.Success(targetFile))
             } else {
-                emit(DownloadState.Success(tempFile))
+                // Fallback for some filesystems
+                tempFile.copyTo(targetFile, overwrite = true)
+                tempFile.delete()
+                emit(DownloadState.Success(targetFile))
             }
         } catch (e: Exception) {
             if (tempFile.exists()) tempFile.delete()
-            emit(DownloadState.Error(e.localizedMessage ?: "ইন্টারনেট সংযোগ চেক করুন"))
+            emit(DownloadState.Error(e.message ?: "ইন্টারনেট সংযোগ চেক করুন"))
         } finally {
             connection?.disconnect()
         }
     }.flowOn(ioDispatcher)
+
+    private fun hasEnoughSpace(requiredBytes: Long): Boolean {
+        return try {
+            val stat = StatFs(storageProvider.cacheDir.absolutePath)
+            val availableBytes = stat.availableBlocksLong * stat.blockSizeLong
+            availableBytes > requiredBytes
+        } catch (_: Exception) {
+            true // Fallback to avoid blocking on older APIs if StatFs fails
+        }
+    }
 
     private fun resolveFullUrl(url: String): String {
         return if (url.startsWith("http://", ignoreCase = true) || url.startsWith("https://", ignoreCase = true)) {
@@ -110,10 +137,11 @@ class PdfDownloader @Inject constructor(
     private fun generateSafeFileName(url: String): String {
         val rawName = url.substringAfterLast("/").substringBefore("?")
         val sanitized = rawName.replace(Regex("[^a-zA-Z0-9._-]"), "_")
-        return if (sanitized.endsWith(".pdf", ignoreCase = true)) {
+        val baseName = if (sanitized.endsWith(".pdf", ignoreCase = true)) {
             sanitized
         } else {
             "book_${url.hashCode()}.pdf"
         }
+        return "$baseName.enc"
     }
 }

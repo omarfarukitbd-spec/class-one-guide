@@ -6,18 +6,26 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.helptrickbd.class1.core.database.AppDatabase
 import com.helptrickbd.class1.core.database.BookDao
+import com.helptrickbd.class1.core.database.BookmarkDao
 import com.helptrickbd.class1.core.database.ChapterDao
 import com.helptrickbd.class1.core.database.DatabaseSeeder
+import com.helptrickbd.class1.core.database.NotificationDao
+import com.helptrickbd.class1.core.notification.data.NotificationRepositoryImpl
+import com.helptrickbd.class1.core.notification.domain.repository.NotificationRepository
 import com.helptrickbd.class1.core.settings.data.SettingsRepositoryImpl
 import com.helptrickbd.class1.core.settings.domain.repository.SettingsRepository
 import com.helptrickbd.class1.core.sync.data.repository.CloudSyncRepositoryImpl
 import com.helptrickbd.class1.core.sync.domain.repository.CloudSyncRepository
 import com.helptrickbd.class1.core.sync.domain.usecase.SyncCloudDataUseCase
 import com.helptrickbd.class1.core.sync.util.NetworkMonitor
+import com.helptrickbd.class1.core.util.StorageProvider
+import com.helptrickbd.class1.core.util.StorageProviderImpl
 import com.helptrickbd.class1.feature.home.data.repository.HomeRepositoryImpl
 import com.helptrickbd.class1.feature.home.domain.repository.HomeRepository
 import com.helptrickbd.class1.feature.pdf_viewer.data.PdfDownloader
+import com.helptrickbd.class1.feature.pdf_viewer.data.repository.BookmarkRepositoryImpl
 import com.helptrickbd.class1.feature.pdf_viewer.data.repository.PdfRepositoryImpl
+import com.helptrickbd.class1.feature.pdf_viewer.domain.repository.BookmarkRepository
 import com.helptrickbd.class1.feature.pdf_viewer.domain.repository.PdfRepository
 import com.helptrickbd.class1.feature.subject_detail.data.repository.SubjectRepositoryImpl
 import com.helptrickbd.class1.feature.subject_detail.domain.repository.SubjectRepository
@@ -26,6 +34,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Singleton
 
 @Module
@@ -55,16 +64,16 @@ object AppModule {
     }
 
     @Provides
-    fun provideBookmarkDao(database: AppDatabase): com.helptrickbd.class1.core.database.BookmarkDao {
+    fun provideBookmarkDao(database: AppDatabase): BookmarkDao {
         return database.bookmarkDao()
     }
 
     @Provides
     @Singleton
     fun provideBookmarkRepository(
-        bookmarkDao: com.helptrickbd.class1.core.database.BookmarkDao
-    ): com.helptrickbd.class1.feature.pdf_viewer.domain.repository.BookmarkRepository {
-        return com.helptrickbd.class1.feature.pdf_viewer.data.repository.BookmarkRepositoryImpl(bookmarkDao)
+        bookmarkDao: BookmarkDao
+    ): BookmarkRepository {
+        return BookmarkRepositoryImpl(bookmarkDao)
     }
 
     @Provides
@@ -85,7 +94,7 @@ object AppModule {
     fun provideCloudSyncRepository(
         @ApplicationContext context: Context,
         firestore: FirebaseFirestore?,
-        @IoDispatcher ioDispatcher: kotlinx.coroutines.CoroutineDispatcher
+        @IoDispatcher ioDispatcher: CoroutineDispatcher
     ): CloudSyncRepository {
         return CloudSyncRepositoryImpl(context, firestore, ioDispatcher)
     }
@@ -99,7 +108,8 @@ object AppModule {
         syncCloudDataUseCase: SyncCloudDataUseCase,
         syncRepository: CloudSyncRepository,
         networkMonitor: NetworkMonitor,
-        @IoDispatcher ioDispatcher: kotlinx.coroutines.CoroutineDispatcher
+        storageProvider: StorageProvider,
+        @IoDispatcher ioDispatcher: CoroutineDispatcher
     ): HomeRepository {
         return HomeRepositoryImpl(
             bookDao,
@@ -108,6 +118,7 @@ object AppModule {
             syncCloudDataUseCase,
             syncRepository,
             networkMonitor,
+            storageProvider,
             ioDispatcher
         )
     }
@@ -131,22 +142,22 @@ object AppModule {
     @Singleton
     fun provideSettingsRepository(
         @ApplicationContext context: Context,
-        @IoDispatcher ioDispatcher: kotlinx.coroutines.CoroutineDispatcher
+        @IoDispatcher ioDispatcher: CoroutineDispatcher
     ): SettingsRepository {
         return SettingsRepositoryImpl(context, ioDispatcher)
     }
 
     @Provides
-    fun provideNotificationDao(database: AppDatabase): com.helptrickbd.class1.core.database.NotificationDao {
+    fun provideNotificationDao(database: AppDatabase): NotificationDao {
         return database.notificationDao()
     }
 
     @Provides
     @Singleton
     fun provideNotificationRepository(
-        notificationDao: com.helptrickbd.class1.core.database.NotificationDao,
-        @IoDispatcher ioDispatcher: kotlinx.coroutines.CoroutineDispatcher
-    ): com.helptrickbd.class1.core.notification.domain.repository.NotificationRepository {
-        return com.helptrickbd.class1.core.notification.data.NotificationRepositoryImpl(notificationDao, ioDispatcher)
+        notificationDao: NotificationDao,
+        @IoDispatcher ioDispatcher: CoroutineDispatcher
+    ): NotificationRepository {
+        return NotificationRepositoryImpl(notificationDao, ioDispatcher)
     }
 }

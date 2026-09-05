@@ -13,7 +13,13 @@ object MadrasahBooksData {
             subtitle = "ইবতেদায়ী ১ম শ্রেণি • NCTB",
             curriculum = Curriculum.MADRASAH,
             pdfUrl = "madr_bangla_full.pdf",
-            progressPercent = 0.45f
+            progressPercent = 0.45f,
+            chapters = SchoolBanglaBookData.book.chapters.map { ch ->
+                ch.copy(
+                    chapterId = "mb_${ch.chapterId}",
+                    resources = ch.resources.map { r -> r.copy(resourceId = "mb_${r.resourceId}") }
+                )
+            }
         ),
         SchoolEnglishBookData.book.copy(
             bookId = "madr_english",
@@ -21,7 +27,13 @@ object MadrasahBooksData {
             subtitle = "Primary Curriculum Class 1 • NCTB",
             curriculum = Curriculum.MADRASAH,
             pdfUrl = "madr_english_full.pdf",
-            progressPercent = 0.35f
+            progressPercent = 0.35f,
+            chapters = SchoolEnglishBookData.book.chapters.map { ch ->
+                ch.copy(
+                    chapterId = "me_${ch.chapterId}",
+                    resources = ch.resources.map { r -> r.copy(resourceId = "me_${r.resourceId}") }
+                )
+            }
         ),
         SchoolMathBookData.book.copy(
             bookId = "madr_math",
@@ -29,7 +41,13 @@ object MadrasahBooksData {
             subtitle = "ইবতেদায়ী ১ম শ্রেণি • NCTB",
             curriculum = Curriculum.MADRASAH,
             pdfUrl = "madr_math_full.pdf",
-            progressPercent = 0.20f
+            progressPercent = 0.20f,
+            chapters = SchoolMathBookData.book.chapters.map { ch ->
+                ch.copy(
+                    chapterId = "mm_${ch.chapterId}",
+                    resources = ch.resources.map { r -> r.copy(resourceId = "mm_${r.resourceId}") }
+                )
+            }
         )
     )
 }

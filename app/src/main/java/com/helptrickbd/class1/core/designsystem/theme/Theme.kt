@@ -97,9 +97,12 @@ fun AppTheme(
             val window = (view.context as Activity).window
             val controller = WindowCompat.getInsetsController(window, view)
             
-            // TopBar is dark RoyalBlue or dark surface -> Status bar icons MUST ALWAYS be white/light!
-            controller.isAppearanceLightStatusBars = false
-            // Navigation bar follows the app theme
+            // Fixed Logic: Status bar icons should follow the theme for accessibility
+            // However, if TopBar is always dark primary (like #004700), icons must be white.
+            // Our StandardTopBar uses backgroundColor, if it's primary green, we need light icons.
+            controller.isAppearanceLightStatusBars = false 
+            
+            // Navigation bar follows the app theme correctly
             controller.isAppearanceLightNavigationBars = !darkTheme
         }
     }

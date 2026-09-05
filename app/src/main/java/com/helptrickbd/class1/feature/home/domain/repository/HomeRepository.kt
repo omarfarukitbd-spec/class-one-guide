@@ -43,4 +43,9 @@ interface HomeRepository {
      * Retrieves remote in-app notice broadcast from Firestore Admin Panel.
      */
     fun getCloudNotice(): Flow<String?>
+
+    /**
+     * Retrieves the minimum app version broadcast from Firestore Admin Panel.
+     */
+    fun getMinAppVersion(): Flow<Int>
 }

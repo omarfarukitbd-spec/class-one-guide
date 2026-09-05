@@ -28,6 +28,7 @@ import com.helptrickbd.class1.feature.home.presentation.HomeUiState
 fun HomeBody(
     innerPadding: PaddingValues,
     state: HomeUiState.Success,
+    layoutMode: LayoutMode,
     onSearchQueryChange: (String) -> Unit,
     onClearSearch: () -> Unit,
     onCurriculumSelected: (Curriculum) -> Unit,
@@ -38,7 +39,7 @@ fun HomeBody(
     modifier: Modifier = Modifier
 ) {
     val isSearching = state.searchQuery.isNotBlank()
-    val isGrid = state.layoutMode == LayoutMode.GRID
+    val isGrid = layoutMode == LayoutMode.GRID
     val spanCount = if (isGrid) 2 else 1
 
     LazyVerticalGrid(
@@ -86,14 +87,16 @@ fun HomeBody(
 
                         if (AppConfig.FEATURE_LAYOUT_SWITCHER) {
                             LayoutSwitchToggle(
-                                layoutMode = state.layoutMode,
+                                layoutMode = layoutMode,
                                 onToggle = onToggleLayoutMode
                             )
                         }
                     }
                 }
-
-                items(state.searchResults, key = { it.book.bookId }) { result ->
+                items(
+                    items = state.searchResults,
+                    key = { "search_${it.book.bookId}_${it.matchedChapterId ?: "root"}" }
+                ) { result ->
                     val highlight = if (result.matchedUnitNo != null && result.matchedChapterTitle != null) {
                         "${result.matchedUnitNo} • ${result.matchedChapterTitle}"
                     } else result.matchedChapterTitle ?: result.matchedUnitNo
@@ -156,28 +159,29 @@ fun HomeBody(
                     ) {
                         Text(
                             text = "${state.selectedCurriculum.titleBangla} পাঠ্যবইসমূহ",
-                            style = MaterialTheme.typography.titleLarge,
+                            style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 17.sp
                         )
                         Surface(
                             color = MaterialTheme.colorScheme.primaryContainer,
                             shape = RoundedCornerShape(8.dp),
-                            border = BorderStroke(0.8.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f))
+                            border = BorderStroke(0.8.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
                         ) {
                             Text(
                                 text = "${state.books.size} টি বই",
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                fontSize = 11.sp,
+                                color = MaterialTheme.colorScheme.primary,
+                                fontSize = 11.5.sp,
                                 fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp)
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                             )
                         }
                     }
 
                     if (AppConfig.FEATURE_LAYOUT_SWITCHER) {
                         LayoutSwitchToggle(
-                            layoutMode = state.layoutMode,
+                            layoutMode = layoutMode,
                             onToggle = onToggleLayoutMode
                         )
                     }

@@ -7,16 +7,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.shape.RoundedCornerShape
+import com.helptrickbd.class1.R
 import com.helptrickbd.class1.core.designsystem.theme.AppTheme
 import com.helptrickbd.class1.core.designsystem.theme.TopBarDark
+import com.helptrickbd.class1.core.designsystem.modifiers.glassmorphism
 
 /**
  * A globally configurable Top Bar that strictly handles native system UI insets.
- * Use this as the SSOT for all screen headers.
+ * Logic: Automatically determines content color based on background luminance.
  */
 @Composable
 fun StandardTopBar(
@@ -28,17 +33,24 @@ fun StandardTopBar(
     backgroundColor: Color = AppTheme.colors.topBarBackground,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
+    // Logic: Calculate content color (White for dark backgrounds, Black/Primary for light)
+    val contentColor = if (backgroundColor.luminance() < 0.5f) Color.White else MaterialTheme.colorScheme.onSurface
     val isDark = backgroundColor == TopBarDark
 
     Surface(
-        color = backgroundColor,
+        color = Color.Transparent,
         border = if (isDark) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)) else null,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .glassmorphism(
+                color = backgroundColor.copy(alpha = 0.85f),
+                shape = RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)
+            )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .statusBarsPadding() // Content starts below status bar, but Surface covers it
+                .statusBarsPadding()
                 .padding(horizontal = 12.dp, vertical = 14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -46,8 +58,8 @@ fun StandardTopBar(
                 IconButton(onClick = onNavigationClick) {
                     Icon(
                         imageVector = navigationIcon,
-                        contentDescription = "Navigation",
-                        tint = Color.White
+                        contentDescription = stringResource(R.string.desc_menu),
+                        tint = contentColor
                     )
                 }
             } else {
@@ -61,16 +73,16 @@ fun StandardTopBar(
             ) {
                 Text(
                     text = title,
-                    color = Color.White,
-                    fontSize = 19.sp,
+                    color = contentColor,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1
                 )
                 if (subtitle != null) {
                     Text(
                         text = subtitle,
-                        color = Color.White.copy(alpha = 0.85f),
-                        fontSize = 12.sp,
+                        color = contentColor.copy(alpha = 0.8f),
+                        fontSize = 11.sp,
                         fontWeight = FontWeight.Normal,
                         maxLines = 1
                     )

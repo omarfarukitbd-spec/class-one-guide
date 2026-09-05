@@ -1,109 +1,163 @@
 package com.helptrickbd.class1.feature.home.ui.components.drawer
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AutoStories
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.School
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.helptrickbd.class1.core.settings.domain.model.StorageInfo
-import com.helptrickbd.class1.core.settings.domain.model.ThemeMode
-import com.helptrickbd.class1.feature.home.domain.model.Curriculum
+import com.helptrickbd.class1.core.designsystem.modifiers.bounceClick
 
 @Composable
 fun AppNavigationDrawer(
-    storageInfo: StorageInfo,
-    selectedTheme: ThemeMode,
-    selectedCurriculum: Curriculum,
-    onCurriculumSelected: (Curriculum) -> Unit,
-    onThemeSelected: (ThemeMode) -> Unit,
-    onClearCache: () -> Unit,
+    onOfflineBooksClick: () -> Unit,
+    onCheckUpdateClick: () -> Unit,
+    onFbGroupClick: () -> Unit,
+    onShareClick: () -> Unit,
+    onRateClick: () -> Unit,
+    onPrivacyClick: () -> Unit,
+    onAboutClick: () -> Unit,
     onCloseDrawer: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ModalDrawerSheet(
         modifier = modifier.width(320.dp),
-        drawerContainerColor = MaterialTheme.colorScheme.background,
-        drawerContentColor = MaterialTheme.colorScheme.onBackground
+        drawerContainerColor = MaterialTheme.colorScheme.surface,
+        drawerContentColor = MaterialTheme.colorScheme.onSurface,
+        drawerShape = RoundedCornerShape(topEnd = 24.dp, bottomEnd = 24.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
+            // Header
             DrawerHeader()
 
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Navigation Items
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                    .padding(horizontal = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                // 1. Storage Manager
-                StorageManagerCard(
-                    storageInfo = storageInfo,
-                    onClearCache = onClearCache
+                
+                Text(
+                    text = "মেনু",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp)
                 )
 
-                // 2. Theme Selector
-                ThemeSelectorCard(
-                    selectedTheme = selectedTheme,
-                    onThemeSelected = onThemeSelected
+                DrawerMenuItem(
+                    label = "অফলাইন বইসমূহ",
+                    icon = Icons.Outlined.DownloadDone,
+                    onClick = { onOfflineBooksClick(); onCloseDrawer() }
+                )
+                
+                DrawerMenuItem(
+                    label = "আপডেট চেক করুন",
+                    icon = Icons.Outlined.SystemUpdate,
+                    onClick = { onCheckUpdateClick(); onCloseDrawer() }
                 )
 
-                // 3. Multi-Class Scalability Ecosystem Card
-                OtherClassesCard()
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
 
-                // 4. About & Version Footer (Consuming Navigation Bar Insets)
-                DrawerFooter()
+                Text(
+                    text = "কমিউনিটি ও সাহায্য",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp)
+                )
+
+                DrawerMenuItem(
+                    label = "ফেসবুক গ্রুপ",
+                    icon = Icons.Outlined.Groups,
+                    onClick = { onFbGroupClick(); onCloseDrawer() }
+                )
+
+                DrawerMenuItem(
+                    label = "অ্যাপটি শেয়ার করুন",
+                    icon = Icons.Outlined.Share,
+                    onClick = { onShareClick(); onCloseDrawer() }
+                )
+
+                DrawerMenuItem(
+                    label = "রেটিং দিন",
+                    icon = Icons.Outlined.StarOutline,
+                    onClick = { onRateClick(); onCloseDrawer() }
+                )
+
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+
+                DrawerMenuItem(
+                    label = "প্রাইভেসি পলিসি",
+                    icon = Icons.Outlined.Policy,
+                    onClick = { onPrivacyClick(); onCloseDrawer() }
+                )
+                
+                DrawerMenuItem(
+                    label = "আমাদের সম্পর্কে",
+                    icon = Icons.Outlined.Info,
+                    onClick = { onAboutClick(); onCloseDrawer() }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
             }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            // Footer (Version Info)
+            DrawerFooter()
         }
     }
 }
 
 @Composable
-private fun OtherClassesCard() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Default.School,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "অন্যান্য শ্রেণির গাইড",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-            Spacer(modifier = Modifier.height(8.dp))
+private fun DrawerMenuItem(
+    label: String,
+    icon: ImageVector,
+    onClick: () -> Unit
+) {
+    NavigationDrawerItem(
+        label = {
             Text(
-                text = "২য়, ৩য়, ৪র্থ ও ৫ম শ্রেণির গাইডবুক ও পাঠ্যবই অ্যাপ শীঘ্রই উন্মুক্ত করা হবে।",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = label,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Medium
             )
-        }
-    }
+        },
+        icon = {
+            Icon(
+                imageVector = icon,
+                contentDescription = label,
+                modifier = Modifier.size(24.dp)
+            )
+        },
+        selected = false,
+        onClick = onClick,
+        colors = NavigationDrawerItemDefaults.colors(
+            unselectedContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.03f),
+            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            unselectedTextColor = MaterialTheme.colorScheme.onSurface
+        ),
+        shape = RoundedCornerShape(12.dp), // Slightly rounded rectangle for modern apps
+        modifier = Modifier
+            .padding(vertical = 4.dp, horizontal = 8.dp)
+            .bounceClick { onClick() }
+    )
 }
 
 @Composable
@@ -111,8 +165,8 @@ private fun DrawerFooter() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 12.dp)
-            .navigationBarsPadding(), // Consumes navigation bar insets
+            .padding(vertical = 16.dp)
+            .navigationBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HorizontalDivider(
@@ -130,7 +184,9 @@ private fun DrawerFooter() {
             text = "সকল অধিকার জাতীয় শিক্ষাক্রম ও পাঠ্যপুস্তক বোর্ড দ্বারা সংরক্ষিত",
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
-            fontSize = 10.sp
+            fontSize = 10.sp,
+            modifier = Modifier.padding(horizontal = 16.dp),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center
         )
     }
 }

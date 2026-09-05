@@ -21,6 +21,16 @@ sealed interface Screen {
     @Serializable
     data object NotificationInbox : Screen
 
+    @Serializable
+    data object KidsZone : Screen
+
+    @Serializable
+    data class Phonics(
+        val type: String // "vowels" or "consonants"
+    ) : Screen
+
+    @Serializable
+    data object Slate : Screen
 
     @Serializable
     data class SubjectDetail(

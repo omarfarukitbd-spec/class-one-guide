@@ -1,11 +1,9 @@
 package com.helptrickbd.class1.feature.home.presentation
 
 import androidx.compose.runtime.Immutable
-import com.helptrickbd.class1.core.settings.domain.model.StorageInfo
-import com.helptrickbd.class1.core.settings.domain.model.ThemeMode
+import com.helptrickbd.class1.core.util.UiText
 import com.helptrickbd.class1.feature.home.domain.model.Book
 import com.helptrickbd.class1.feature.home.domain.model.Curriculum
-import com.helptrickbd.class1.feature.home.domain.model.LayoutMode
 import com.helptrickbd.class1.feature.home.domain.model.SearchResult
 
 /**
@@ -14,6 +12,7 @@ import com.helptrickbd.class1.feature.home.domain.model.SearchResult
 @Immutable
 sealed interface HomeUiState {
     data object Loading : HomeUiState
+    data class Empty(val message: UiText) : HomeUiState
 
     @Immutable
     data class Success(
@@ -21,14 +20,10 @@ sealed interface HomeUiState {
         val selectedCurriculum: Curriculum,
         val resumeBook: Book?,
         val books: List<Book>,
-        val storageInfo: StorageInfo = StorageInfo(),
-        val themeMode: ThemeMode = ThemeMode.SYSTEM,
-        val layoutMode: LayoutMode = LayoutMode.GRID,
         val searchQuery: String = "",
         val searchResults: List<SearchResult> = emptyList(),
-        val cloudNotice: String? = null,
-        val unreadNotifications: Int = 0
+        val cloudNotice: String? = null
     ) : HomeUiState
 
-    data class Error(val message: String) : HomeUiState
+    data class Error(val message: UiText) : HomeUiState
 }

@@ -1,0 +1,35 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Hand Drop Shadow -->
+    <path
+        android:fillColor="#33000000"
+        android:pathData="M22,6 C20.5,6 19.3,7.2 19.3,8.7 L19.3,22.2 L17.5,21.5 C16.2,21 14.7,21.5 14,22.8 L13.2,24.1 L21.6,35.3 C22.6,36.7 24.3,37.5 26,37.5 L36.5,37.5 C38.7,37.5 40.5,35.7 40.5,33.5 L40.5,22.5 C40.5,21.1 39.4,20 38,20 C37.8,20 37.6,20 37.4,20.1 C37.1,18.9 36,18 34.7,18 C34.3,18 33.9,18.1 33.6,18.3 C33.1,17.2 32,16.5 30.7,16.5 C30.4,16.5 30,16.6 29.7,16.7 L29.7,8.7 C29.7,7.2 28.5,6 27,6 L22,6 Z" />
+
+    <!-- Hand Palm & Fingers -->
+    <path
+        android:fillColor="#FFCA28"
+        android:strokeColor="#FF8F00"
+        android:strokeWidth="1.5"
+        android:strokeLineJoin="round"
+        android:pathData="M20,4 C18.5,4 17.3,5.2 17.3,6.7 L17.3,20.2 L15.5,19.5 C14.2,19 12.7,19.5 12,20.8 L11.2,22.1 L19.6,33.3 C20.6,34.7 22.3,35.5 24,35.5 L34.5,35.5 C36.7,35.5 38.5,33.7 38.5,31.5 L38.5,20.5 C38.5,19.1 37.4,18 36,18 C35.8,18 35.6,18 35.4,18.1 C35.1,16.9 34,16 32.7,16 C32.3,16 31.9,16.1 31.6,16.3 C31.1,15.2 30,14.5 28.7,14.5 C28.4,14.5 28,14.6 27.7,14.7 L27.7,6.7 C27.7,5.2 26.5,4 25,4 L20,4 Z" />
+
+    <!-- Index Finger Highlight -->
+    <path
+        android:fillColor="#FFE082"
+        android:pathData="M18.8,7 C18.8,5.9 19.7,5 20.8,5 L23.5,5 C24.6,5 25.5,5.9 25.5,7 L25.5,18 L18.8,18 L18.8,7 Z" />
+
+    <!-- Chalk / Pen Tip at Index Fingertip -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="1.2"
+        android:pathData="M19,3.5 L23.5,3.5 L21.2,0.5 Z" />
+
+    <!-- Sparkle / Glow at the Tip -->
+    <path
+        android:fillColor="#00E5FF"
+        android:pathData="M21.2, -1.5 L22,-0.2 L23.3, -1 L22.5,0.3 L23.8,1.1 L22.4,1.4 L22.7,2.8 L21.5,2 L20.3,2.8 L20.6,1.4 L19.2,1.1 L20.5,0.3 L19.7, -1 L21, -0.2 Z" />
+</vector>

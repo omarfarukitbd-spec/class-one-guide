@@ -9,7 +9,7 @@ window.addEventListener("DOMContentLoaded", () => {
     initAppModals();
     initEventListeners();
     initClassCloneModal();
-    renderVowelsGrid();
+    renderPhonicsGrid();
     loadClassData(currentClassId);
 });
 
@@ -35,7 +35,7 @@ function initNavigation() {
             navItems.forEach(n => n.classList.remove("active"));
             item.classList.add("active");
 
-            document.querySelectorAll(".tab-content").forEach(tab => {
+            document.querySelectorAll(".tab-section").forEach(tab => {
                 tab.classList.remove("active");
             });
 
@@ -48,6 +48,13 @@ function initNavigation() {
 }
 
 function initEventListeners() {
+    const toggleBtn = document.getElementById("btn-toggle-sidebar");
+    if (toggleBtn) {
+        toggleBtn.addEventListener("click", () => {
+            document.querySelector(".sidebar").classList.toggle("collapsed");
+        });
+    }
+
     document.getElementById("class-selector")?.addEventListener("change", (e) => {
         loadClassData(e.target.value);
     });

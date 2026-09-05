@@ -13,15 +13,35 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.ui.graphics.Brush
 import com.helptrickbd.class1.core.config.AppConfig
-import com.helptrickbd.class1.core.designsystem.theme.AppTheme
+import com.helptrickbd.class1.core.designsystem.theme.BackgroundDark
 
 @Composable
 fun DrawerHeader(modifier: Modifier = Modifier) {
+    val isDark = MaterialTheme.colorScheme.background == BackgroundDark
+    val headerBrush = if (isDark) {
+        Brush.linearGradient(
+            colors = listOf(
+                MaterialTheme.colorScheme.primaryContainer, // #0C2B45 Deep Midnight Navy
+                MaterialTheme.colorScheme.surface           // #131B2C Smoky Glass
+            )
+        )
+    } else {
+        Brush.linearGradient(
+            colors = listOf(
+                MaterialTheme.colorScheme.primary, // #004700
+                Color(0xFF005A00)
+            )
+        )
+    }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(AppTheme.brushes.liquidMain)
+            .background(headerBrush)
             .statusBarsPadding() // Consumes status bar insets for native edge-to-edge
             .padding(horizontal = 20.dp, vertical = 24.dp)
     ) {

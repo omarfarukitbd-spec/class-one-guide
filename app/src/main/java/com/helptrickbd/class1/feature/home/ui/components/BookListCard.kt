@@ -13,12 +13,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.helptrickbd.class1.R
+import com.helptrickbd.class1.core.designsystem.theme.AppTheme
+import com.helptrickbd.class1.core.util.toBanglaDigit
 import com.helptrickbd.class1.feature.home.domain.model.Book
 import com.helptrickbd.class1.feature.home.ui.model.SubjectThemeResolver
+import kotlin.math.roundToInt
 
+/**
+ * A horizontal list-style card for displaying a book on the Home screen.
+ * Optimized for dense information display and localized accessibility.
+ */
 @Composable
 fun BookListCard(
     book: Book,
@@ -29,30 +39,28 @@ fun BookListCard(
 ) {
     val theme = SubjectThemeResolver.resolve(book.title)
     val chapterCount = if (book.totalChapters > 0) book.totalChapters else book.chapters.size
-    val progressPercent = (book.progressPercent * 100).toInt()
+    val progressPercent = (book.progressPercent * 100).roundToInt()
 
     Card(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp, pressedElevation = 5.dp),
-        border = BorderStroke(1.2.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp, pressedElevation = 6.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f))
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 14.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.Top
+                .padding(14.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            // 1. Left: Emerald Green Icon Box
+            // 1. Left: Premium Subject Icon Box
             Surface(
                 color = MaterialTheme.colorScheme.primaryContainer,
-                shape = RoundedCornerShape(14.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f)),
-                modifier = Modifier
-                    .size(54.dp)
-                    .padding(top = 2.dp)
+                shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)),
+                modifier = Modifier.size(56.dp)
             ) {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -62,17 +70,17 @@ fun BookListCard(
                         imageVector = theme.primaryIcon,
                         contentDescription = theme.categoryBadge,
                         tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(28.dp)
+                        modifier = Modifier.size(30.dp)
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(14.dp))
 
             // 2. Middle: Content Information
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(3.dp)
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -91,11 +99,11 @@ fun BookListCard(
                         border = BorderStroke(0.6.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
                     ) {
                         Text(
-                            text = "$chapterCount টি অধ্যায়",
+                            text = stringResource(R.string.label_unit_count, chapterCount.toBanglaDigit()),
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
                             fontSize = 9.sp,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                         )
                     }
                 }
@@ -109,61 +117,48 @@ fun BookListCard(
                     maxLines = 1
                 )
 
-                if (matchedLessonHighlight != null) {
-                    Text(
-                        text = "মিলেছে: $matchedLessonHighlight",
-                        fontSize = 11.sp,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        maxLines = 1
-                    )
-                } else {
-                    book.subtitle?.let {
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            fontSize = 11.sp,
-                            maxLines = 1
-                        )
-                    }
-                }
+                Text(
+                    text = matchedLessonHighlight?.let { stringResource(R.string.label_matched, it) }
+                        ?: book.subtitle ?: stringResource(R.string.label_default_subtitle),
+                    fontSize = 11.sp,
+                    color = if (matchedLessonHighlight != null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1
+                )
 
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
-                // Mini Reading Progress Bar
+                // Reading Progress Bar
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(0.95f)
+                    modifier = Modifier.fillMaxWidth(0.96f)
                 ) {
                     LinearProgressIndicator(
                         progress = { book.progressPercent },
                         modifier = Modifier
                             .weight(1f)
-                            .height(4.dp)
+                            .height(5.dp)
                             .clip(CircleShape),
                         color = MaterialTheme.colorScheme.primary,
                         trackColor = MaterialTheme.colorScheme.surfaceVariant
                     )
-                    Spacer(modifier = Modifier.width(6.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "$progressPercent%",
+                        text = "${progressPercent.toBanglaDigit()}%",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 9.sp
+                        fontSize = 10.sp
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(10.dp))
 
-            // 3. Right: Bookmark at Top-Right & Action Button at Bottom-Right
+            // 3. Right: Bookmark at Top & Solid CTA at Bottom
             Column(
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .height(68.dp)
-                    .padding(top = 0.dp)
+                modifier = Modifier.height(72.dp)
             ) {
                 if (onToggleFavorite != null) {
                     IconButton(
@@ -172,7 +167,11 @@ fun BookListCard(
                     ) {
                         Icon(
                             imageVector = if (book.isFavorite) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder,
-                            contentDescription = if (book.isFavorite) "বুকমার্ক সরান" else "বুকমার্কে যোগ করুন",
+                            contentDescription = if (book.isFavorite) {
+                                stringResource(R.string.desc_remove_bookmark)
+                            } else {
+                                stringResource(R.string.desc_add_bookmark)
+                            },
                             tint = if (book.isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(20.dp)
                         )
@@ -182,30 +181,52 @@ fun BookListCard(
                 }
 
                 Surface(
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    shape = RoundedCornerShape(8.dp),
-                    border = BorderStroke(0.8.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(10.dp),
+                    shadowElevation = 2.dp
                 ) {
                     Row(
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                        modifier = Modifier.padding(horizontal = 11.dp, vertical = 6.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = if (book.progressPercent > 0f) "পড়ুন" else "শুরু করুন",
+                            text = if (book.progressPercent > 0f) {
+                                stringResource(R.string.btn_read)
+                            } else {
+                                stringResource(R.string.label_start_reading)
+                            },
                             fontSize = 11.sp,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontWeight = FontWeight.Bold
                         )
-                        Spacer(modifier = Modifier.width(3.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(12.dp)
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.size(13.dp)
                         )
                     }
                 }
             }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun BookListCardPreview() {
+    AppTheme {
+        Box(modifier = Modifier.padding(16.dp)) {
+            BookListCard(
+                book = Book(
+                    bookId = "1",
+                    title = "আমার বাংলা বই",
+                    progressPercent = 0.45f,
+                    isFavorite = false
+                ),
+                onClick = {}
+            )
         }
     }
 }

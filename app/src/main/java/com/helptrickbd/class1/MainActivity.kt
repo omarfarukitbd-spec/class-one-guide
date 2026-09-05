@@ -2,6 +2,7 @@ package com.helptrickbd.class1
 
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -14,6 +15,7 @@ import com.helptrickbd.class1.core.designsystem.theme.AppTheme
 import com.helptrickbd.class1.core.navigation.AppNavGraph
 import com.helptrickbd.class1.core.settings.domain.model.ThemeMode
 import com.helptrickbd.class1.core.settings.domain.repository.SettingsRepository
+import com.helptrickbd.class1.core.security.SecurityManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -24,6 +26,13 @@ class MainActivity : ComponentActivity() {
     lateinit var settingsRepository: SettingsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Enforce Enterprise Security Posture
+        if (!SecurityManager.isDeviceSecure(this)) {
+            Toast.makeText(this, "Security integrity compromised. App cannot run on rooted/unsafe devices.", Toast.LENGTH_LONG).show()
+            finishAffinity()
+            return
+        }
+
         // 100% Native Edge-to-Edge System Bar Initialization
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(

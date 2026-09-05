@@ -18,7 +18,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.helptrickbd.class1.core.designsystem.theme.AppTheme
+import androidx.compose.ui.graphics.Brush
+import com.helptrickbd.class1.core.designsystem.theme.BackgroundDark
+import com.helptrickbd.class1.core.designsystem.theme.PrimaryLight
 import com.helptrickbd.class1.feature.home.domain.model.Book
 
 @Composable
@@ -27,12 +29,29 @@ fun ResumeReadingSection(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isDark = MaterialTheme.colorScheme.background == BackgroundDark
+    val cardBrush = if (isDark) {
+        Brush.linearGradient(
+            colors = listOf(
+                MaterialTheme.colorScheme.primaryContainer,
+                MaterialTheme.colorScheme.surface
+            )
+        )
+    } else {
+        Brush.linearGradient(
+            colors = listOf(
+                PrimaryLight,
+                Color(0xFF005A00)
+            )
+        )
+    }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
-            .background(AppTheme.brushes.liquidMain)
-            .border(1.dp, Color.White.copy(alpha = 0.25f), RoundedCornerShape(20.dp))
+            .background(cardBrush)
+            .border(1.dp, Color.White.copy(alpha = 0.2f), RoundedCornerShape(20.dp))
             .clickable(onClick = onClick)
             .padding(16.dp)
     ) {

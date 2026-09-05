@@ -1,6 +1,7 @@
 package com.helptrickbd.class1.feature.pdf_viewer.ui
 
 import androidx.compose.runtime.Immutable
+import com.helptrickbd.class1.core.util.UiText
 import com.helptrickbd.class1.feature.pdf_viewer.domain.engine.PdfRendererEngine
 import com.helptrickbd.class1.feature.pdf_viewer.domain.model.Bookmark
 import com.helptrickbd.class1.feature.pdf_viewer.domain.model.PdfActiveSheet
@@ -15,6 +16,9 @@ import java.io.File
 sealed interface PdfViewerUiState {
     @Immutable
     data class Loading(val progress: Float = 0f) : PdfViewerUiState
+
+    @Immutable
+    data class Empty(val message: UiText) : PdfViewerUiState
 
     @Immutable
     data class Success(
@@ -32,5 +36,5 @@ sealed interface PdfViewerUiState {
     ) : PdfViewerUiState
 
     @Immutable
-    data class Error(val message: String) : PdfViewerUiState
+    data class Error(val message: UiText) : PdfViewerUiState
 }

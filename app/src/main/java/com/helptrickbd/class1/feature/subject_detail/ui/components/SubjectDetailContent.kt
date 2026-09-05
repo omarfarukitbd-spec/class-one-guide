@@ -7,8 +7,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.helptrickbd.class1.R
+import com.helptrickbd.class1.core.designsystem.theme.AppTheme
+import com.helptrickbd.class1.feature.home.domain.model.Book
 import com.helptrickbd.class1.feature.home.domain.model.LanguageVersion
 import com.helptrickbd.class1.feature.home.domain.model.Resource
 import com.helptrickbd.class1.feature.home.domain.model.ResourceType
@@ -23,6 +28,9 @@ fun SubjectDetailContent(
     onResourceClick: (Resource) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val fullBookSuffix = stringResource(R.string.msg_full_book_suffix)
+    val chaptersTitle = stringResource(R.string.label_chapters_and_syllabus, state.chapters.size)
+
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(
@@ -33,7 +41,7 @@ fun SubjectDetailContent(
         ),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        // 1. Subject Hero Header (Icon, Category, Title & Progress Meter)
+        // 1. Subject Hero Header
         item {
             SubjectHeroHeader(book = state.book)
         }
@@ -47,7 +55,7 @@ fun SubjectDetailContent(
                         onResourceClick(
                             Resource(
                                 resourceId = "full_book_${state.book.bookId}",
-                                title = "${state.book.title} (সম্পূর্ণ বই)",
+                                title = "${state.book.title} $fullBookSuffix",
                                 pdfUrl = state.book.pdfUrl,
                                 type = ResourceType.TEXTBOOK
                             )
@@ -57,7 +65,7 @@ fun SubjectDetailContent(
             }
         }
 
-        // 3. Language Version Selector (if book supports Bangla/English)
+        // 3. Language Version Selector
         if (state.book.availableVersions.size > 1) {
             item {
                 VersionSelector(
@@ -70,7 +78,7 @@ fun SubjectDetailContent(
         // 4. Chapter Section Title
         item {
             Text(
-                text = "অধ্যায় ও পাঠ্যসূচি (${state.chapters.size} টি)",
+                text = chaptersTitle,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Bold
@@ -86,5 +94,24 @@ fun SubjectDetailContent(
                 onResourceClick = onResourceClick
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SubjectDetailContentPreview() {
+    AppTheme {
+        SubjectDetailContent(
+            innerPadding = PaddingValues(0.dp),
+            state = SubjectDetailUiState.Success(
+                book = Book("1", "আমার বাংলা বই", pdfUrl = "mock.pdf"),
+                selectedVersion = LanguageVersion.BANGLA,
+                chapters = listOf(),
+                expandedChapterId = null
+            ),
+            onVersionSelected = {},
+            onChapterToggle = {},
+            onResourceClick = {}
+        )
     }
 }

@@ -1,3 +1,5 @@
+import com.google.firebase.appdistribution.gradle.AppDistributionExtension
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,6 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.firebase.appdistribution)
 }
 
 android {
@@ -31,6 +34,18 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            configure<AppDistributionExtension> {
+                artifactType = "APK"
+                releaseNotes = "Release build uploaded via Gradle"
+                testers = "omarfarukitbd@gmail.com"
+            }
+        }
+        debug {
+            configure<AppDistributionExtension> {
+                artifactType = "APK"
+                releaseNotes = "Debug build uploaded via Gradle"
+                testers = "omarfarukitbd@gmail.com"
+            }
         }
     }
     compileOptions {
@@ -47,6 +62,8 @@ android {
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.messaging)
@@ -70,9 +87,11 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
+    
+    // UI & Animations
+    implementation(libs.lottie.compose)
 
     testImplementation(libs.junit)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)

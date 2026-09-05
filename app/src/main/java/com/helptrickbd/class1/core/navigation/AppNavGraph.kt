@@ -7,15 +7,24 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.helptrickbd.class1.feature.learn_hub.ui.phonics.PhonicsScreen
+import com.helptrickbd.class1.feature.learn_hub.ui.phonics.PhonicsViewModel
+import com.helptrickbd.class1.feature.learn_hub.ui.slate.SlateScreen
+import com.helptrickbd.class1.feature.learn_hub.ui.slate.SlateViewModel
 import com.helptrickbd.class1.feature.main.ui.MainScreen
 import com.helptrickbd.class1.feature.pdf_viewer.ui.PdfViewerScreen
 import com.helptrickbd.class1.feature.pdf_viewer.ui.PdfViewerViewModel
 import com.helptrickbd.class1.feature.subject_detail.ui.SubjectDetailScreen
 import com.helptrickbd.class1.feature.subject_detail.ui.SubjectDetailViewModel
-
 import com.helptrickbd.class1.feature.splash.presentation.SplashViewModel
 import com.helptrickbd.class1.feature.splash.ui.SplashScreen
+import com.helptrickbd.class1.feature.notifications.presentation.NotificationViewModel
+import com.helptrickbd.class1.feature.notifications.ui.NotificationInboxScreen
 
+/**
+ * Central Navigation Hub for the Class 1 Application.
+ * Manages route definitions and cross-feature navigation logic.
+ */
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
@@ -69,20 +78,24 @@ fun AppNavGraph(
                 },
                 onNotificationClick = {
                     navController.navigate(Screen.NotificationInbox)
+                },
+                onNavigateToScreen = { route ->
+                    navController.navigate(route)
                 }
             )
         }
 
         composable<Screen.NotificationInbox> {
-            val notifViewModel: com.helptrickbd.class1.feature.notifications.presentation.NotificationViewModel = hiltViewModel()
-            com.helptrickbd.class1.feature.notifications.ui.NotificationInboxScreen(
+            val notifViewModel: NotificationViewModel = hiltViewModel()
+            NotificationInboxScreen(
                 viewModel = notifViewModel,
                 onBackClick = { navController.popBackStack() },
                 onBookClick = { bookId ->
+                    // Logic Fix: Pass placeholder title to avoid empty TopBar in SubjectDetail
                     navController.navigate(
                         Screen.SubjectDetail(
                             subjectId = bookId,
-                            subjectName = ""
+                            subjectName = "বইয়ের বিবরণ"
                         )
                     )
                 }
@@ -115,6 +128,23 @@ fun AppNavGraph(
                 bookId = args.bookId,
                 initialPage = args.initialPage,
                 viewModel = pdfViewModel,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        // Feature hub routes (Slate, Phonics etc)
+        composable<Screen.Phonics> {
+            val phonicsViewModel: PhonicsViewModel = hiltViewModel()
+            PhonicsScreen(
+                viewModel = phonicsViewModel,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable<Screen.Slate> {
+            val slateViewModel: SlateViewModel = hiltViewModel()
+            SlateScreen(
+                viewModel = slateViewModel,
                 onBackClick = { navController.popBackStack() }
             )
         }

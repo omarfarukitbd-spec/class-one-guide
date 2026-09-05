@@ -16,34 +16,39 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+import androidx.compose.ui.graphics.Color
+
 @Composable
 fun BookCardActionPrompt(
     progressPercent: Float,
+    accentColor: Color = MaterialTheme.colorScheme.primary,
+    containerColor: Color = MaterialTheme.colorScheme.primary,
+    onContainerColor: Color = MaterialTheme.colorScheme.onPrimary,
     modifier: Modifier = Modifier
 ) {
     Surface(
-        color = MaterialTheme.colorScheme.primaryContainer,
+        color = containerColor,
         shape = RoundedCornerShape(10.dp),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)),
+        shadowElevation = 2.dp,
         modifier = modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 10.dp, vertical = 7.dp),
+                .padding(horizontal = 12.dp, vertical = 7.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = if (progressPercent > 0f) "চালিয়ে যান" else "পড়া শুরু করুন",
                 fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = onContainerColor,
                 fontWeight = FontWeight.Bold
             )
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = onContainerColor,
                 modifier = Modifier.size(15.dp)
             )
         }

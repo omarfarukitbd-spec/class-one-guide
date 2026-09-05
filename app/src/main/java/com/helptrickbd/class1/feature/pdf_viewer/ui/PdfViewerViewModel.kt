@@ -1,5 +1,6 @@
 package com.helptrickbd.class1.feature.pdf_viewer.ui
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.helptrickbd.class1.feature.pdf_viewer.domain.engine.PdfRendererEngine
@@ -10,27 +11,48 @@ import com.helptrickbd.class1.feature.pdf_viewer.domain.model.PdfViewMode
 import com.helptrickbd.class1.feature.pdf_viewer.domain.repository.PdfRepository
 import com.helptrickbd.class1.feature.pdf_viewer.domain.usecase.DeleteBookmarkUseCase
 import com.helptrickbd.class1.feature.pdf_viewer.domain.usecase.GetBookmarksUseCase
+import com.helptrickbd.class1.core.security.PdfCryptoEngine
+import com.helptrickbd.class1.core.analytics.domain.AnalyticsTracker
+import com.helptrickbd.class1.core.analytics.domain.CrashReporter
 import com.helptrickbd.class1.feature.pdf_viewer.domain.usecase.SaveReadingProgressUseCase
 import com.helptrickbd.class1.feature.pdf_viewer.domain.usecase.ToggleBookmarkUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
+import com.helptrickbd.class1.R
+import com.helptrickbd.class1.core.util.UiText
+import com.helptrickbd.class1.core.util.StorageProvider
+
+sealed interface PdfViewerUiEvent {
+    data class ShowToast(val message: UiText) : PdfViewerUiEvent
+}
 
 @HiltViewModel
 class PdfViewerViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val pdfRepository: PdfRepository,
     private val saveReadingProgressUseCase: SaveReadingProgressUseCase,
     private val getBookmarksUseCase: GetBookmarksUseCase,
     private val toggleBookmarkUseCase: ToggleBookmarkUseCase,
-    private val deleteBookmarkUseCase: DeleteBookmarkUseCase
+    private val deleteBookmarkUseCase: DeleteBookmarkUseCase,
+    private val cryptoEngine: PdfCryptoEngine,
+    private val analyticsTracker: AnalyticsTracker,
+    private val crashReporter: CrashReporter,
+    private val storageProvider: StorageProvider
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<PdfViewerUiState>(PdfViewerUiState.Loading(0f))
     val uiState: StateFlow<PdfViewerUiState> = _uiState.asStateFlow()
+
+    private val _uiEvent = Channel<PdfViewerUiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
 
     private var activeEngine: PdfRendererEngine? = null
     private var loadedUrl: String? = null
@@ -38,10 +60,19 @@ class PdfViewerViewModel @Inject constructor(
         private set
     private var bookmarkJob: Job? = null
 
+    /**
+     * Loads PDF from URL or Local Cache with DRM protection.
+     * Logic Fix: Only recreates engine if URL has materially changed.
+     */
     fun loadPdf(url: String, bookId: String? = null, initialPage: Int = 1) {
         if (url == loadedUrl && _uiState.value is PdfViewerUiState.Success) return
+        
         loadedUrl = url
         currentBookId = bookId
+
+        viewModelScope.launch {
+            analyticsTracker.logScreenView("PdfViewerScreen", bookId)
+        }
 
         observeBookmarks(bookId)
 
@@ -53,8 +84,10 @@ class PdfViewerViewModel @Inject constructor(
                         _uiState.value = PdfViewerUiState.Loading(state.progress)
                     }
                     is DownloadState.Success -> {
+                        // Lifecycle Fix: Ensure old engine is shredded before opening new one
                         activeEngine?.close()
-                        val engine = PdfRendererEngine(state.file)
+                        
+                        val engine = PdfRendererEngine(context, storageProvider.cacheDir, state.file, cryptoEngine)
                         activeEngine = engine
 
                         if (engine.pageCount > 0) {
@@ -69,11 +102,14 @@ class PdfViewerViewModel @Inject constructor(
                                 isCurrentPageBookmarked = bookmarks.any { it.pageNumber == startPage }
                             )
                         } else {
-                            _uiState.value = PdfViewerUiState.Error("পিডিএফ ফাইলটি সঠিক নয় বা খালি")
+                            _uiState.value = PdfViewerUiState.Empty(UiText.StringResource(R.string.error_invalid_or_empty_pdf))
                         }
                     }
                     is DownloadState.Error -> {
-                        _uiState.value = PdfViewerUiState.Error(state.message)
+                        val errorMsg = state.message
+                        _uiState.value = PdfViewerUiState.Error(UiText.DynamicString(errorMsg))
+                        crashReporter.recordException(Exception("PdfDownloadError: $errorMsg for book $bookId"))
+                        _uiEvent.send(PdfViewerUiEvent.ShowToast(UiText.StringResource(R.string.error_downloading_pdf, errorMsg)))
                     }
                 }
             }
@@ -104,6 +140,9 @@ class PdfViewerViewModel @Inject constructor(
             viewModelScope.launch {
                 saveReadingProgressUseCase(currentBookId, page, currentState.totalPages)
             }
+            viewModelScope.launch {
+                analyticsTracker.logEvent("pdf_page_turned", mapOf("page" to page, "book_id" to currentBookId.orEmpty()))
+            }
         }
     }
 
@@ -111,11 +150,13 @@ class PdfViewerViewModel @Inject constructor(
         val currentState = _uiState.value
         if (currentState is PdfViewerUiState.Success) {
             viewModelScope.launch {
-                toggleBookmarkUseCase(
+                val isAdded = toggleBookmarkUseCase(
                     bookId = currentBookId,
                     pageNumber = currentState.currentPage,
                     title = "পৃষ্ঠা ${currentState.currentPage}"
                 )
+                val msgRes = if (!isAdded) R.string.msg_bookmark_removed else R.string.msg_bookmark_added
+                _uiEvent.send(PdfViewerUiEvent.ShowToast(UiText.StringResource(msgRes)))
             }
         }
     }
@@ -123,6 +164,7 @@ class PdfViewerViewModel @Inject constructor(
     fun deleteBookmark(bookmarkId: Long) {
         viewModelScope.launch {
             deleteBookmarkUseCase(bookmarkId)
+            _uiEvent.send(PdfViewerUiEvent.ShowToast(UiText.StringResource(R.string.msg_bookmark_removed)))
         }
     }
 

@@ -13,4 +13,6 @@ interface CloudSyncRepository {
     suspend fun saveLocalLastSyncTimestamp(timestamp: Long)
     fun getCachedNoticeFlow(): Flow<String?>
     suspend fun saveCachedNotice(notice: String?)
+    fun getMinAppVersionFlow(): Flow<Int>
+    suspend fun saveMinAppVersion(version: Int)
 }

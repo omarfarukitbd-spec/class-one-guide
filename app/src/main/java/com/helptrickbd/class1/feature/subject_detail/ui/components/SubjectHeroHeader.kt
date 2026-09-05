@@ -9,9 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.helptrickbd.class1.R
+import com.helptrickbd.class1.core.designsystem.theme.AppTheme
 import com.helptrickbd.class1.feature.home.domain.model.Book
 import com.helptrickbd.class1.feature.home.ui.model.SubjectThemeResolver
 
@@ -95,13 +99,13 @@ fun SubjectHeroHeader(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "মোট $chapterCount টি অধ্যায়",
+                    text = stringResource(R.string.label_total_chapters, chapterCount),
                     fontSize = 11.sp,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "$progressPercent% সম্পন্ন",
+                    text = stringResource(R.string.label_progress_percent, progressPercent),
                     fontSize = 11.sp,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold
@@ -118,6 +122,24 @@ fun SubjectHeroHeader(
                     .clip(CircleShape),
                 color = MaterialTheme.colorScheme.primary,
                 trackColor = MaterialTheme.colorScheme.surfaceVariant
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SubjectHeroHeaderPreview() {
+    AppTheme {
+        Box(modifier = Modifier.padding(16.dp)) {
+            SubjectHeroHeader(
+                book = Book(
+                    bookId = "1",
+                    title = "আমার বাংলা বই",
+                    subtitle = "প্রথম শ্রেণি",
+                    totalChapters = 24,
+                    progressPercent = 0.45f
+                )
             )
         }
     }

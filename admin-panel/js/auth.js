@@ -164,10 +164,10 @@ async function verifyMasterPin(inputPin) {
     if (!inputPin) return false;
     if (db) {
         try {
-            const configDoc = await db.collection("admin_config").doc("master_auth").get();
+            const configDoc = await db.collection("admin_config").doc("security").get();
             if (configDoc.exists) {
                 const data = configDoc.data();
-                if (data.pin) return String(data.pin) === String(inputPin);
+                if (data.master_pin) return String(data.master_pin) === String(inputPin);
             }
         } catch (e) {
             console.warn("Firestore PIN check notice:", e);

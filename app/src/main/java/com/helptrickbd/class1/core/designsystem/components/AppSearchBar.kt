@@ -13,6 +13,10 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +34,7 @@ fun AppSearchBar(
     placeholderText: String = "বই, ইউনিট বা অধ্যায় খুঁজুন..."
 ) {
     val focusManager = LocalFocusManager.current
+    var localQuery by remember(query) { mutableStateOf(query) }
 
     Surface(
         modifier = modifier.fillMaxWidth(),
@@ -54,8 +59,11 @@ fun AppSearchBar(
             Spacer(modifier = Modifier.width(10.dp))
 
             TextField(
-                value = query,
-                onValueChange = onQueryChange,
+                value = localQuery,
+                onValueChange = { 
+                    localQuery = it
+                    onQueryChange(it) 
+                },
                 placeholder = {
                     Text(
                         text = placeholderText,

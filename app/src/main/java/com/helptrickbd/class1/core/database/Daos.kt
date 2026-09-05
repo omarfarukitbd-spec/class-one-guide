@@ -24,6 +24,9 @@ interface BookDao {
     @Query("SELECT * FROM books ORDER BY title ASC")
     fun getAllBooksFlow(): Flow<List<BookEntity>>
 
+    @Query("SELECT * FROM books WHERE curriculum = :curriculum AND (title LIKE '%' || :query || '%' OR subtitle LIKE '%' || :query || '%')")
+    fun searchBooks(curriculum: Curriculum, query: String): Flow<List<BookEntity>>
+
     @Query("SELECT * FROM books")
     suspend fun getAllBooksDirect(): List<BookEntity>
 
@@ -53,6 +56,18 @@ interface ChapterDao {
 
     @Query("SELECT * FROM chapters")
     fun getAllChaptersFlow(): Flow<List<ChapterEntity>>
+
+    @Query("SELECT * FROM chapters WHERE title LIKE '%' || :query || '%' OR unitNo LIKE '%' || :query || '%'")
+    fun searchChapters(query: String): Flow<List<ChapterEntity>>
+
+    // Efficiently find chapters that belong to a specific curriculum through a JOIN
+    @Query("""
+        SELECT chapters.* FROM chapters 
+        INNER JOIN books ON chapters.bookId = books.bookId 
+        WHERE books.curriculum = :curriculum 
+        AND (chapters.title LIKE '%' || :query || '%' OR chapters.unitNo LIKE '%' || :query || '%')
+    """)
+    fun searchChaptersInCurriculum(curriculum: Curriculum, query: String): Flow<List<ChapterEntity>>
 
     @Query("SELECT COUNT(*) FROM chapters")
     suspend fun getChapterCount(): Int

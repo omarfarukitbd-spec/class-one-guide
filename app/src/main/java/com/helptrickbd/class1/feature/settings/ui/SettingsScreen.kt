@@ -6,6 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -17,13 +18,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.helptrickbd.class1.core.designsystem.components.StandardTopBar
-import com.helptrickbd.class1.feature.home.ui.components.drawer.StorageManagerCard
-import com.helptrickbd.class1.feature.home.ui.components.drawer.ThemeSelectorCard
+import com.helptrickbd.class1.feature.settings.ui.components.StorageManagerCard
+import com.helptrickbd.class1.feature.settings.ui.components.ThemeSelectorCard
 import com.helptrickbd.class1.feature.settings.presentation.SettingsViewModel
 
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
+    onBackClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -34,7 +36,9 @@ fun SettingsScreen(
         topBar = {
             StandardTopBar(
                 title = "সেটিংস ও নিয়ন্ত্রণ",
-                subtitle = "থিম, মেমোরি ও অ্যাপ কনফিগারেশন"
+                subtitle = "থিম, মেমোরি ও অ্যাপ কনফিগারেশন",
+                navigationIcon = if (onBackClick != null) Icons.AutoMirrored.Rounded.ArrowBack else null,
+                onNavigationClick = onBackClick ?: {}
             )
         }
     ) { innerPadding ->

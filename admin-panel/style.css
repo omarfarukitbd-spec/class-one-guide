@@ -110,11 +110,23 @@ body {
 
 /* Universal SVG Icon Engine (Inherits Color & Visibility Globally) */
 svg, .svg-icon, .svg-icon-sm, .svg-icon-lg {
-    fill: currentColor;
-    stroke: none;
     display: inline-block;
     vertical-align: middle;
     flex-shrink: 0;
+}
+svg:not([fill="none"]) {
+    fill: currentColor;
+}
+svg[stroke] {
+    stroke: currentColor;
+}
+.svg-filled {
+    fill: currentColor;
+    stroke: none;
+}
+.svg-stroke {
+    fill: none;
+    stroke: currentColor;
 }
 .svg-icon { width: 20px; height: 20px; }
 .svg-icon-sm { width: 16px; height: 16px; }
@@ -139,6 +151,41 @@ aside.sidebar {
     padding: 20px 16px;
     flex-shrink: 0;
     z-index: 50;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.sidebar.collapsed {
+    width: 80px;
+    padding: 20px 12px;
+}
+
+.sidebar.collapsed .brand-text {
+    display: none;
+}
+.sidebar.collapsed .sidebar-brand {
+    justify-content: center !important;
+    flex-direction: column;
+    padding: 8px 0 20px;
+    gap: 16px;
+}
+.sidebar.collapsed #btn-toggle-sidebar {
+    display: flex;
+}
+
+.sidebar.collapsed .nav-item {
+    justify-content: center;
+    padding: 11px 0;
+}
+.sidebar.collapsed .nav-item span {
+    display: none;
+}
+.sidebar.collapsed .sidebar-footer button span {
+    display: none;
+}
+.sidebar.collapsed .sidebar-footer button {
+    justify-content: center !important;
+    padding: 8px 0;
 }
 
 .sidebar-brand {

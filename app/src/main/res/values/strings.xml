@@ -1,3 +1,152 @@
 <resources>
     <string name="app_name">Class 1 Guide</string>
+    <string name="title_home">প্রথম শ্রেণির গাইড ও পাঠ্যবই</string>
+    <string name="subtitle_home">জাতীয় শিক্ষাক্রম ও পাঠ্যপুস্তক বোর্ড (NCTB)</string>
+    <string name="desc_notifications">নোটিফিকেশন ও নোটিশ</string>
+    <string name="desc_menu">মেনু</string>
+    <string name="error_no_books_found">কোনো বই পাওয়া যায়নি</string>
+    <string name="error_no_search_results">অনুসন্ধানের কোনো ফলাফল পাওয়া যায়নি</string>
+    <string name="msg_added_to_favorites">ফেভারিটে যুক্ত করা হয়েছে</string>
+    <string name="msg_removed_from_favorites">ফেভারিট থেকে সরানো হয়েছে</string>
+    <string name="msg_cache_cleared_successfully">ক্যাশে সফলভাবে ক্লিয়ার করা হয়েছে</string>
+    
+    <string name="error_book_details_not_found">বইয়ের বিবরণ পাওয়া যায়নি</string>
+    <string name="error_no_chapters_for_version">এই ভার্সনের কোনো অধ্যায় নেই</string>
+    <string name="error_loading_book_details">বইয়ের বিবরণ লোড করতে সমস্যা হয়েছে: %1$s</string>
+    <string name="title_subject_detail">বইয়ের বিবরণ</string>
+    <string name="subtitle_subject_detail">অধ্যায় ও রিসোর্স নির্বাচন করুন</string>
+    <string name="desc_remove_bookmark">বুকমার্ক সরান</string>
+    <string name="desc_add_bookmark">বুকমার্কে যোগ করুন</string>
+    <string name="label_total_chapters">মোট %1$d টি অধ্যায়</string>
+    <string name="label_progress_percent">%1$d%% সম্পন্ন</string>
+    <string name="label_chapters_and_syllabus">অধ্যায় ও পাঠ্যসূচি (%1$d টি)</string>
+    <string name="label_reading_options">%1$dটি পড়ার অপশন</string>
+    <string name="desc_collapse">সংকুচিত করুন</string>
+    <string name="desc_expand">প্রসারিত করুন</string>
+    <string name="msg_full_book_suffix">(সম্পূর্ণ বই)</string>
+    <string name="btn_retry">আবার চেষ্টা করুন</string>
+    <string name="error_unknown">অজানা ত্রুটি ঘটেছে</string>
+    <string name="msg_empty_chapters">এই বইয়ের জন্য কোনো অধ্যায় পাওয়া যায়নি</string>
+    <string name="label_read_full_book_cta">সম্পূর্ণ বই একনজরে পড়ুন</string>
+    <string name="label_digital_textbook_desc">বোর্ড অনুমোদিত ডিজিটাল পাঠ্যবই</string>
+    <string name="btn_read">পড়ুন</string>
+
+    <string name="label_matched">মিলেছে: %1$s</string>
+    <string name="label_default_subtitle">প্রথম শ্রেণি</string>
+    <string name="label_read_book">বইটি পড়ুন</string>
+    <string name="label_start_reading">শুরু করুন</string>
+    <string name="label_unit_count">%1$s টি অধ্যায়</string>
+    <string name="error_invalid_or_empty_pdf">পিডিএফ ফাইলটি সঠিক নয় বা খালি</string>
+    <string name="error_downloading_pdf">ডাউনলোডে ত্রুটি: %1$s</string>
+    <string name="msg_bookmark_removed">বুকমার্ক মুছে ফেলা হয়েছে</string>
+    <string name="msg_bookmark_added">বুকমার্ক যোগ করা হয়েছে</string>
+    <string name="msg_page">পৃষ্ঠা %1$s</string>
+
+    <string name="msg_offline_books_coming_soon">অফলাইন বইসমূহ শীঘ্রই আসছে</string>
+    <string name="msg_app_up_to_date">অ্যাপ আপ-টু-ডেট আছে</string>
+    <string name="msg_facebook_group_link">ফেসবুক গ্রুপ লিঙ্ক করা হবে</string>
+    <string name="msg_share_coming_soon">শেয়ার অপশন শীঘ্রই আসছে</string>
+    <string name="msg_play_store_link">প্লে-স্টোর লিঙ্ক করা হবে</string>
+    <string name="msg_privacy_policy">প্রাইভেসি পলিসি</string>
+    <string name="msg_developer_info">ডেভেলপার ইনফো</string>
+
+    <!-- Kids Zone / Learn Hub Strings -->
+    <string name="kids_zone_title">কিডস জোন</string>
+    <string name="kids_zone_subtitle">ছোটদের আনন্দের পাঠশালা</string>
+    <string name="kids_zone_tagline">এসো আনন্দের সাথে বর্ণমালা ও আঁকাআঁকি শিখি!</string>
+    <string name="kids_zone_badge_stat">৭টি মজার বিভাগ</string>
+    
+    <string name="kids_cat_vowels_title">স্বরবর্ণ</string>
+    <string name="kids_cat_vowels_desc">অ থেকে ঔ পর্যন্ত বর্ণমালা</string>
+    <string name="kids_cat_vowels_badge">১১টি বর্ণ</string>
+    
+    <string name="kids_cat_consonants_title">ব্যঞ্জনবর্ণ</string>
+    <string name="kids_cat_consonants_desc">ক থেকে ঁ পর্যন্ত বর্ণমালা</string>
+    <string name="kids_cat_consonants_badge">৩৯টি বর্ণ</string>
+    
+    <string name="kids_cat_slate_title">ডিজিটাল স্লেট</string>
+    <string name="kids_cat_slate_desc">হাত ঘুরিয়ে আঁকাআঁকি ও লেখা</string>
+    <string name="kids_cat_slate_badge">আঁকাআঁকি</string>
+    
+    <string name="kids_cat_vowel_words_title">স্বরবর্ণের শব্দ</string>
+    <string name="kids_cat_vowel_words_desc">ছবি ও বাক্যসহ বর্ণ শেখা</string>
+    <string name="kids_cat_vowel_words_badge">অডিওসহ</string>
+    
+    <string name="kids_cat_consonant_words_title">ব্যঞ্জনবর্ণের শব্দ</string>
+    <string name="kids_cat_consonant_words_desc">প্রতিটি বর্ণের মজার শব্দ</string>
+    <string name="kids_cat_consonant_words_badge">চিত্রসহ</string>
+    
+    <string name="kids_cat_rhymes_title">মিষ্টি ছড়া</string>
+    <string name="kids_cat_rhymes_desc">সুর ও ছন্দে আনন্দের পাঠ</string>
+    <string name="kids_cat_rhymes_badge">অডিও ছড়া</string>
+    
+    <string name="kids_cat_poems_title">মজার কবিতা</string>
+    <string name="kids_cat_poems_desc">ছোটদের প্রিয় প্রিয় কবিতা</string>
+    <string name="kids_cat_poems_badge">কাব্য পাঠ</string>
+
+    <!-- Phonics Screen Strings -->
+    <string name="phonics_title">বাংলা বর্ণমালা ও সাউন্ডবোর্ড</string>
+    <string name="phonics_tab_vowels">স্বরবর্ণ (১১)</string>
+    <string name="phonics_tab_consonants">ব্যঞ্জনবর্ণ (৩৯)</string>
+    <string name="phonics_mode_alphabet">বর্ণমালা</string>
+    <string name="phonics_mode_words">শব্দ ও বাক্য</string>
+    <string name="phonics_playing">উচ্চারণ বাজছে...</string>
+    <string name="phonics_tap_to_listen">শুনতে ট্যাপ করুন</string>
+    <string name="btn_replay">আবার শুনুন</string>
+    <string name="label_letter">বর্ণ: %1$s</string>
+    <string name="label_word">শব্দ: %1$s</string>
+    <string name="phonics_mode_soundboard">সাউন্ডবোর্ড</string>
+    <string name="phonics_mode_storybook">সচিত্র বই</string>
+    <string name="phonics_mode_word_builder">শব্দ তৈরি</string>
+    <string name="phonics_auto_play">অটো প্লে</string>
+    <string name="phonics_auto_pause">থামাও</string>
+    <string name="word_builder_title">সঠিক বর্ণ সাজিয়ে শব্দ তৈরি করো</string>
+    <string name="word_builder_hint">নিচের বর্ণে স্পর্শ করো</string>
+    <string name="word_builder_success">চমৎকার! সঠিক শব্দ তৈরি হয়েছে!</string>
+    <string name="word_builder_reset">পুনরায়</string>
+    <string name="word_builder_next">পরবর্তী শব্দ</string>
+
+    <!-- Global Exit Dialog Strings -->
+    <string name="exit_dialog_title">অ্যাপ থেকে প্রস্থান</string>
+    <string name="exit_dialog_message">আপনি কি নিশ্চিত যে আপনি অ্যাপটি বন্ধ করতে চান?</string>
+    <string name="exit_dialog_confirm">হ্যাঁ, প্রস্থান করুন</string>
+    <string name="exit_dialog_cancel">না</string>
+
+    <!-- Slate Canvas Strings -->
+    <string name="slate_title">ডিজিটাল স্লেট</string>
+    <string name="slate_subtitle">হাতের লেখা অনুশীলন ও মুক্ত ড্রয়িং</string>
+    <string name="slate_tool_chalk">চক</string>
+    <string name="slate_tool_eraser">ইরেজার</string>
+    <string name="slate_tool_undo">পূর্বাবস্থায় ফেরান</string>
+    <string name="slate_tool_redo">পুনরায় আনুন</string>
+    <string name="slate_tool_clear">স্লেট পরিষ্কার</string>
+    <string name="slate_tool_sound_on">শব্দ চালু</string>
+    <string name="slate_tool_sound_off">শব্দ বন্ধ</string>
+    <string name="slate_brush_chalk">চক</string>
+    <string name="slate_brush_neon">নিয়ন আলো</string>
+    <string name="slate_brush_marker">মার্কার</string>
+    <string name="slate_brush_pencil">পেন্সিল</string>
+    <string name="slate_size_thin">চিকন</string>
+    <string name="slate_size_medium">মাঝারি</string>
+    <string name="slate_size_thick">মোটা</string>
+    <string name="slate_theme_blackboard">কালো স্লেট</string>
+    <string name="slate_theme_greenboard">সবুজ বোর্ড</string>
+    <string name="slate_theme_neon">নিয়ন স্লেট</string>
+    <string name="slate_theme_paper">ড্রয়িং খাতা</string>
+    <string name="slate_cat_vowels">স্বরবর্ণ</string>
+    <string name="slate_cat_consonants">ব্যঞ্জনবর্ণ</string>
+    <string name="slate_cat_numbers">সংখ্যা</string>
+    <string name="slate_cat_shapes">আকার</string>
+    <string name="slate_cat_freehand">মুক্ত আর্ট</string>
+    <string name="slate_listen_voice">উচ্চারণ শুনুন</string>
+    <string name="slate_clear_dialog_title">স্লেট পরিষ্কার করতে চান?</string>
+    <string name="slate_clear_dialog_msg">স্লেটের সমস্ত দাগ মুছে নতুন করে শুরু করতে চান?</string>
+    <string name="slate_clear_dialog_confirm">হ্যাঁ, মুছুন</string>
+    <string name="slate_clear_dialog_cancel">না, থাক</string>
+    <string name="slate_celebration_title">চমৎকার! দারুণ হয়েছে!</string>
+    <string name="slate_save_art">ছবি সেভ</string>
+    <string name="slate_save_success">আপনার সুন্দর আঁকা ডিভাইসে সংরক্ষিত হয়েছে!</string>
+    <string name="slate_guide_toggle_on">হাত ঘোরানো গাইড চালু</string>
+    <string name="slate_guide_toggle_off">হাত ঘোরানো গাইড বন্ধ</string>
+    <string name="slate_guide_start_here">এখান থেকে শুরু করো</string>
 </resources>

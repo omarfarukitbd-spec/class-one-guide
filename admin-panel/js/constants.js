@@ -12,19 +12,6 @@ const SVG_ICONS = {
     down: `<svg class="svg-icon-sm" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>`
 };
 
-const BENGALI_VOWELS = [
-    { letter: "অ", name: "স্বর অ", word: "অজগর", sentence: "অ তে অজগর! অজগরটি আসছে তেড়ে!", icon: "🐍", color: "#10B981", audioUrl: "audio/shorboborno/vowel_1_o.mp3" },
-    { letter: "আ", name: "স্বর আ", word: "আম", sentence: "আ তে আম! আমটি আমি খাব পেড়ে!", icon: "🥭", color: "#F59E0B", audioUrl: "audio/shorboborno/vowel_2_aa.mp3" },
-    { letter: "ই", name: "হ্রস্ব ই", word: "ইলিশ", sentence: "ই তে ইলিশ! ইলিশ ভাজা খেতে মজা!", icon: "🐟", color: "#06B6D4", audioUrl: "audio/shorboborno/vowel_3_i.mp3" },
-    { letter: "ঈ", name: "দীর্ঘ ঈ", word: "ঈগল", sentence: "ঈ তে ঈগল! ঈগল পাখি আকাশে ওড়ে!", icon: "🦅", color: "#8B5CF6", audioUrl: "audio/shorboborno/vowel_4_ee.mp3" },
-    { letter: "উ", name: "হ্রস্ব উ", word: "উট", sentence: "উ তে উট! উট চলেছে মরুর দেশে!", icon: "🐫", color: "#EC4899", audioUrl: "audio/shorboborno/vowel_5_u.mp3" },
-    { letter: "ঊ", name: "দীর্ঘ ঊ", word: "ঊষা", sentence: "ঊ তে ঊষা! ঊষার আলো মিষ্টি আলো!", icon: "🌅", color: "#F97316", audioUrl: "audio/shorboborno/vowel_6_oo.mp3" },
-    { letter: "ঋ", name: "ঋ", word: "ঋষি", sentence: "ঋ তে ঋষি! ঋষি মশাই বসেন ধ্যানে!", icon: "🧘‍♂️", color: "#14B8A6", audioUrl: "audio/shorboborno/vowel_7_ri.mp3" },
-    { letter: "এ", name: "এ", word: "একতারা", sentence: "এ তে একতারা! একতারাটি বাজে বেশ!", icon: "🪕", color: "#3B82F6", audioUrl: "audio/shorboborno/vowel_8_e.mp3" },
-    { letter: "ঐ", name: "ঐ", word: "ঐরাবত", sentence: "ঐ তে ঐরাবত! ঐরাবত হাতি চলে হেলেদুলে!", icon: "🐘", color: "#6366F1", audioUrl: "audio/shorboborno/vowel_9_oi.mp3" },
-    { letter: "ও", name: "ও", word: "ওল", sentence: "ও তে ওল! ওল খেলে কিন্তু ধরবে গলা!", icon: "🥔", color: "#84CC16", audioUrl: "audio/shorboborno/vowel_10_o.mp3" },
-    { letter: "ঔ", name: "ঔ", word: "ঔষধ", sentence: "ঔ তে ঔষধ! ঔষধ খেলে রোগ সারে!", icon: "💊", color: "#E11D48", audioUrl: "audio/shorboborno/vowel_11_ou.mp3" }
-];
 
 const INITIAL_CLASS_1_BOOKS = [
     {
@@ -35,16 +22,16 @@ const INITIAL_CLASS_1_BOOKS = [
         pdfUrl: "bangla_class1_full.pdf",
         availableVersions: ["BANGLA", "ENGLISH"],
         chapters: [
-            { chapterId: "sb_c1", unitNo: "ইউনিট ১", title: "আমার পরিচয় ও বিদ্যালয়", version: "BANGLA", resources: [{ resourceId: "r1", title: "মূল বই পড়ুন", pdfUrl: "bangla_u1_text.pdf", type: "TEXTBOOK" }, { resourceId: "r2", title: "গাইডবুক পড়ুন", pdfUrl: "bangla_u1_guide.pdf", type: "GUIDEBOOK" }, { resourceId: "r3", title: "মডেল টেস্ট", pdfUrl: "bangla_u1_test.pdf", type: "MODEL_TEST" }] },
-            { chapterId: "sb_c2", unitNo: "ইউনিট ২", title: "বর্ণ শিখি: স্বরবর্ণ (অ থেকে ঔ)", version: "BANGLA", resources: [{ resourceId: "r4", title: "মূল বই পড়ুন", pdfUrl: "bangla_u2_text.pdf", type: "TEXTBOOK" }, { resourceId: "r5", title: "গাইডবুক পড়ুন", pdfUrl: "bangla_u2_guide.pdf", type: "GUIDEBOOK" }] },
-            { chapterId: "sb_c3", unitNo: "ইউনিট ৩", title: "বর্ণ শিখি: ব্যঞ্জনবর্ণ - ১ম ভাগ (ক থেকে ঞ)", version: "BANGLA", resources: [{ resourceId: "r6", title: "মূল বই পড়ুন", pdfUrl: "bangla_u3_text.pdf", type: "TEXTBOOK" }, { resourceId: "r7", title: "গাইডবুক পড়ুন", pdfUrl: "bangla_u3_guide.pdf", type: "GUIDEBOOK" }] },
-            { chapterId: "sb_c4", unitNo: "ইউনিট ৪", title: "বর্ণ শিখি: ব্যঞ্জনবর্ণ - ২য় ভাগ (ট থেকে ন)", version: "BANGLA", resources: [{ resourceId: "r8", title: "মূল বই পড়ুন", pdfUrl: "bangla_u4_text.pdf", type: "TEXTBOOK" }, { resourceId: "r9", title: "গাইডবুক পড়ুন", pdfUrl: "bangla_u4_guide.pdf", type: "GUIDEBOOK" }] },
-            { chapterId: "sb_c5", unitNo: "ইউনিট ৫", title: "বর্ণ শিখি: ব্যঞ্জনবর্ণ - ৩য় ভাগ (প থেকে ম)", version: "BANGLA", resources: [{ resourceId: "r10", title: "মূল বই পড়ুন", pdfUrl: "bangla_u5_text.pdf", type: "TEXTBOOK" }, { resourceId: "r11", title: "গাইডবুক পড়ুন", pdfUrl: "bangla_u5_guide.pdf", type: "GUIDEBOOK" }] },
-            { chapterId: "sb_c6", unitNo: "ইউনিট ৬", title: "বর্ণ শিখি: ব্যঞ্জনবর্ণ - ৪র্থ ভাগ (য থেকে ঁ)", version: "BANGLA", resources: [{ resourceId: "r12", title: "মূল বই পড়ুন", pdfUrl: "bangla_u6_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "sb_c7", unitNo: "ইউনিট ৭", title: "কারচিহ্ন ও সহজ শব্দ গঠন (া থেকে ৌ)", version: "BANGLA", resources: [{ resourceId: "r13", title: "মূল বই পড়ুন", pdfUrl: "bangla_u7_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "sb_c8", unitNo: "ইউনিট ৮", title: "মজার মজার ছড়া ও কবিতা আবৃত্তি", version: "BANGLA", resources: [{ resourceId: "r14", title: "মূল বই পড়ুন", pdfUrl: "bangla_u8_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "sb_c9", unitNo: "ইউনিট ৯", title: "শিক্ষণীয় গল্প ও নীতিশিক্ষা", version: "BANGLA", resources: [{ resourceId: "r15", title: "মূল বই পড়ুন", pdfUrl: "bangla_u9_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "sb_c10", unitNo: "ইউনিট ১০", title: "আমাদের প্রিয় বাংলাদেশ ও জাতীয় প্রতীক", version: "BANGLA", resources: [{ resourceId: "r16", title: "মূল বই পড়ুন", pdfUrl: "bangla_u10_text.pdf", type: "TEXTBOOK" }] }
+            { chapterId: "sb_c1", unitNo: "পাঠ ১", title: "আমার পরিচয়", version: "BANGLA", resources: [{ resourceId: "r1", title: "মূল বই পড়ুন", pdfUrl: "bangla_u1_text.pdf", type: "TEXTBOOK" }, { resourceId: "r2", title: "গাইডবুক পড়ুন", pdfUrl: "bangla_u1_guide.pdf", type: "GUIDEBOOK" }] },
+            { chapterId: "sb_c2", unitNo: "পাঠ ২", title: "আমি ও আমার বিদ্যালয়", version: "BANGLA", resources: [{ resourceId: "r4", title: "মূল বই পড়ুন", pdfUrl: "bangla_u2_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "sb_c3", unitNo: "পাঠ ৩", title: "আমরা কী কী কাজ করি", version: "BANGLA", resources: [{ resourceId: "r6", title: "মূল বই পড়ুন", pdfUrl: "bangla_u3_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "sb_c4", unitNo: "পাঠ ৪", title: "ছড়া - আতা গাছে তোতা পাখি", version: "BANGLA", resources: [{ resourceId: "r8", title: "মূল বই পড়ুন", pdfUrl: "bangla_u4_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "sb_c5", unitNo: "পাঠ ৫", title: "গল্প - কাক ও কলসি", version: "BANGLA", resources: [{ resourceId: "r10", title: "মূল বই পড়ুন", pdfUrl: "bangla_u5_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "sb_c6", unitNo: "পাঠ ৬", title: "বর্ণ শিখি (অ - ঔ)", version: "BANGLA", resources: [{ resourceId: "r12", title: "মূল বই পড়ুন", pdfUrl: "bangla_u6_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "sb_c7", unitNo: "পাঠ ৭", title: "বর্ণ শিখি (ক - ঞ)", version: "BANGLA", resources: [{ resourceId: "r13", title: "মূল বই পড়ুন", pdfUrl: "bangla_u7_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "sb_c8", unitNo: "পাঠ ৮", title: "বর্ণ শিখি (ট - ন)", version: "BANGLA", resources: [{ resourceId: "r14", title: "মূল বই পড়ুন", pdfUrl: "bangla_u8_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "sb_c9", unitNo: "পাঠ ৯", title: "বর্ণ শিখি (প - ম)", version: "BANGLA", resources: [{ resourceId: "r15", title: "মূল বই পড়ুন", pdfUrl: "bangla_u9_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "sb_c10", unitNo: "পাঠ ১০", title: "ছড়া - বাক বাকুম পায়রা", version: "BANGLA", resources: [{ resourceId: "r16", title: "মূল বই পড়ুন", pdfUrl: "bangla_u10_text.pdf", type: "TEXTBOOK" }] }
         ]
     },
     {
@@ -55,16 +42,16 @@ const INITIAL_CLASS_1_BOOKS = [
         pdfUrl: "english_class1_full.pdf",
         availableVersions: ["BANGLA", "ENGLISH"],
         chapters: [
-            { chapterId: "se_c1", unitNo: "Unit 1", title: "Greetings & Farewells (Hello, Hi, Goodbye)", version: "BANGLA", resources: [{ resourceId: "se_r1", title: "Read Textbook", pdfUrl: "eng_u1_text.pdf", type: "TEXTBOOK" }, { resourceId: "se_r2", title: "Guide & Translation", pdfUrl: "eng_u1_guide.pdf", type: "GUIDEBOOK" }] },
-            { chapterId: "se_c2", unitNo: "Unit 2", title: "Alphabet & Phonics (Letters A to F)", version: "BANGLA", resources: [{ resourceId: "se_r3", title: "Read Textbook", pdfUrl: "eng_u2_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "se_c3", unitNo: "Unit 3", title: "Numbers & Counting (Numbers 1 to 5)", version: "BANGLA", resources: [{ resourceId: "se_r4", title: "Read Textbook", pdfUrl: "eng_u3_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "se_c4", unitNo: "Unit 4", title: "Alphabet & Words (Letters G to L)", version: "BANGLA", resources: [{ resourceId: "se_r5", title: "Read Textbook", pdfUrl: "eng_u4_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "se_c5", unitNo: "Unit 5", title: "Classroom Commands & Action Verbs", version: "BANGLA", resources: [{ resourceId: "se_r6", title: "Read Textbook", pdfUrl: "eng_u5_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "se_c6", unitNo: "Unit 6", title: "Alphabet & Words (Letters M to R)", version: "BANGLA", resources: [{ resourceId: "se_r7", title: "Read Textbook", pdfUrl: "eng_u6_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "se_c7", unitNo: "Unit 7", title: "Numbers & Quantities (Numbers 6 to 10)", version: "BANGLA", resources: [{ resourceId: "se_r8", title: "Read Textbook", pdfUrl: "eng_u7_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "se_c8", unitNo: "Unit 8", title: "Alphabet & Words (Letters S to Z)", version: "BANGLA", resources: [{ resourceId: "se_r9", title: "Read Textbook", pdfUrl: "eng_u8_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "se_c9", unitNo: "Unit 9", title: "Colours, Shapes & Nature", version: "BANGLA", resources: [{ resourceId: "se_r10", title: "Read Textbook", pdfUrl: "eng_u9_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "se_c10", unitNo: "Unit 10", title: "Rhymes, Stories & Review Activities", version: "BANGLA", resources: [{ resourceId: "se_r11", title: "Read Textbook", pdfUrl: "eng_u10_text.pdf", type: "TEXTBOOK" }] }
+            { chapterId: "se_c1", unitNo: "Unit 1", title: "Greetings", version: "BANGLA", resources: [{ resourceId: "se_r1", title: "Read Textbook", pdfUrl: "eng_u1_text.pdf", type: "TEXTBOOK" }, { resourceId: "se_r2", title: "Guide & Translation", pdfUrl: "eng_u1_guide.pdf", type: "GUIDEBOOK" }] },
+            { chapterId: "se_c2", unitNo: "Unit 2", title: "Introductions and Alphabet", version: "BANGLA", resources: [{ resourceId: "se_r3", title: "Read Textbook", pdfUrl: "eng_u2_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "se_c3", unitNo: "Unit 3", title: "Saying Goodbye", version: "BANGLA", resources: [{ resourceId: "se_r4", title: "Read Textbook", pdfUrl: "eng_u3_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "se_c4", unitNo: "Unit 4", title: "Numbers (1-3)", version: "BANGLA", resources: [{ resourceId: "se_r5", title: "Read Textbook", pdfUrl: "eng_u4_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "se_c5", unitNo: "Unit 5", title: "Rhyme (Two Little Black Birds)", version: "BANGLA", resources: [{ resourceId: "se_r6", title: "Read Textbook", pdfUrl: "eng_u5_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "se_c6", unitNo: "Unit 6", title: "Alphabet (A to E)", version: "BANGLA", resources: [{ resourceId: "se_r7", title: "Read Textbook", pdfUrl: "eng_u6_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "se_c7", unitNo: "Unit 7", title: "Alphabet (F to J)", version: "BANGLA", resources: [{ resourceId: "se_r8", title: "Read Textbook", pdfUrl: "eng_u7_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "se_c8", unitNo: "Unit 8", title: "Alphabet (K to O)", version: "BANGLA", resources: [{ resourceId: "se_r9", title: "Read Textbook", pdfUrl: "eng_u8_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "se_c9", unitNo: "Unit 9", title: "Alphabet (P to T)", version: "BANGLA", resources: [{ resourceId: "se_r10", title: "Read Textbook", pdfUrl: "eng_u9_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "se_c10", unitNo: "Unit 10", title: "Alphabet (U to Z)", version: "BANGLA", resources: [{ resourceId: "se_r11", title: "Read Textbook", pdfUrl: "eng_u10_text.pdf", type: "TEXTBOOK" }] }
         ]
     },
     {
@@ -75,16 +62,16 @@ const INITIAL_CLASS_1_BOOKS = [
         pdfUrl: "math_class1_full.pdf",
         availableVersions: ["BANGLA", "ENGLISH"],
         chapters: [
-            { chapterId: "sm_c1", unitNo: "অধ্যায় ১", title: "তুলনা করি (কম-বেশি, ছোট-বড়, হালকা-ভারী)", version: "BANGLA", resources: [{ resourceId: "sm_r1", title: "মূল বই পড়ুন", pdfUrl: "math_u1_text.pdf", type: "TEXTBOOK" }, { resourceId: "sm_r2", title: "সমাধান ও গাইড", pdfUrl: "math_u1_guide.pdf", type: "GUIDEBOOK" }] },
-            { chapterId: "sm_c2", unitNo: "অধ্যায় ২", title: "গণনা ও সংখ্যা (১ থেকে ৫)", version: "BANGLA", resources: [{ resourceId: "sm_r3", title: "মূল বই পড়ুন", pdfUrl: "math_u2_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "sm_c3", unitNo: "অধ্যায় ৩", title: "গণনা ও সংখ্যা (৬ থেকে ১০)", version: "BANGLA", resources: [{ resourceId: "sm_r4", title: "মূল বই পড়ুন", pdfUrl: "math_u3_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "sm_c4", unitNo: "অধ্যায় ৪", title: "শূন্য (০) এর ধারণা ও ক্রমবাচক সংখ্যা", version: "BANGLA", resources: [{ resourceId: "sm_r5", title: "মূল বই পড়ুন", pdfUrl: "math_u4_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "sm_c5", unitNo: "অধ্যায় ৫", title: "যোগের ধারণা (১ থেকে ৯ পর্যন্ত)", version: "BANGLA", resources: [{ resourceId: "sm_r6", title: "মূল বই পড়ুন", pdfUrl: "math_u5_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "sm_c6", unitNo: "অধ্যায় ৬", title: "বিয়োগের ধারণা (১ থেকে ৯ পর্যন্ত)", version: "BANGLA", resources: [{ resourceId: "sm_r7", title: "মূল বই পড়ুন", pdfUrl: "math_u6_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "sm_c7", unitNo: "অধ্যায় ৭", title: "১১ থেকে ২০ পর্যন্ত সংখ্যা ও যোগ-বিয়োগ", version: "BANGLA", resources: [{ resourceId: "sm_r8", title: "মূল বই পড়ুন", pdfUrl: "math_u7_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "sm_c8", unitNo: "অধ্যায় ৮", title: "বিভিন্ন জ্যামিতিক আকৃতি (গোল, তিনকোনা, চারকোনা)", version: "BANGLA", resources: [{ resourceId: "sm_r9", title: "মূল বই পড়ুন", pdfUrl: "math_u8_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "sm_c9", unitNo: "অধ্যায় ৯", title: "টাকা ও পয়সার পরিচিতি ও সহজ হিসাব", version: "BANGLA", resources: [{ resourceId: "sm_r10", title: "মূল বই পড়ুন", pdfUrl: "math_u9_text.pdf", type: "TEXTBOOK" }] },
-            { chapterId: "sm_c10", unitNo: "অধ্যায় ১০", title: "দিন, রাত, সময় ও সপ্তাহের ৭ দিন", version: "BANGLA", resources: [{ resourceId: "sm_r11", title: "মূল বই পড়ুন", pdfUrl: "math_u10_text.pdf", type: "TEXTBOOK" }] }
+            { chapterId: "sm_c1", unitNo: "অধ্যায় ১", title: "তুলনা করি (কম-বেশি, ছোট-বড়)", version: "BANGLA", resources: [{ resourceId: "sm_r1", title: "মূল বই পড়ুন", pdfUrl: "math_u1_text.pdf", type: "TEXTBOOK" }, { resourceId: "sm_r2", title: "সমাধান ও গাইড", pdfUrl: "math_u1_guide.pdf", type: "GUIDEBOOK" }] },
+            { chapterId: "sm_c2", unitNo: "অধ্যায় ২", title: "গণনা (১ থেকে ৫)", version: "BANGLA", resources: [{ resourceId: "sm_r3", title: "মূল বই পড়ুন", pdfUrl: "math_u2_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "sm_c3", unitNo: "অধ্যায় ৩", title: "সংখ্যা (১ থেকে ১০)", version: "BANGLA", resources: [{ resourceId: "sm_r4", title: "মূল বই পড়ুন", pdfUrl: "math_u3_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "sm_c4", unitNo: "অধ্যায় ৪", title: "শূন্য (০) এর ধারণা", version: "BANGLA", resources: [{ resourceId: "sm_r5", title: "মূল বই পড়ুন", pdfUrl: "math_u4_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "sm_c5", unitNo: "অধ্যায় ৫", title: "যোগের ধারণা", version: "BANGLA", resources: [{ resourceId: "sm_r6", title: "মূল বই পড়ুন", pdfUrl: "math_u5_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "sm_c6", unitNo: "অধ্যায় ৬", title: "বিয়োগের ধারণা", version: "BANGLA", resources: [{ resourceId: "sm_r7", title: "মূল বই পড়ুন", pdfUrl: "math_u6_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "sm_c7", unitNo: "অধ্যায় ৭", title: "সংখ্যা (১১ থেকে ২০)", version: "BANGLA", resources: [{ resourceId: "sm_r8", title: "মূল বই পড়ুন", pdfUrl: "math_u7_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "sm_c8", unitNo: "অধ্যায় ৮", title: "জ্যামিতিক আকৃতি", version: "BANGLA", resources: [{ resourceId: "sm_r9", title: "মূল বই পড়ুন", pdfUrl: "math_u8_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "sm_c9", unitNo: "অধ্যায় ৯", title: "প্যাটার্ন ও পরিমাপ", version: "BANGLA", resources: [{ resourceId: "sm_r10", title: "মূল বই পড়ুন", pdfUrl: "math_u9_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "sm_c10", unitNo: "অধ্যায় ১০", title: "বাংলাদেশের মুদ্রা ও নোট", version: "BANGLA", resources: [{ resourceId: "sm_r11", title: "মূল বই পড়ুন", pdfUrl: "math_u10_text.pdf", type: "TEXTBOOK" }] }
         ]
     },
     {
@@ -138,6 +125,66 @@ const INITIAL_CLASS_1_BOOKS = [
             { chapterId: "mar_c1", unitNo: "আদ-দারসুল আউয়াল", title: "আত্মপরিচয় ও সম্ভাষণ (মারহাবান, কাইফা হালুক)", version: "BANGLA", resources: [{ resourceId: "mar_r1", title: "মূল বই পড়ুন", pdfUrl: "arabic_u1_text.pdf", type: "TEXTBOOK" }] },
             { chapterId: "mar_c2", unitNo: "আদ-দারসুস সানী", title: "বিদ্যালয় ও সহপাঠী (হাযা কিতাবুন, হাযা ক্বলমুন)", version: "BANGLA", resources: [{ resourceId: "mar_r2", title: "মূল বই পড়ুন", pdfUrl: "arabic_u2_text.pdf", type: "TEXTBOOK" }] },
             { chapterId: "mar_c3", unitNo: "আদ-দারসুস সালিস", title: "ফলমূল ও পশুপাখির নাম (তুফফাহুন, আসাদুন)", version: "BANGLA", resources: [{ resourceId: "mar_r3", title: "মূল বই পড়ুন", pdfUrl: "arabic_u3_text.pdf", type: "TEXTBOOK" }] }
+        ]
+    },
+    {
+        bookId: "madr_bangla",
+        title: "আমার বাংলা বই (ইবতেদায়ী)",
+        subtitle: "ইবতেদায়ী ১ম শ্রেণি • NCTB",
+        curriculum: "MADRASAH",
+        pdfUrl: "madr_bangla_full.pdf",
+        availableVersions: ["BANGLA", "ENGLISH"],
+        chapters: [
+            { chapterId: "mb_c1", unitNo: "পাঠ ১", title: "আমার পরিচয়", version: "BANGLA", resources: [{ resourceId: "mb_r1", title: "মূল বই পড়ুন", pdfUrl: "bangla_u1_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mb_c2", unitNo: "পাঠ ২", title: "আমি ও আমার বিদ্যালয়", version: "BANGLA", resources: [{ resourceId: "mb_r4", title: "মূল বই পড়ুন", pdfUrl: "bangla_u2_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mb_c3", unitNo: "পাঠ ৩", title: "আমরা কী কী কাজ করি", version: "BANGLA", resources: [{ resourceId: "mb_r6", title: "মূল বই পড়ুন", pdfUrl: "bangla_u3_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mb_c4", unitNo: "পাঠ ৪", title: "ছড়া - আতা গাছে তোতা পাখি", version: "BANGLA", resources: [{ resourceId: "mb_r8", title: "মূল বই পড়ুন", pdfUrl: "bangla_u4_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mb_c5", unitNo: "পাঠ ৫", title: "গল্প - কাক ও কলসি", version: "BANGLA", resources: [{ resourceId: "mb_r10", title: "মূল বই পড়ুন", pdfUrl: "bangla_u5_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mb_c6", unitNo: "পাঠ ৬", title: "বর্ণ শিখি (অ - ঔ)", version: "BANGLA", resources: [{ resourceId: "mb_r12", title: "মূল বই পড়ুন", pdfUrl: "bangla_u6_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mb_c7", unitNo: "পাঠ ৭", title: "বর্ণ শিখি (ক - ঞ)", version: "BANGLA", resources: [{ resourceId: "mb_r13", title: "মূল বই পড়ুন", pdfUrl: "bangla_u7_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mb_c8", unitNo: "পাঠ ৮", title: "বর্ণ শিখি (ট - ন)", version: "BANGLA", resources: [{ resourceId: "mb_r14", title: "মূল বই পড়ুন", pdfUrl: "bangla_u8_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mb_c9", unitNo: "পাঠ ৯", title: "বর্ণ শিখি (প - ম)", version: "BANGLA", resources: [{ resourceId: "mb_r15", title: "মূল বই পড়ুন", pdfUrl: "bangla_u9_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mb_c10", unitNo: "পাঠ ১০", title: "ছড়া - বাক বাকুম পায়রা", version: "BANGLA", resources: [{ resourceId: "mb_r16", title: "মূল বই পড়ুন", pdfUrl: "bangla_u10_text.pdf", type: "TEXTBOOK" }] }
+        ]
+    },
+    {
+        bookId: "madr_english",
+        title: "English for Today (ইবতেদায়ী)",
+        subtitle: "Primary Curriculum Class 1 • NCTB",
+        curriculum: "MADRASAH",
+        pdfUrl: "madr_english_full.pdf",
+        availableVersions: ["BANGLA", "ENGLISH"],
+        chapters: [
+            { chapterId: "me_c1", unitNo: "Unit 1", title: "Greetings", version: "BANGLA", resources: [{ resourceId: "me_r1", title: "Read Textbook", pdfUrl: "eng_u1_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "me_c2", unitNo: "Unit 2", title: "Introductions and Alphabet", version: "BANGLA", resources: [{ resourceId: "me_r3", title: "Read Textbook", pdfUrl: "eng_u2_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "me_c3", unitNo: "Unit 3", title: "Saying Goodbye", version: "BANGLA", resources: [{ resourceId: "me_r4", title: "Read Textbook", pdfUrl: "eng_u3_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "me_c4", unitNo: "Unit 4", title: "Numbers (1-3)", version: "BANGLA", resources: [{ resourceId: "me_r5", title: "Read Textbook", pdfUrl: "eng_u4_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "me_c5", unitNo: "Unit 5", title: "Rhyme (Two Little Black Birds)", version: "BANGLA", resources: [{ resourceId: "me_r6", title: "Read Textbook", pdfUrl: "eng_u5_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "me_c6", unitNo: "Unit 6", title: "Alphabet (A to E)", version: "BANGLA", resources: [{ resourceId: "me_r7", title: "Read Textbook", pdfUrl: "eng_u6_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "me_c7", unitNo: "Unit 7", title: "Alphabet (F to J)", version: "BANGLA", resources: [{ resourceId: "me_r8", title: "Read Textbook", pdfUrl: "eng_u7_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "me_c8", unitNo: "Unit 8", title: "Alphabet (K to O)", version: "BANGLA", resources: [{ resourceId: "me_r9", title: "Read Textbook", pdfUrl: "eng_u8_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "me_c9", unitNo: "Unit 9", title: "Alphabet (P to T)", version: "BANGLA", resources: [{ resourceId: "me_r10", title: "Read Textbook", pdfUrl: "eng_u9_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "me_c10", unitNo: "Unit 10", title: "Alphabet (U to Z)", version: "BANGLA", resources: [{ resourceId: "me_r11", title: "Read Textbook", pdfUrl: "eng_u10_text.pdf", type: "TEXTBOOK" }] }
+        ]
+    },
+    {
+        bookId: "madr_math",
+        title: "প্রাথমিক গণিত (ইবতেদায়ী)",
+        subtitle: "ইবতেদায়ী ১ম শ্রেণি • NCTB",
+        curriculum: "MADRASAH",
+        pdfUrl: "madr_math_full.pdf",
+        availableVersions: ["BANGLA", "ENGLISH"],
+        chapters: [
+            { chapterId: "mm_c1", unitNo: "অধ্যায় ১", title: "তুলনা করি (কম-বেশি, ছোট-বড়)", version: "BANGLA", resources: [{ resourceId: "mm_r1", title: "মূল বই পড়ুন", pdfUrl: "math_u1_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mm_c2", unitNo: "অধ্যায় ২", title: "গণনা (১ থেকে ৫)", version: "BANGLA", resources: [{ resourceId: "mm_r3", title: "মূল বই পড়ুন", pdfUrl: "math_u2_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mm_c3", unitNo: "অধ্যায় ৩", title: "সংখ্যা (১ থেকে ১০)", version: "BANGLA", resources: [{ resourceId: "mm_r4", title: "মূল বই পড়ুন", pdfUrl: "math_u3_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mm_c4", unitNo: "অধ্যায় ৪", title: "শূন্য (০) এর ধারণা", version: "BANGLA", resources: [{ resourceId: "mm_r5", title: "মূল বই পড়ুন", pdfUrl: "math_u4_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mm_c5", unitNo: "অধ্যায় ৫", title: "যোগের ধারণা", version: "BANGLA", resources: [{ resourceId: "mm_r6", title: "মূল বই পড়ুন", pdfUrl: "math_u5_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mm_c6", unitNo: "অধ্যায় ৬", title: "বিয়োগের ধারণা", version: "BANGLA", resources: [{ resourceId: "mm_r7", title: "মূল বই পড়ুন", pdfUrl: "math_u6_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mm_c7", unitNo: "অধ্যায় ৭", title: "সংখ্যা (১১ থেকে ২০)", version: "BANGLA", resources: [{ resourceId: "mm_r8", title: "মূল বই পড়ুন", pdfUrl: "math_u7_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mm_c8", unitNo: "অধ্যায় ৮", title: "জ্যামিতিক আকৃতি", version: "BANGLA", resources: [{ resourceId: "mm_r9", title: "মূল বই পড়ুন", pdfUrl: "math_u8_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mm_c9", unitNo: "অধ্যায় ৯", title: "প্যাটার্ন ও পরিমাপ", version: "BANGLA", resources: [{ resourceId: "mm_r10", title: "মূল বই পড়ুন", pdfUrl: "math_u9_text.pdf", type: "TEXTBOOK" }] },
+            { chapterId: "mm_c10", unitNo: "অধ্যায় ১০", title: "বাংলাদেশের মুদ্রা ও নোট", version: "BANGLA", resources: [{ resourceId: "mm_r11", title: "মূল বই পড়ুন", pdfUrl: "math_u10_text.pdf", type: "TEXTBOOK" }] }
         ]
     }
 ];

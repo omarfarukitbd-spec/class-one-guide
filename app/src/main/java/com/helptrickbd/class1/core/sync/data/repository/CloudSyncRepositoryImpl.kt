@@ -32,10 +32,12 @@ class CloudSyncRepositoryImpl @Inject constructor(
     }
 
     private val _noticeFlow = MutableStateFlow<String?>(null)
+    private val _minAppVersionFlow = MutableStateFlow(1)
 
     init {
         val cached = prefs.getString("cached_cloud_notice", null)
         _noticeFlow.value = cached
+        _minAppVersionFlow.value = prefs.getInt("cached_min_app_version", 1)
     }
 
     override fun getCachedNoticeFlow(): Flow<String?> = _noticeFlow.asStateFlow()
@@ -44,11 +46,18 @@ class CloudSyncRepositoryImpl @Inject constructor(
         prefs.edit().putString("cached_cloud_notice", notice).apply()
         _noticeFlow.value = notice
     }
+    
+    override fun getMinAppVersionFlow(): Flow<Int> = _minAppVersionFlow.asStateFlow()
+
+    override suspend fun saveMinAppVersion(version: Int) = withContext(ioDispatcher) {
+        prefs.edit().putInt("cached_min_app_version", version).apply()
+        _minAppVersionFlow.value = version
+    }
 
     override suspend fun getRemoteClassMetadata(classId: String): RemoteClassMetadataDto? = withContext(ioDispatcher) {
         val db = firestore ?: return@withContext null
         try {
-            val doc = db.collection("classes").document(classId).get().awaitTask()
+            val doc = db.collection(com.helptrickbd.class1.core.config.AppConfig.CLOUD_ROOT_COLLECTION).document(classId).get().awaitTask()
             if (doc.exists()) {
                 val metadataMap = doc.get("metadata") as? Map<*, *>
                 RemoteClassMetadataDto(
@@ -69,7 +78,7 @@ class CloudSyncRepositoryImpl @Inject constructor(
     ): List<Pair<RemoteBookDto, List<RemoteChapterDto>>> = withContext(ioDispatcher) {
         val db = firestore ?: return@withContext emptyList()
         try {
-            val doc = db.collection("classes").document(classId).get().awaitTask()
+            val doc = db.collection(com.helptrickbd.class1.core.config.AppConfig.CLOUD_ROOT_COLLECTION).document(classId).get().awaitTask()
             if (!doc.exists()) return@withContext emptyList()
 
             val resultList = mutableListOf<Pair<RemoteBookDto, List<RemoteChapterDto>>>()

@@ -13,11 +13,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.helptrickbd.class1.R
+import com.helptrickbd.class1.core.designsystem.theme.AppTheme
 import com.helptrickbd.class1.feature.home.domain.model.Chapter
 import com.helptrickbd.class1.feature.home.domain.model.Resource
+import com.helptrickbd.class1.feature.home.domain.model.ResourceType
 
 @Composable
 fun ChapterItemCard(
@@ -74,7 +79,7 @@ fun ChapterItemCard(
                             fontSize = 15.sp
                         )
                         Text(
-                            text = "${chapter.resources.size}টি পড়ার অপশন",
+                            text = stringResource(R.string.label_reading_options, chapter.resources.size),
                             fontSize = 11.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -87,7 +92,11 @@ fun ChapterItemCard(
                 ) {
                     Icon(
                         imageVector = if (isExpanded) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore,
-                        contentDescription = if (isExpanded) "সংকুচিত করুন" else "প্রসারিত করুন",
+                        contentDescription = if (isExpanded) {
+                            stringResource(R.string.desc_collapse)
+                        } else {
+                            stringResource(R.string.desc_expand)
+                        },
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(4.dp).size(20.dp)
                     )
@@ -114,6 +123,33 @@ fun ChapterItemCard(
                     }
                 }
             }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ChapterItemCardPreview() {
+    AppTheme {
+        Box(modifier = Modifier.padding(16.dp)) {
+            ChapterItemCard(
+                chapter = Chapter(
+                    chapterId = "c1",
+                    unitNo = "ইউনিট ১",
+                    title = "আমার পরিচয়",
+                    resources = listOf(
+                        Resource(
+                            resourceId = "r1",
+                            title = "পাঠ ১: আমরা ও আমাদের চারপাশ",
+                            pdfUrl = "mock.pdf",
+                            type = ResourceType.TEXTBOOK
+                        )
+                    )
+                ),
+                isExpanded = true,
+                onToggleExpand = {},
+                onResourceClick = {}
+            )
         }
     }
 }
