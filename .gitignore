@@ -17,3 +17,7 @@ local.properties
 .artifacts/
 node_modules/
 functions/node_modules/
+*.docx
+*.doc
+*.pdf
+*.xlsx
