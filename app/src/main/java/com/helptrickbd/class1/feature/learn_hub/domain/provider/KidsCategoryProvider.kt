@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Audiotrack
 import androidx.compose.material.icons.rounded.AutoStories
 import androidx.compose.material.icons.rounded.Draw
+import androidx.compose.material.icons.rounded.Extension
 import androidx.compose.material.icons.rounded.LibraryBooks
 import androidx.compose.material.icons.rounded.MenuBook
 import androidx.compose.material.icons.rounded.RecordVoiceOver
@@ -49,6 +50,16 @@ object KidsCategoryProvider {
             primaryColor = Color(0xFF06B6D4),
             gradientColors = listOf(Color(0xFF06B6D4), Color(0xFF0284C7)),
             route = Screen.Slate
+        ),
+        KidsCategory(
+            id = "quiz",
+            titleRes = R.string.kids_cat_quiz_title,
+            subtitleRes = R.string.kids_cat_quiz_desc,
+            badgeRes = R.string.kids_cat_quiz_badge,
+            icon = Icons.Rounded.Extension,
+            primaryColor = Color(0xFF6366F1),
+            gradientColors = listOf(Color(0xFF6366F1), Color(0xFF4F46E5)),
+            route = Screen.KidsQuiz()
         ),
         KidsCategory(
             id = "vowel_words",

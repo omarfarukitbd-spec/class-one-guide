@@ -22,15 +22,21 @@ class PhonicsViewModel @Inject constructor(
 ) : ViewModel() {
 
     val audioPlayer = PhonicsAudioPlayer(context)
-    private val route: Screen.Phonics = savedStateHandle.toRoute()
+    val route: Screen.Phonics = savedStateHandle.toRoute()
 
     private val _selectedTab = MutableStateFlow(
         if (route.type.contains("consonant")) PhonicsTab.CONSONANTS else PhonicsTab.VOWELS
     )
     private val _displayMode = MutableStateFlow(
-        if (route.type.contains("words")) PhonicsDisplayMode.WORDS else PhonicsDisplayMode.ALPHABET
+        if (route.type.contains("word")) PhonicsDisplayMode.WORDS else PhonicsDisplayMode.ALPHABET
     )
-    private val _screenMode = MutableStateFlow(PhonicsScreenMode.SOUNDBOARD)
+    private val _screenMode = MutableStateFlow(
+        when {
+            route.type.contains("word") -> PhonicsScreenMode.WORD_BUILDER
+            route.type.contains("rhyme") || route.type.contains("poem") -> PhonicsScreenMode.STORYBOOK
+            else -> PhonicsScreenMode.SOUNDBOARD
+        }
+    )
     private val _detailItem = MutableStateFlow<PhonicsItem?>(null)
 
     val uiState: StateFlow<PhonicsUiState> = combine(

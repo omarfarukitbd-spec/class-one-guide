@@ -9,6 +9,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.helptrickbd.class1.feature.learn_hub.ui.phonics.PhonicsScreen
 import com.helptrickbd.class1.feature.learn_hub.ui.phonics.PhonicsViewModel
+import com.helptrickbd.class1.feature.learn_hub.ui.quiz.QuizScreen
+import com.helptrickbd.class1.feature.learn_hub.ui.quiz.QuizViewModel
 import com.helptrickbd.class1.feature.learn_hub.ui.slate.SlateScreen
 import com.helptrickbd.class1.feature.learn_hub.ui.slate.SlateViewModel
 import com.helptrickbd.class1.feature.main.ui.MainScreen
@@ -147,6 +149,14 @@ fun AppNavGraph(
             val slateViewModel: SlateViewModel = hiltViewModel()
             SlateScreen(
                 viewModel = slateViewModel,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable<Screen.KidsQuiz> {
+            val quizViewModel: QuizViewModel = hiltViewModel()
+            QuizScreen(
+                viewModel = quizViewModel,
                 onBackClick = { navController.popBackStack() }
             )
         }

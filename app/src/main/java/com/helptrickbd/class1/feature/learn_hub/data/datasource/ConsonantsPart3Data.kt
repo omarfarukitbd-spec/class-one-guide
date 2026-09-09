@@ -21,10 +21,10 @@ object ConsonantsPart3Data {
     ) = PhonicsItem(
         id = id, letter = letter, name = name, word = word, sentence = sentence,
         icon = icon, primaryColor = color, gradientColors = listOf(color, grad),
-        audioAssetPath = "audio/banjonborno/$letter.mp3",
+        audioAssetPath = "audio/letters/consonants/consonant_$audioId.mp3",
         letterAudioPath = "audio/letters/consonants/consonant_$audioId.mp3",
         illustrationAssetPath = "images/illustrations/illust_${11 + audioId}.jpg",
-        sentenceAudioPath = "audio/banjonborno/$letter.mp3",
+        sentenceAudioPath = "audio/rhymes/consonants/rhyme_$audioId.mp3",
         wordTokens = tokens,
         vectorDrawableRes = vectorRes,
         wordAudioPath = "audio/words/consonants/consonant_word_$audioId.mp3"

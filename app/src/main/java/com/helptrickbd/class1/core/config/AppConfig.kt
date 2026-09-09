@@ -64,6 +64,9 @@ object AppConfig {
     const val FEATURE_KIDS_ZONE = true
     const val FEATURE_PHONICS_AUDIO = true
     const val FEATURE_SLATE_CANVAS = true
+    const val FEATURE_KIDS_QUIZ = true
+    const val QUIZ_MAX_ROUNDS = 10
+    const val QUIZ_STAR_PER_CORRECT = 10
 
     val DEFAULT_LAYOUT_MODE = com.helptrickbd.class1.feature.home.domain.model.LayoutMode.GRID
     

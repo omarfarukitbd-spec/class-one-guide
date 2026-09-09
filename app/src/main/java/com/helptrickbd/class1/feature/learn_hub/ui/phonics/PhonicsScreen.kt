@@ -71,8 +71,25 @@ fun PhonicsScreen(
         modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
+            val screenTitle = when {
+                viewModel.route.type.contains("words") || viewModel.route.type.contains("word") -> {
+                    if (uiState.selectedTab == PhonicsTab.VOWELS) stringResource(R.string.kids_cat_vowel_words_title)
+                    else stringResource(R.string.kids_cat_consonant_words_title)
+                }
+                viewModel.route.type.contains("rhyme") -> stringResource(R.string.kids_cat_rhymes_title)
+                viewModel.route.type.contains("poem") -> stringResource(R.string.kids_cat_poems_title)
+                viewModel.route.type == "consonants" -> stringResource(R.string.kids_cat_consonants_title)
+                viewModel.route.type == "vowels" -> stringResource(R.string.kids_cat_vowels_title)
+                else -> stringResource(R.string.phonics_title)
+            }
+            val screenSubtitle = when (uiState.screenMode) {
+                PhonicsScreenMode.SOUNDBOARD -> stringResource(R.string.phonics_mode_soundboard)
+                PhonicsScreenMode.STORYBOOK -> stringResource(R.string.phonics_mode_storybook)
+                PhonicsScreenMode.WORD_BUILDER -> stringResource(R.string.phonics_mode_word_builder)
+            }
             StandardTopBar(
-                title = stringResource(R.string.phonics_title),
+                title = screenTitle,
+                subtitle = screenSubtitle,
                 navigationIcon = Icons.AutoMirrored.Rounded.ArrowBack,
                 onNavigationClick = handleBack
             )

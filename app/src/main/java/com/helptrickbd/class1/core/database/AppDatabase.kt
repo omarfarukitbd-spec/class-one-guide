@@ -5,8 +5,14 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(
-    entities = [BookEntity::class, ChapterEntity::class, BookmarkEntity::class, NotificationEntity::class],
-    version = 6,
+    entities = [
+        BookEntity::class,
+        ChapterEntity::class,
+        BookmarkEntity::class,
+        NotificationEntity::class,
+        QuizProgressEntity::class
+    ],
+    version = 7,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -15,4 +21,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun chapterDao(): ChapterDao
     abstract fun bookmarkDao(): BookmarkDao
     abstract fun notificationDao(): NotificationDao
+    abstract fun quizDao(): QuizDao
 }

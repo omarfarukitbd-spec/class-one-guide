@@ -10,6 +10,7 @@ import com.helptrickbd.class1.core.database.BookmarkDao
 import com.helptrickbd.class1.core.database.ChapterDao
 import com.helptrickbd.class1.core.database.DatabaseSeeder
 import com.helptrickbd.class1.core.database.NotificationDao
+import com.helptrickbd.class1.core.database.QuizDao
 import com.helptrickbd.class1.core.notification.data.NotificationRepositoryImpl
 import com.helptrickbd.class1.core.notification.domain.repository.NotificationRepository
 import com.helptrickbd.class1.core.settings.data.SettingsRepositoryImpl
@@ -29,6 +30,8 @@ import com.helptrickbd.class1.feature.pdf_viewer.domain.repository.BookmarkRepos
 import com.helptrickbd.class1.feature.pdf_viewer.domain.repository.PdfRepository
 import com.helptrickbd.class1.feature.subject_detail.data.repository.SubjectRepositoryImpl
 import com.helptrickbd.class1.feature.subject_detail.domain.repository.SubjectRepository
+import com.helptrickbd.class1.feature.learn_hub.domain.repository.QuizRepository
+import com.helptrickbd.class1.feature.learn_hub.data.repository.QuizRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -69,11 +72,24 @@ object AppModule {
     }
 
     @Provides
+    fun provideQuizDao(database: AppDatabase): QuizDao {
+        return database.quizDao()
+    }
+
+    @Provides
     @Singleton
     fun provideBookmarkRepository(
         bookmarkDao: BookmarkDao
     ): BookmarkRepository {
         return BookmarkRepositoryImpl(bookmarkDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideQuizRepository(
+        quizDao: QuizDao
+    ): QuizRepository {
+        return QuizRepositoryImpl(quizDao)
     }
 
     @Provides

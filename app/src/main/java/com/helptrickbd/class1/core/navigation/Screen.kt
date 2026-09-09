@@ -46,4 +46,9 @@ sealed interface Screen {
         val initialPage: Int = 1,
         val chapterId: String = ""
     ) : Screen
+
+    @Serializable
+    data class KidsQuiz(
+        val initialMode: String = ""
+    ) : Screen
 }

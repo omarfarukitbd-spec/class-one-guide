@@ -157,4 +157,39 @@
     <string name="slate_guide_toggle_on">হাত ঘোরানো গাইড চালু</string>
     <string name="slate_guide_toggle_off">হাত ঘোরানো গাইড বন্ধ</string>
     <string name="slate_guide_start_here">এখান থেকে শুরু করো</string>
+
+    <!-- Kids Zone Magic Quiz Lab Strings -->
+    <string name="kids_cat_quiz_title">বর্ণ সন্ধান খেলা</string>
+    <string name="kids_cat_quiz_desc">ধ্বনি ও ৩ডি ছবি দেখে বর্ণ মেলানোর জাদুকরী খেলা</string>
+    <string name="kids_cat_quiz_badge">মজার কুইজ</string>
+
+    <string name="quiz_screen_title">জাদুকরী বর্ণ সন্ধান</string>
+    <string name="quiz_screen_subtitle">খেলতে খেলতে বর্ণ শিখি</string>
+    <string name="quiz_mode_selection_title">খেলার মোড বেছে নাও</string>
+    <string name="quiz_mode_sound_title">ধ্বনি শুনে বর্ণ মেলাও</string>
+    <string name="quiz_mode_sound_desc">স্পষ্ট উচ্চারণ শুনে সঠিক বর্ণটি স্পর্শ করো</string>
+    <string name="quiz_mode_picture_title">৩ডি ছবি দেখে বর্ণ চেনো</string>
+    <string name="quiz_mode_picture_desc">রঙিন ছবি দেখে প্রথম বর্ণটি চিহ্নিত করো</string>
+    <string name="quiz_mode_sequence_title">পরের বর্ণটি বলো</string>
+    <string name="quiz_mode_sequence_desc">ধারাবাহিকতা বজায় রেখে পরের বর্ণ বলো</string>
+
+    <string name="quiz_question_counter">প্রশ্ন %1$s / %2$s</string>
+    <string name="quiz_stars_counter">%1$s স্টার</string>
+    <string name="quiz_combo_badge">টানা %1$s বার সঠিক!</string>
+    <string name="quiz_listen_again">আবার শুনুন</string>
+    <string name="quiz_correct_cheer">অসাধারণ! সঠিক হয়েছে!</string>
+    <string name="quiz_wrong_cheer">উফ! ভুল হয়েছে, আবার চেষ্টা করো!</string>
+
+    <string name="quiz_victory_title">অভিনন্দন! দারুণ খেলেছ!</string>
+    <string name="quiz_victory_desc">তুমি সব কটি প্রশ্নের উত্তর দিয়েছ!</string>
+    <string name="quiz_stat_score">মোট পয়েন্ট: %1$s</string>
+    <string name="quiz_stat_correct">সঠিক উত্তর: %1$s / %2$s</string>
+    <string name="quiz_stat_stars">অর্জিত স্টার: %1$s</string>
+    <string name="quiz_btn_play_again">আবার খেলি</string>
+    <string name="quiz_btn_choose_mode">অন্যান্য মোড</string>
+
+    <string name="quiz_quit_dialog_title">খেলা কি শেষ করতে চাও?</string>
+    <string name="quiz_quit_dialog_msg">এখন ফিরে গেলে বর্তমান রাউন্ডের অগ্রগতি হারিয়ে যাবে।</string>
+    <string name="quiz_quit_confirm">হ্যাঁ, ফিরে যাই</string>
+    <string name="quiz_quit_resume">না, খেলা চালিয়ে যাই</string>
 </resources>

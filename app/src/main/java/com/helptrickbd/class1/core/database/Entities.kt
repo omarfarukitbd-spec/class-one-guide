@@ -68,3 +68,15 @@ data class NotificationEntity(
     val isRead: Boolean = false,
     val timestamp: Long = System.currentTimeMillis()
 )
+
+@Entity(
+    tableName = "quiz_progress"
+)
+data class QuizProgressEntity(
+    @PrimaryKey val modeId: String,
+    val totalPlayed: Int = 0,
+    val totalCorrect: Int = 0,
+    val highestScore: Int = 0,
+    val totalStars: Int = 0,
+    val lastPlayedTimestamp: Long = System.currentTimeMillis()
+)
