@@ -22,6 +22,5 @@ data class SlateUiState(
     val showClearDialog: Boolean = false,
     val showCelebration: Boolean = false,
     val showSaveSuccess: Boolean = false,
-    val showGuideAnimation: Boolean = true,
     val currentlyPlayingAudioId: String? = null
 )

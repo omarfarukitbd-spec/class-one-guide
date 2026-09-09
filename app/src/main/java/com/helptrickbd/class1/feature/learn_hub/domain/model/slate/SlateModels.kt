@@ -81,3 +81,11 @@ data class SlateTracingItem(
     val audioPath: String? = null,
     val category: SlateTracingCategory
 )
+
+@Immutable
+data class LetterGlyphBounds(
+    val left: Float,
+    val top: Float,
+    val width: Float,
+    val height: Float
+)

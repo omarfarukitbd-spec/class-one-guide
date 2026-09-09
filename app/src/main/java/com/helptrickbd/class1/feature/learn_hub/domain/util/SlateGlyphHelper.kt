@@ -28,7 +28,7 @@ object SlateGlyphHelper {
     ): LetterGlyphMetrics {
         val w = canvasSize.width
         val h = canvasSize.height
-        val fontSize = minOf(w, h) * 0.52f
+        val fontSize = minOf(w * 0.70f, h * 0.60f).coerceAtLeast(100f)
 
         val paint = Paint().apply {
             textSize = fontSize

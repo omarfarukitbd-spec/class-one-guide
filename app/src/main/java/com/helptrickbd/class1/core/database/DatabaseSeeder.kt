@@ -68,7 +68,8 @@ class DatabaseSeeder @Inject constructor(
                     title = chapter.title,
                     version = chapter.version,
                     resources = chapter.resources,
-                    orderIndex = index
+                    orderIndex = index,
+                    isCompleted = chapter.isCompleted
                 )
             }
         }

@@ -177,7 +177,8 @@ class HomeRepositoryImpl @Inject constructor(
             unitNo = unitNo,
             title = title,
             version = version,
-            resources = resources
+            resources = resources,
+            isCompleted = isCompleted
         )
     }
 }

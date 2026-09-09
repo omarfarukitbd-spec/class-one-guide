@@ -32,10 +32,11 @@ fun PdfViewerScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     bookId: String = "",
-    initialPage: Int = 1
+    initialPage: Int = 1,
+    chapterId: String = ""
 ) {
-    LaunchedEffect(pdfUrl, bookId) {
-        viewModel.loadPdf(url = pdfUrl, bookId = bookId, initialPage = initialPage)
+    LaunchedEffect(pdfUrl, bookId, chapterId) {
+        viewModel.loadPdf(url = pdfUrl, bookId = bookId, initialPage = initialPage, chapterId = chapterId)
     }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

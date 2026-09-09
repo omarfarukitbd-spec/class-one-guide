@@ -21,3 +21,21 @@ functions/node_modules/
 *.doc
 *.pdf
 *.xlsx
+
+# Firebase cache & debug logs
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+
+# Binary packages & archives
+*.apk
+*.xapk
+*.apks
+
+# Reverse engineering / decompiled APK data
+decompiled_bornoporichoy/
+
+# Audio source folder stray media
+Audio File/**/*.png
+Audio File/**/*.jpg

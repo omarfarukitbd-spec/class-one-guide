@@ -37,7 +37,8 @@ data class ChapterEntity(
     val title: String,
     val version: LanguageVersion = LanguageVersion.BANGLA,
     val resources: List<Resource> = emptyList(),
-    val orderIndex: Int = 0
+    val orderIndex: Int = 0,
+    val isCompleted: Boolean = false
 )
 
 @Entity(

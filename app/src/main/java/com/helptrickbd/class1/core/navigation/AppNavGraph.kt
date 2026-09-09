@@ -107,12 +107,13 @@ fun AppNavGraph(
             SubjectDetailScreen(
                 viewModel = detailViewModel,
                 onBackClick = { navController.popBackStack() },
-                onResourceClick = { resource ->
+                onResourceClick = { chapterId, resource ->
                     navController.navigate(
                         Screen.PdfViewer(
                             resourceTitle = resource.title,
                             pdfUrl = resource.pdfUrl,
-                            bookId = detailViewModel.bookId
+                            bookId = detailViewModel.bookId,
+                            chapterId = chapterId
                         )
                     )
                 }
@@ -127,6 +128,7 @@ fun AppNavGraph(
                 pdfUrl = args.pdfUrl,
                 bookId = args.bookId,
                 initialPage = args.initialPage,
+                chapterId = args.chapterId,
                 viewModel = pdfViewModel,
                 onBackClick = { navController.popBackStack() }
             )

@@ -58,17 +58,20 @@ class PdfViewerViewModel @Inject constructor(
     private var loadedUrl: String? = null
     var currentBookId: String? = null
         private set
+    var currentChapterId: String? = null
+        private set
     private var bookmarkJob: Job? = null
 
     /**
      * Loads PDF from URL or Local Cache with DRM protection.
      * Logic Fix: Only recreates engine if URL has materially changed.
      */
-    fun loadPdf(url: String, bookId: String? = null, initialPage: Int = 1) {
+    fun loadPdf(url: String, bookId: String? = null, initialPage: Int = 1, chapterId: String? = null) {
         if (url == loadedUrl && _uiState.value is PdfViewerUiState.Success) return
         
         loadedUrl = url
         currentBookId = bookId
+        currentChapterId = chapterId
 
         viewModelScope.launch {
             analyticsTracker.logScreenView("PdfViewerScreen", bookId)
@@ -138,7 +141,7 @@ class PdfViewerViewModel @Inject constructor(
             val isBookmarked = currentState.bookmarks.any { it.pageNumber == page }
             _uiState.value = currentState.copy(currentPage = page, isCurrentPageBookmarked = isBookmarked)
             viewModelScope.launch {
-                saveReadingProgressUseCase(currentBookId, page, currentState.totalPages)
+                saveReadingProgressUseCase(currentBookId, page, currentState.totalPages, currentChapterId)
             }
             viewModelScope.launch {
                 analyticsTracker.logEvent("pdf_page_turned", mapOf("page" to page, "book_id" to currentBookId.orEmpty()))

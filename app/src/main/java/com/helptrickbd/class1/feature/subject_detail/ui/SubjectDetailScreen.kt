@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Bookmark
+import androidx.compose.material.icons.rounded.BookmarkAdded
 import androidx.compose.material.icons.rounded.BookmarkBorder
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.SearchOff
@@ -33,7 +34,7 @@ import com.helptrickbd.class1.feature.subject_detail.ui.components.SubjectDetail
 fun SubjectDetailScreen(
     viewModel: SubjectDetailViewModel,
     onBackClick: () -> Unit,
-    onResourceClick: (Resource) -> Unit,
+    onResourceClick: (String, Resource) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -66,13 +67,21 @@ fun SubjectDetailScreen(
                     if (book != null) {
                         IconButton(onClick = viewModel::onToggleFavorite) {
                             Icon(
-                                imageVector = if (isFav) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder,
+                                imageVector = when {
+                                    book.progressPercent >= 1.0f -> Icons.Rounded.BookmarkAdded
+                                    isFav -> Icons.Rounded.Bookmark
+                                    else -> Icons.Rounded.BookmarkBorder
+                                },
                                 contentDescription = if (isFav) {
                                     stringResource(R.string.desc_remove_bookmark)
                                 } else {
                                     stringResource(R.string.desc_add_bookmark)
                                 },
-                                tint = if (isFav) MaterialTheme.colorScheme.primary else Color.White
+                                tint = when {
+                                    book.progressPercent >= 1.0f -> Color(0xFF10B981)
+                                    isFav -> MaterialTheme.colorScheme.primary
+                                    else -> Color.White
+                                }
                             )
                         }
                     }
@@ -95,6 +104,7 @@ fun SubjectDetailScreen(
                     state = state,
                     onVersionSelected = viewModel::onVersionSelected,
                     onChapterToggle = viewModel::onChapterToggle,
+                    onToggleChapterCompletion = viewModel::onToggleChapterCompletion,
                     onResourceClick = onResourceClick
                 )
             }

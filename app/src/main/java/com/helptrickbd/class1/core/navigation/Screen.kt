@@ -43,6 +43,7 @@ sealed interface Screen {
         val resourceTitle: String,
         val pdfUrl: String,
         val bookId: String = "",
-        val initialPage: Int = 1
+        val initialPage: Int = 1,
+        val chapterId: String = ""
     ) : Screen
 }

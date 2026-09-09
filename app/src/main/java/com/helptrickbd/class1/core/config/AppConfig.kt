@@ -43,6 +43,7 @@ object AppConfig {
     const val FEATURE_PDF_READER = true
     const val FEATURE_OFFLINE_CACHE = true
     const val FEATURE_READING_PROGRESS = true
+    const val FEATURE_CHAPTER_COMPLETION_TRACKING = true
     const val FEATURE_DARK_MODE = true
     const val FEATURE_NAVIGATION_DRAWER = true
     const val FEATURE_CLOUD_SYNC = true

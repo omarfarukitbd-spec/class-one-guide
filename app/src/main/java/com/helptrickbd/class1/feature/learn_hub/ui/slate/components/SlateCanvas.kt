@@ -87,13 +87,15 @@ private fun DrawScope.drawTracingGuide(item: SlateTracingItem, theme: SlateBoard
         )
     } else if (item.letter.isNotBlank()) {
         val metrics = SlateGlyphHelper.computeExactMetrics(item.letter, size)
-        val faintColor = if (theme == SlateBoardTheme.ART_PAPER) {
-            android.graphics.Color.argb(45, 0, 0, 0)
-        } else {
-            android.graphics.Color.argb(55, 255, 255, 255)
-        }
-        metrics.paint.color = faintColor
+        val isDark = theme != SlateBoardTheme.ART_PAPER
 
+        // 1. Soft filled typographic letter silhouette (আসল সুদৃশ্য বাংলা ফন্ট)
+        val fillAlpha = if (isDark) 38 else 26
+        metrics.paint.color = if (isDark) {
+            android.graphics.Color.argb(fillAlpha, 255, 255, 255)
+        } else {
+            android.graphics.Color.argb(fillAlpha, 0, 0, 0)
+        }
         drawContext.canvas.nativeCanvas.drawText(
             item.letter,
             metrics.originX,
@@ -101,17 +103,19 @@ private fun DrawScope.drawTracingGuide(item: SlateTracingItem, theme: SlateBoard
             metrics.paint
         )
 
-        val outlineColor = if (theme == SlateBoardTheme.ART_PAPER) {
-            Color(0x38000000)
+        // 2. Smooth stencil contour outline (মসৃণ চক রূপরেখা)
+        val outlineColor = if (isDark) {
+            Color(0xFFFFFFFF).copy(alpha = 0.24f)
         } else {
-            Color(0x40FFFFFF)
+            Color(0xFF000000).copy(alpha = 0.18f)
         }
         drawPath(
             path = metrics.nativePath.asComposePath(),
             color = outlineColor,
             style = Stroke(
-                width = 2.5f,
-                pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                width = 3.5f,
+                cap = StrokeCap.Round,
+                join = StrokeJoin.Round
             )
         )
     }

@@ -117,10 +117,14 @@ class SlateViewModel @Inject constructor(
         val cur = state.currentStroke ?: return
         redoStack.clear()
         val newStrokes = state.strokes + cur
-        val shouldCelebrate = !hasCelebrated && newStrokes.size >= 8 && state.selectedTracingItem.category != SlateTracingCategory.FREEHAND
+        val totalPoints = newStrokes.sumOf { it.points.size }
+        val shouldCelebrate = !hasCelebrated &&
+            (newStrokes.size >= 2 || totalPoints >= 40) &&
+            state.selectedTracingItem.category != SlateTracingCategory.FREEHAND
+
         if (shouldCelebrate) {
             hasCelebrated = true
-            soundManager.playCheer()
+            soundManager.playClap()
         }
         _uiState.update {
             it.copy(
@@ -139,14 +143,14 @@ class SlateViewModel @Inject constructor(
             val last = state.strokes.last()
             redoStack.add(last)
             val updated = state.strokes.dropLast(1)
-            soundManager.playDuster()
+            soundManager.playChalk()
             _uiState.update { it.copy(strokes = updated, canUndo = updated.isNotEmpty(), canRedo = true) }
         }
     }
 
     fun redo() {
         if (redoStack.isNotEmpty()) {
-            val item = redoStack.removeAt(redoStack.lastIndex)
+            val item = redoStack.removeAt(redoStack.size - 1)
             val updated = _uiState.value.strokes + item
             soundManager.playChalk()
             _uiState.update { it.copy(strokes = updated, canUndo = true, canRedo = redoStack.isNotEmpty()) }
@@ -168,10 +172,9 @@ class SlateViewModel @Inject constructor(
     fun dismissCelebration() { _uiState.update { it.copy(showCelebration = false) } }
     fun dismissSaveSuccess() { _uiState.update { it.copy(showSaveSuccess = false) } }
     fun toggleSound() { soundManager.toggleSound() }
-    fun toggleGuideAnimation() { _uiState.update { it.copy(showGuideAnimation = !it.showGuideAnimation) } }
 
     fun triggerCelebration() {
-        soundManager.playCheer()
+        soundManager.playClap()
         _uiState.update { it.copy(showCelebration = true) }
     }
 

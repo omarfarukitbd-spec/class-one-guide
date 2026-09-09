@@ -25,6 +25,7 @@ class SlateSoundManager(private val context: Context) {
     private var chalkSoundId = 0
     private var dusterSoundId = 0
     private var cheerSoundId = 0
+    private var clapSoundId = 0
     private var isLoaded = false
 
     private val _isSoundEnabled = MutableStateFlow(true)
@@ -50,6 +51,10 @@ class SlateSoundManager(private val context: Context) {
             val afd3 = context.assets.openFd("audio/sfx/cheer_sparkle.wav")
             cheerSoundId = soundPool.load(afd3.fileDescriptor, afd3.startOffset, afd3.length, 1)
             afd3.close()
+
+            val afd4 = context.assets.openFd("audio/sfx/clapping.wav")
+            clapSoundId = soundPool.load(afd4.fileDescriptor, afd4.startOffset, afd4.length, 1)
+            afd4.close()
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -72,8 +77,17 @@ class SlateSoundManager(private val context: Context) {
     }
 
     fun playCheer() {
-        if (!_isSoundEnabled.value || cheerSoundId == 0) return
-        soundPool.play(cheerSoundId, 0.85f, 0.85f, 2, 0, 1.0f)
+        if (!_isSoundEnabled.value) return
+        if (cheerSoundId != 0) soundPool.play(cheerSoundId, 0.85f, 0.85f, 2, 0, 1.0f)
+    }
+
+    fun playClap() {
+        if (!_isSoundEnabled.value) return
+        if (clapSoundId != 0) {
+            soundPool.play(clapSoundId, 1.0f, 1.0f, 2, 0, 1.0f)
+        } else if (cheerSoundId != 0) {
+            soundPool.play(cheerSoundId, 0.90f, 0.90f, 2, 0, 1.0f)
+        }
     }
 
     fun release() {

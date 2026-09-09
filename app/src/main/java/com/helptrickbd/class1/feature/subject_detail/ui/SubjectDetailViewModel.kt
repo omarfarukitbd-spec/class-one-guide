@@ -136,6 +136,21 @@ class SubjectDetailViewModel @Inject constructor(
         }
     }
 
+    fun onToggleChapterCompletion(chapterId: String) {
+        val book = _currentBook.value ?: return
+        val chapter = book.chapters.firstOrNull { it.chapterId == chapterId } ?: return
+        val newCompletion = !chapter.isCompleted
+        viewModelScope.launch {
+            repository.toggleChapterCompletion(book.bookId, chapterId, newCompletion)
+            val msgRes = if (newCompletion) R.string.msg_chapter_completed else R.string.msg_chapter_incomplete
+            _uiEvent.send(SubjectDetailUiEvent.ShowToast(UiText.StringResource(msgRes)))
+            analyticsTracker.logEvent(
+                "chapter_completion_toggled",
+                mapOf("chapter_id" to chapterId, "completed" to newCompletion, "book_id" to bookId)
+            )
+        }
+    }
+
     private fun logScreenView() {
         viewModelScope.launch {
             analyticsTracker.logScreenView("SubjectDetailScreen", bookId)

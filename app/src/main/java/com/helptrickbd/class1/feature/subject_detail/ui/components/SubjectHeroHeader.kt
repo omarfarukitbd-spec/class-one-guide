@@ -2,22 +2,20 @@ package com.helptrickbd.class1.feature.subject_detail.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.helptrickbd.class1.R
 import com.helptrickbd.class1.core.designsystem.theme.AppTheme
 import com.helptrickbd.class1.feature.home.domain.model.Book
+import com.helptrickbd.class1.feature.home.domain.model.Chapter
 import com.helptrickbd.class1.feature.home.ui.model.SubjectThemeResolver
+import kotlin.math.roundToInt
 
 @Composable
 fun SubjectHeroHeader(
@@ -25,8 +23,10 @@ fun SubjectHeroHeader(
     modifier: Modifier = Modifier
 ) {
     val theme = SubjectThemeResolver.resolve(book.title)
-    val chapterCount = if (book.totalChapters > 0) book.totalChapters else book.chapters.size
-    val progressPercent = (book.progressPercent * 100).toInt()
+    val totalChaps = if (book.chapters.isNotEmpty()) book.chapters.size
+                     else if (book.totalChapters > 0) book.totalChapters else 1
+    val completedChaps = if (book.chapters.isNotEmpty()) book.chapters.count { it.isCompleted }
+                         else (book.progressPercent * totalChaps).roundToInt()
 
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -40,20 +40,21 @@ fun SubjectHeroHeader(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
+            // 1. Subject Identity Row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Surface(
-                    color = MaterialTheme.colorScheme.primaryContainer,
+                    color = theme.containerColor,
                     shape = RoundedCornerShape(16.dp),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f))
+                    border = BorderStroke(1.dp, theme.accentColor.copy(alpha = 0.25f))
                 ) {
                     Box(modifier = Modifier.padding(12.dp)) {
                         Icon(
                             imageVector = theme.primaryIcon,
                             contentDescription = theme.categoryBadge,
-                            tint = MaterialTheme.colorScheme.primary,
+                            tint = theme.accentColor,
                             modifier = Modifier.size(32.dp)
                         )
                     }
@@ -65,7 +66,7 @@ fun SubjectHeroHeader(
                     Text(
                         text = theme.categoryBadge,
                         style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = theme.accentColor,
                         fontWeight = FontWeight.Bold,
                         fontSize = 11.sp
                     )
@@ -90,38 +91,14 @@ fun SubjectHeroHeader(
                 }
             }
 
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            // Reading Progress Row
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(R.string.label_total_chapters, chapterCount),
-                    fontSize = 11.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = stringResource(R.string.label_progress_percent, progressPercent),
-                    fontSize = 11.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            LinearProgressIndicator(
-                progress = { book.progressPercent },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(6.dp)
-                    .clip(CircleShape),
-                color = MaterialTheme.colorScheme.primary,
-                trackColor = MaterialTheme.colorScheme.surfaceVariant
+            // 2. Reading Analytics Visual Indicator Card (Modularized)
+            SubjectReadingAnalyticsCard(
+                totalChapters = totalChaps,
+                completedChapters = completedChaps,
+                accentColor = theme.accentColor,
+                containerColor = theme.containerColor
             )
         }
     }
@@ -137,8 +114,12 @@ private fun SubjectHeroHeaderPreview() {
                     bookId = "1",
                     title = "আমার বাংলা বই",
                     subtitle = "প্রথম শ্রেণি",
-                    totalChapters = 24,
-                    progressPercent = 0.45f
+                    totalChapters = 10,
+                    progressPercent = 0.70f,
+                    chapters = listOf(
+                        Chapter("c1", "ইউনিট ১", "আমার পরিচয়", isCompleted = true),
+                        Chapter("c2", "ইউনিট ২", "বর্ণ শিখি", isCompleted = false)
+                    )
                 )
             )
         }

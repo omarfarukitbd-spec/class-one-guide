@@ -36,6 +36,9 @@ interface BookDao {
     @Query("UPDATE books SET lastReadPage = :page, progressPercent = :progress, lastReadTimestamp = :timestamp WHERE bookId = :bookId")
     suspend fun updateReadingProgress(bookId: String, page: Int, progress: Float, timestamp: Long)
 
+    @Query("UPDATE books SET progressPercent = :progress, lastReadTimestamp = :timestamp WHERE bookId = :bookId")
+    suspend fun updateBookProgressOnly(bookId: String, progress: Float, timestamp: Long)
+
     @Query("UPDATE books SET isFavorite = :isFavorite WHERE bookId = :bookId")
     suspend fun toggleFavorite(bookId: String, isFavorite: Boolean)
 
@@ -77,6 +80,15 @@ interface ChapterDao {
 
     @Query("DELETE FROM chapters WHERE bookId NOT IN (:activeIds)")
     suspend fun deleteChaptersForBooksNotIn(activeIds: List<String>)
+
+    @Query("UPDATE chapters SET isCompleted = :isCompleted WHERE chapterId = :chapterId")
+    suspend fun updateChapterCompletion(chapterId: String, isCompleted: Boolean)
+
+    @Query("SELECT COUNT(*) FROM chapters WHERE bookId = :bookId AND isCompleted = 1")
+    fun getCompletedChapterCountForBook(bookId: String): Flow<Int>
+
+    @Query("SELECT COUNT(*) FROM chapters WHERE bookId = :bookId AND isCompleted = 1")
+    suspend fun getCompletedChapterCountForBookDirect(bookId: String): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertChapters(chapters: List<ChapterEntity>)

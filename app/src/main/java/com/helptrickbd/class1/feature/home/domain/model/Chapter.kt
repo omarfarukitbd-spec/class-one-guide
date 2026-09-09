@@ -11,5 +11,6 @@ data class Chapter(
     val unitNo: String, // e.g., "ইউনিট ১"
     val title: String,
     val version: LanguageVersion = LanguageVersion.BANGLA,
-    val resources: List<Resource> = emptyList()
+    val resources: List<Resource> = emptyList(),
+    val isCompleted: Boolean = false
 )

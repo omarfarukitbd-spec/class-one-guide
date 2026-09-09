@@ -31,6 +31,22 @@ class SubjectRepositoryImpl @Inject constructor(
         bookDao.toggleFavorite(bookId, isFavorite)
     }
 
+    override suspend fun toggleChapterCompletion(bookId: String, chapterId: String, isCompleted: Boolean) {
+        chapterDao.updateChapterCompletion(chapterId, isCompleted)
+        val allChapters = chapterDao.getChaptersForBookDirect(bookId)
+        if (allChapters.isNotEmpty()) {
+            val completedCount = allChapters.count { 
+                if (it.chapterId == chapterId) isCompleted else it.isCompleted 
+            }
+            val newProgress = (completedCount.toFloat() / allChapters.size.toFloat()).coerceIn(0f, 1f)
+            bookDao.updateBookProgressOnly(
+                bookId = bookId,
+                progress = newProgress,
+                timestamp = System.currentTimeMillis()
+            )
+        }
+    }
+
     private fun BookEntity.toDomain(chapters: List<Chapter>): Book {
         return Book(
             bookId = bookId,
@@ -54,7 +70,8 @@ class SubjectRepositoryImpl @Inject constructor(
             unitNo = unitNo,
             title = title,
             version = version,
-            resources = resources
+            resources = resources,
+            isCompleted = isCompleted
         )
     }
 }

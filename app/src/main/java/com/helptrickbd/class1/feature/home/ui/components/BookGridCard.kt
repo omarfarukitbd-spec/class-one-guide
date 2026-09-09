@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Bookmark
+import androidx.compose.material.icons.rounded.BookmarkAdded
 import androidx.compose.material.icons.rounded.BookmarkBorder
 import androidx.compose.material.icons.rounded.MenuBook
 import androidx.compose.material3.*
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -84,13 +86,21 @@ fun BookGridCard(
                             modifier = Modifier.size(32.dp).offset(x = 8.dp, y = (-8).dp)
                         ) {
                             Icon(
-                                imageVector = if (book.isFavorite) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder,
+                                imageVector = when {
+                                    book.progressPercent >= 1.0f -> Icons.Rounded.BookmarkAdded
+                                    book.isFavorite -> Icons.Rounded.Bookmark
+                                    else -> Icons.Rounded.BookmarkBorder
+                                },
                                 contentDescription = if (book.isFavorite) {
                                     stringResource(R.string.desc_remove_bookmark)
                                 } else {
                                     stringResource(R.string.desc_add_bookmark)
                                 },
-                                tint = if (book.isFavorite) theme.accentColor else MaterialTheme.colorScheme.onSurfaceVariant,
+                                tint = when {
+                                    book.progressPercent >= 1.0f -> Color(0xFF10B981)
+                                    book.isFavorite -> theme.accentColor
+                                    else -> MaterialTheme.colorScheme.onSurfaceVariant
+                                },
                                 modifier = Modifier.size(22.dp)
                             )
                         }

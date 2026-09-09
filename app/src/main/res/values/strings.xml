@@ -19,6 +19,14 @@
     <string name="desc_add_bookmark">বুকমার্কে যোগ করুন</string>
     <string name="label_total_chapters">মোট %1$d টি অধ্যায়</string>
     <string name="label_progress_percent">%1$d%% সম্পন্ন</string>
+    <string name="label_chapter_completed">অধ্যায় পড়া সম্পন্ন</string>
+    <string name="label_mark_chapter_completed">পড়া সম্পন্ন চিহ্নিত করুন</string>
+    <string name="label_reading_progress_stat">%1$s টির মধ্যে %2$s টি অধ্যায় সম্পন্ন</string>
+    <string name="msg_chapter_completed">অধ্যায় পড়া সম্পন্ন হয়েছে</string>
+    <string name="msg_chapter_incomplete">অধ্যায়টি আবার পড়ার তালিকায় রাখা হয়েছে</string>
+    <string name="label_all_chapters_completed">সম্পূর্ণ পড়া শেষ! চমৎকার!</string>
+    <string name="label_reading_in_progress">পড়া চলমান</string>
+    <string name="label_start_studying">এখনই পড়া শুরু করুন</string>
     <string name="label_chapters_and_syllabus">অধ্যায় ও পাঠ্যসূচি (%1$d টি)</string>
     <string name="label_reading_options">%1$dটি পড়ার অপশন</string>
     <string name="desc_collapse">সংকুচিত করুন</string>

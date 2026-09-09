@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface SubjectRepository {
     fun getBookDetail(bookId: String): Flow<Book?>
     suspend fun toggleFavorite(bookId: String, isFavorite: Boolean)
+    suspend fun toggleChapterCompletion(bookId: String, chapterId: String, isCompleted: Boolean)
 }

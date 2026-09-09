@@ -4,7 +4,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Gesture
 import androidx.compose.material.icons.rounded.PhotoCamera
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.*
@@ -46,15 +45,6 @@ fun SlateScreen(
                 navigationIcon = Icons.Rounded.ArrowBack,
                 onNavigationClick = onBackClick,
                 actions = {
-                    IconButton(onClick = { viewModel.toggleGuideAnimation() }) {
-                        Icon(
-                            Icons.Rounded.Gesture,
-                            contentDescription = stringResource(
-                                if (uiState.showGuideAnimation) R.string.slate_guide_toggle_off else R.string.slate_guide_toggle_on
-                            ),
-                            tint = if (uiState.showGuideAnimation) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
-                        )
-                    }
                     IconButton(onClick = { viewModel.triggerCelebration() }) {
                         Icon(
                             Icons.Rounded.Star,
@@ -98,11 +88,6 @@ fun SlateScreen(
                         onStrokeStart = viewModel::onStrokeStart,
                         onStrokeDrag = viewModel::onStrokeDrag,
                         onStrokeEnd = viewModel::onStrokeEnd
-                    )
-                    SlateTracingGuideOverlay(
-                        tracingItem = uiState.selectedTracingItem,
-                        isUserDrawing = uiState.currentStroke != null,
-                        showGuide = uiState.showGuideAnimation
                     )
                     SlateCelebrationOverlay(
                         visible = uiState.showCelebration,

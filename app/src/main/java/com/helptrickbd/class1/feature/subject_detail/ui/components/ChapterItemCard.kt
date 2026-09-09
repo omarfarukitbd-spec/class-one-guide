@@ -7,12 +7,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.BookmarkAdded
+import androidx.compose.material.icons.rounded.BookmarkBorder
 import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,7 +32,8 @@ fun ChapterItemCard(
     chapter: Chapter,
     isExpanded: Boolean,
     onToggleExpand: () -> Unit,
-    onResourceClick: (Resource) -> Unit,
+    onToggleCompletion: () -> Unit,
+    onResourceClick: (String, Resource) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -39,7 +43,11 @@ fun ChapterItemCard(
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.5.dp),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+        border = BorderStroke(
+            1.dp,
+            if (chapter.isCompleted) Color(0xFF10B981).copy(alpha = 0.45f)
+            else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+        )
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Row(
@@ -55,13 +63,19 @@ fun ChapterItemCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Surface(
-                        color = MaterialTheme.colorScheme.primaryContainer,
+                        color = if (chapter.isCompleted) Color(0xFF10B981).copy(alpha = 0.15f)
+                                else MaterialTheme.colorScheme.primaryContainer,
                         shape = RoundedCornerShape(12.dp),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f))
+                        border = BorderStroke(
+                            1.dp,
+                            if (chapter.isCompleted) Color(0xFF10B981).copy(alpha = 0.5f)
+                            else MaterialTheme.colorScheme.primary.copy(alpha = 0.25f)
+                        )
                     ) {
                         Text(
                             text = chapter.unitNo,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            color = if (chapter.isCompleted) Color(0xFF047857)
+                                   else MaterialTheme.colorScheme.onPrimaryContainer,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp)
@@ -86,20 +100,50 @@ fun ChapterItemCard(
                     }
                 }
 
-                Surface(
-                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Icon(
-                        imageVector = if (isExpanded) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore,
-                        contentDescription = if (isExpanded) {
-                            stringResource(R.string.desc_collapse)
-                        } else {
-                            stringResource(R.string.desc_expand)
-                        },
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.padding(4.dp).size(20.dp)
-                    )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    // 1. Bookmark button with completion tick mark
+                    IconButton(
+                        onClick = onToggleCompletion,
+                        modifier = Modifier.size(34.dp)
+                    ) {
+                        Surface(
+                            color = if (chapter.isCompleted) Color(0xFF10B981).copy(alpha = 0.15f)
+                                    else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = if (chapter.isCompleted) Icons.Rounded.BookmarkAdded
+                                              else Icons.Rounded.BookmarkBorder,
+                                contentDescription = if (chapter.isCompleted) {
+                                    stringResource(R.string.label_chapter_completed)
+                                } else {
+                                    stringResource(R.string.label_mark_chapter_completed)
+                                },
+                                tint = if (chapter.isCompleted) Color(0xFF10B981)
+                                       else MaterialTheme.colorScheme.outline,
+                                modifier = Modifier.padding(5.dp).size(18.dp)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.width(6.dp))
+
+                    // 2. Expand/Collapse indicator
+                    Surface(
+                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = if (isExpanded) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore,
+                            contentDescription = if (isExpanded) {
+                                stringResource(R.string.desc_collapse)
+                            } else {
+                                stringResource(R.string.desc_expand)
+                            },
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(4.dp).size(20.dp)
+                        )
+                    }
                 }
             }
 
@@ -118,7 +162,7 @@ fun ChapterItemCard(
                     chapter.resources.forEach { resource ->
                         ResourceActionButton(
                             resource = resource,
-                            onClick = { onResourceClick(resource) }
+                            onClick = { onResourceClick(chapter.chapterId, resource) }
                         )
                     }
                 }
@@ -144,11 +188,13 @@ private fun ChapterItemCardPreview() {
                             pdfUrl = "mock.pdf",
                             type = ResourceType.TEXTBOOK
                         )
-                    )
+                    ),
+                    isCompleted = true
                 ),
                 isExpanded = true,
                 onToggleExpand = {},
-                onResourceClick = {}
+                onToggleCompletion = {},
+                onResourceClick = { _, _ -> }
             )
         }
     }

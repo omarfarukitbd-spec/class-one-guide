@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [BookEntity::class, ChapterEntity::class, BookmarkEntity::class, NotificationEntity::class],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

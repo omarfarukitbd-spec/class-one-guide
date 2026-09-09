@@ -25,7 +25,8 @@ fun SubjectDetailContent(
     state: SubjectDetailUiState.Success,
     onVersionSelected: (LanguageVersion) -> Unit,
     onChapterToggle: (String) -> Unit,
-    onResourceClick: (Resource) -> Unit,
+    onToggleChapterCompletion: (String) -> Unit,
+    onResourceClick: (String, Resource) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val fullBookSuffix = stringResource(R.string.msg_full_book_suffix)
@@ -41,7 +42,7 @@ fun SubjectDetailContent(
         ),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        // 1. Subject Hero Header
+        // 1. Subject Hero Header with Visual Reading Analytics Indicator
         item {
             SubjectHeroHeader(book = state.book)
         }
@@ -53,6 +54,7 @@ fun SubjectDetailContent(
                     title = state.book.title,
                     onClick = {
                         onResourceClick(
+                            "",
                             Resource(
                                 resourceId = "full_book_${state.book.bookId}",
                                 title = "${state.book.title} $fullBookSuffix",
@@ -91,6 +93,7 @@ fun SubjectDetailContent(
                 chapter = chapter,
                 isExpanded = state.expandedChapterId == chapter.chapterId,
                 onToggleExpand = { onChapterToggle(chapter.chapterId) },
+                onToggleCompletion = { onToggleChapterCompletion(chapter.chapterId) },
                 onResourceClick = onResourceClick
             )
         }
@@ -111,7 +114,8 @@ private fun SubjectDetailContentPreview() {
             ),
             onVersionSelected = {},
             onChapterToggle = {},
-            onResourceClick = {}
+            onToggleChapterCompletion = {},
+            onResourceClick = { _, _ -> }
         )
     }
 }

@@ -105,6 +105,8 @@ class SyncCloudDataUseCase @Inject constructor(
                     )
                 )
 
+                val existingChaptersMap = chapterDao.getChaptersForBookDirect(remoteBook.bookId).associateBy { it.chapterId }
+
                 for (remoteChap in remoteChapters) {
                     val chapVersion = runCatching { LanguageVersion.valueOf(remoteChap.version) }.getOrDefault(LanguageVersion.BANGLA)
                     val resources = remoteChap.resources.map { r ->
@@ -132,7 +134,8 @@ class SyncCloudDataUseCase @Inject constructor(
                             title = remoteChap.title,
                             version = chapVersion,
                             resources = resources,
-                            orderIndex = remoteChap.orderIndex
+                            orderIndex = remoteChap.orderIndex,
+                            isCompleted = existingChaptersMap[uniqueChapterId]?.isCompleted ?: false
                         )
                     )
                 }
